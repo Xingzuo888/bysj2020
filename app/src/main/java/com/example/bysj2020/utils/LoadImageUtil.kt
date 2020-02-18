@@ -66,7 +66,7 @@ class LoadImageUtil {
      * @param url
      */
     fun loadCircularImage(view: ImageView, url: String?) {
-        val requestOptions = RequestOptions().placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher)
+        val requestOptions = RequestOptions().placeholder(R.mipmap.default_picture).error(R.mipmap.default_picture)
         manager?.applyDefaultRequestOptions(requestOptions)?.load(url)?.into(view)
     }
 
