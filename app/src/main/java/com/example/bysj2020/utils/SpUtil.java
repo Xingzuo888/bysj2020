@@ -12,7 +12,6 @@ public class SpUtil {
         return sp;
     }
 
-
     /**
      * 保存数据到sharedPreference
      *
@@ -36,6 +35,7 @@ public class SpUtil {
         } else if (value instanceof Set) {
             editor.putStringSet(key, (Set<String>) value);
         }
+        editor.commit();
     }
 
     /**

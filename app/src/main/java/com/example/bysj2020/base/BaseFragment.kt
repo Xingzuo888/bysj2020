@@ -56,7 +56,7 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener, View.OnClickList
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         this.mActivity = context as AppCompatActivity
     }

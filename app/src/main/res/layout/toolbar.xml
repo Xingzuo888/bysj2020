@@ -55,7 +55,7 @@
             android:id="@+id/right_icons"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:alignParentRight="true"
+            android:layout_gravity="right"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:visibility="gone" />
@@ -65,7 +65,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:alignParentRight="true"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:visibility="visible" />
