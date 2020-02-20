@@ -11,6 +11,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -56,6 +57,9 @@ dependencies {
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
     //消息传输
     implementation 'org.greenrobot:eventbus:3.2.0'
+    //QMUI
+    implementation 'com.qmuiteam:qmui:2.0.0-alpha02'
+
 
     implementation 'com.android.support:recyclerview-v7:29.0.0'
 

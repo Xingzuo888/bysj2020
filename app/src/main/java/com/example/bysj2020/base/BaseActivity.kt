@@ -1,6 +1,7 @@
 package com.example.bysj2020.base
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.MenuItem
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleObserver
 import com.example.bysj2020.R
+import com.example.bysj2020.activity.Home
 import com.example.bysj2020.event.BaseEvent
 import com.example.bysj2020.statelayout.EmptyView
 import com.example.bysj2020.statelayout.ErrorView
@@ -65,8 +67,7 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
             android.R.id.home -> {
                 val extraMap = intent.getStringExtra("extraMap")
                 if (null != extraMap) {
-                    //todo
-//                    startActivity()
+                    startActivity(Intent(this, Home::class.java))
                 }
                 hideKeyboard()
                 finish()
@@ -88,11 +89,11 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
      */
     fun initStateLayout(click: LoadHelper.EmptyClickListener) {
         helper = LoadHelper.Builder(this)
-                .setContentView(getContentView())
-                .setEmptyView(getEmptyView())
-                .setErrorView(getErrorView())
-                .setLoadingView(getLoadingView())
-                .build()
+            .setContentView(getContentView())
+            .setEmptyView(getEmptyView())
+            .setErrorView(getErrorView())
+            .setLoadingView(getLoadingView())
+            .build()
         helper.init()
         helper.addEmptyClickListener(click)
     }

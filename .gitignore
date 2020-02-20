@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 app/build
+app/debug/output.json
+app/release/bysj2020-1.0.apk
+app/release/output.json
+app/debug/bysj2020-1.0.apk
