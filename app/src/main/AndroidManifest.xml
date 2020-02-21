@@ -16,6 +16,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.ForgetLoginPassword"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.Register"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginVerificationCode"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginPassword"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.Launch"
             android:screenOrientation="portrait"
             android:theme="@style/LaunchTheme">

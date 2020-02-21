@@ -125,6 +125,7 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
      */
     fun setBack() {
         toolbar.title = ""
+        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_black)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -134,7 +135,7 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
      * @param color 颜色
      */
     fun setBackColor(color: Int) {
-        val upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material)
+        val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_keyboard_arrow_left_black)
         upArrow?.setColorFilter(ContextCompat.getColor(this, color), PorterDuff.Mode.SRC_ATOP)
         supportActionBar?.setHomeAsUpIndicator(upArrow)
     }
@@ -320,8 +321,7 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
             super.onBackPressed()
         } else {
             //应用外登录，接收通知
-            //todo
-//            startActivity()
+            startActivity(Intent(this,Home::class.java))
             finish()
         }
     }

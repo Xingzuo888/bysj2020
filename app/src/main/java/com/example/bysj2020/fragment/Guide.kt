@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.Home
+import com.example.bysj2020.activity.LoginVerificationCode
 import com.example.bysj2020.utils.SpUtil
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
 
@@ -70,8 +71,7 @@ class Guide : Fragment() {
         }
         guide_login?.setOnClickListener {
             SpUtil.Save(activity,"isFirstLaunch",false)
-            ///todo 跳转
-
+            startActivity(Intent(activity, LoginVerificationCode::class.java).putExtra("type",1))//首次登录
             activity?.finish()
         }
         guide_jump?.setOnClickListener{
