@@ -19,8 +19,8 @@ class LoadingView(private val mContext: Context, private val title: String) : Vi
     override fun createView(): View {
         mLoadingView = LayoutInflater.from(mContext).inflate(R.layout.loading, null)
         if (!TextUtils.isEmpty(title)) {
-            val errorTitle: TextView = mLoadingView.findViewById(R.id.loading_title)
-            errorTitle.text = title
+            val loadingTitle: TextView = mLoadingView.findViewById(R.id.loading_title)
+            loadingTitle.text = title
         }
         return mLoadingView
     }

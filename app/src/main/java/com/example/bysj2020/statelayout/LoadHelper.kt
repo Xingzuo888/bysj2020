@@ -12,7 +12,7 @@ import com.example.bysj2020.R
  *    Time   : 2020/02/15
  *    Desc   : 加载布局助手
  */
-class LoadHelper(var builder: Builder) : View.OnClickListener {
+class LoadHelper(builder: Builder) : View.OnClickListener {
     private var context: Context = builder.context
     private var contentView: View = builder.contentView
     private var emptyView: View = builder.emptyView

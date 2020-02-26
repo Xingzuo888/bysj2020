@@ -50,7 +50,7 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener, View.OnClickList
     }
 
     private fun prepareFetchData(forceUpdate: Boolean) {
-        if (isVisibleToUser && isViewInitiated && (isDataInitiated || forceUpdate)) {
+        if (isVisibleToUser && isViewInitiated && (!isDataInitiated || forceUpdate)) {
             loadData()
             isDataInitiated = true
         }
