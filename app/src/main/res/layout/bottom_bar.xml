@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.qmuiteam.qmui.layout.QMUILinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_gravity="bottom"
+    android:orientation="vertical"
+    app:qmui_shadowAlpha="1.0"
+    app:qmui_shadowElevation="15dp">
+
+    <RadioGroup
+        android:id="@+id/bottom_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <RadioButton
+            android:id="@+id/bottom_radio_home"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/bottom_home"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@drawable/bottom_color"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/bottom_radio_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:button="@null"
+            android:drawableTop="@drawable/bottom_address"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="目的地"
+            android:textColor="@drawable/bottom_color"
+            android:textSize="10dp" />
+
+        <RadioButton
+            android:id="@+id/bottom_radio_mine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:button="@null"
+            android:drawableTop="@drawable/bottom_mine"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="我的"
+            android:textColor="@drawable/bottom_color"
+            android:textSize="10dp" />
+    </RadioGroup>
+</com.qmuiteam.qmui.layout.QMUILinearLayout>

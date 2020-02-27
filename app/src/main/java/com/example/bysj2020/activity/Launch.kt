@@ -27,7 +27,7 @@ class Launch : AppCompatActivity() {
 
     fun initViews() {
         //每次进入APP就调用检查
-//        isFirst = SpUtil.Obtain(this, "isFirstLaunch", true) as Boolean
+        isFirst = SpUtil.Obtain(this, "isFirstLaunch", true) as Boolean
         if (isFirst) {
             handler.postDelayed({
                 startActivity(Intent(this@Launch, Welcome::class.java))

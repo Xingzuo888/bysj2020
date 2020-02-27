@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.bysj2020.R
-import com.example.bysj2020.adapter.ViewPagerAdapter
+import com.example.bysj2020.adapter.ViewPagerAdapters
 import com.example.bysj2020.fragment.Guide
 import com.gyf.immersionbar.ImmersionBar
 import kotlinx.android.synthetic.main.activity_welcome.*
@@ -31,7 +31,8 @@ class Welcome : AppCompatActivity() {
             mFragments.add(Guide.newInstance(i))
         }
         mFragments.add(Guide.newInstance(2))
-        val adapters=ViewPagerAdapter(supportFragmentManager,mFragments)
+        val adapters=
+            ViewPagerAdapters(supportFragmentManager, mFragments)
         welcome_vp!!.adapter=adapters
         welcome_indicator.setmViewPager(welcome_vp)
         welcome_vp!!.addOnPageChangeListener(object :ViewPager.OnPageChangeListener{

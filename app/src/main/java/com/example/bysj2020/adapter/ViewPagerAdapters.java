@@ -12,14 +12,14 @@ import java.util.List;
  * Time   : 2020/02/19
  * Desc   :
  */
-public class ViewPagerAdapter<T> extends FragmentStatePagerAdapter {
+public class ViewPagerAdapters<T> extends FragmentStatePagerAdapter {
     private List<T> fragments;
 
-    public ViewPagerAdapter(@NonNull FragmentManager fm) {
+    public ViewPagerAdapters(@NonNull FragmentManager fm) {
         super(fm);
     }
 
-    public ViewPagerAdapter(@NonNull FragmentManager fm, List<T> fragments) {
+    public ViewPagerAdapters(@NonNull FragmentManager fm, List<T> fragments) {
         super(fm);
         this.fragments = fragments;
     }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+        android:id="@+id/ari_iv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:elevation="5dp"
+        android:outlineAmbientShadowColor="@color/black"
+        app:srcCompat="@mipmap/default_picture"
+        
+        android:scaleType="fitXY"
+        app:layout_constraintDimensionRatio="0.74:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:qmui_corner_radius="15dp" />
+
+    <View
+        android:id="@+id/ari_v"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/address_recycler_border"
+        app:layout_constraintRight_toRightOf="@id/ari_iv"
+        app:layout_constraintLeft_toLeftOf="@id/ari_iv"
+        app:layout_constraintTop_toTopOf="@id/ari_iv"
+        app:layout_constraintBottom_toBottomOf="@id/ari_iv"
+        android:layout_margin="10dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:text="九寨沟"
+        android:textColor="@color/black"
+        app:layout_constraintLeft_toLeftOf="@id/ari_v"
+        app:layout_constraintBottom_toTopOf="@id/ari_nameE"
+        app:layout_constraintRight_toRightOf="@id/ari_v"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="5dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:id="@+id/ari_nameC" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:text="Jiuzhaigou"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toLeftOf="@id/ari_v"
+        app:layout_constraintBottom_toBottomOf="@id/ari_v"
+        app:layout_constraintRight_toRightOf="@id/ari_v"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="2dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:id="@+id/ari_nameE" />
+</androidx.constraintlayout.widget.ConstraintLayout>
