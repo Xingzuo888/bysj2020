@@ -277,13 +277,16 @@
                             android:layout_height="200dp"
                             app:AutoPlayTime="3000"
                             app:isShowTips="true"
+                            app:isTipsMarquee="true"
                             app:pointContainerPosition="BOTTOM"
+                            app:pointLeftRightPadding="5dp"
                             app:pointNormal="@drawable/banner_normal"
                             app:pointSelect="@drawable/banner_select"
-                            app:pointsContainerBackground="@color/gray_b"
+                            app:pointTopBottomPadding="8dp"
+                            app:pointsContainerBackground="#4D000000"
                             app:pointsPosition="RIGHT"
                             app:tipTextColor="@color/white"
-                            app:tipTextSize="20dp" />
+                            app:tipTextSize="15dp" />
                     </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout

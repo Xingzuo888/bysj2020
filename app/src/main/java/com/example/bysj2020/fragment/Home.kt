@@ -1,11 +1,16 @@
 package com.example.bysj2020.fragment
 
+import android.content.Intent
 import android.os.CountDownTimer
 import android.view.View
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.example.bysj2020.R
+import com.example.bysj2020.activity.Search
 import com.example.bysj2020.adapter.FHomeRecyclerViewAdapter
 import com.example.bysj2020.base.BaseFragment
+import com.example.bysj2020.bean.XBannerBean
 import com.example.bysj2020.statelayout.LoadHelper
 import com.example.bysj2020.utils.ToastUtil
 import com.stx.xhb.androidx.XBanner
@@ -22,6 +27,7 @@ class Home : BaseFragment() {
     private var timer: CountDownTimer? = null //达到20秒后，触发界面显示，则自动刷新
     private var canRefresh: Boolean = false
     private var isLoading = false//是否正在加载数据,用于防止加载中时操作崩溃
+    private var list= arrayListOf(XBannerBean("预防与凤凰居防御符给他发出的很干净春归何处",R.drawable.uuu),XBannerBean("iii",R.drawable.iii),XBannerBean("ooo",R.drawable.ooo))
 
     companion object {
         fun newInstance(): Home {
@@ -66,7 +72,12 @@ class Home : BaseFragment() {
         f_home_smartRefreshLayout.setDisableContentWhenLoading(true)
         f_home_smartRefreshLayout.setEnableLoadMore(false)
         //初始化轮播图
-//        f_home_xBanner.setBannerData()
+        f_home_xBanner.setBannerData(list)
+        f_home_xBanner.loadImage(object :XBanner.XBannerAdapter{
+            override fun loadBanner(banner: XBanner?, model: Any?, view: View?, position: Int) {
+                Glide.with(this@Home).load(list[position].url).into(view as ImageView)
+            }
+        })
         f_home_xBanner.setOnItemClickListener { xBanner: XBanner, any: Any, view: View, i: Int ->
             ToastUtil.setToast(activity, "")
         }
@@ -77,6 +88,9 @@ class Home : BaseFragment() {
      */
     fun getDataList() {
         showContent()
+        if (f_home_smartRefreshLayout.isRefreshing) {
+            f_home_smartRefreshLayout.finishRefresh()
+        }
     }
 
     override fun onClick(v: View?) {
@@ -98,6 +112,7 @@ class Home : BaseFragment() {
             }
             R.id.search_lay -> {
                 //跳转到搜索界面
+                startActivity(Intent(activity,Search::class.java))
             }
             R.id.f_home_moreCity_tv -> {
                 //更多城市
@@ -197,11 +212,13 @@ class Home : BaseFragment() {
         if (canRefresh) {
             //20秒后，显示当前页面刷新
             getDataList()
+            f_home_xBanner.startAutoPlay()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        f_home_xBanner.stopAutoPlay()
         if (null == timer) {
             timer!!.cancel()
         }

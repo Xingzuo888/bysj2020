@@ -32,7 +32,7 @@ import java.util.regex.Pattern
  */
 class LoginVerificationCode : BaseActivity() {
 
-    private var type = 0//登录类型（1.首次登录，跳转home）
+    private var isBackArrow:Boolean=true //登录来源（true 不是从引导页来的，有返回箭头）
 
     private var isTimerStart: Boolean = false
     private var timer: CountDownTimer? = null
@@ -44,9 +44,12 @@ class LoginVerificationCode : BaseActivity() {
     }
 
     override fun initViews() {
-        type = intent.getIntExtra("type", 0)
+        isBackArrow=intent.getBooleanExtra("isBackArrow",true)
         right_text.visibility = View.VISIBLE
         right_text.text = "注册"
+        if (isBackArrow) {
+            setBack()
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbar.elevation = 0f
         }
@@ -136,7 +139,7 @@ class LoginVerificationCode : BaseActivity() {
             }
             R.id.login_vc_loginPassword_tv -> {
                 //密码登录
-                startActivity(Intent(this, LoginPassword::class.java).putExtra("type", 1))//首次登录
+                startActivity(Intent(this, LoginPassword::class.java).putExtra("isBackArrow", isBackArrow))
                 finish()
             }
         }
@@ -210,7 +213,11 @@ class LoginVerificationCode : BaseActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exit()
+            if (isBackArrow) {
+                finish()
+            } else {
+                exit()
+            }
             return true
         }
         return false

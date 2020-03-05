@@ -17,8 +17,20 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.Search"
+            android:name=".activity.SystemSetting"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.AccountSecurity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PersonalInformation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingNotice"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Search"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ForgetLoginPassword"
             android:screenOrientation="portrait" />

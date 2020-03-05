@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    android:id="@+id/f_mine_lay"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/f_mine_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="200dp">
+
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/f_mine_collapsing_toolbar"
                 android:layout_width="match_parent"
@@ -16,224 +21,240 @@
                 android:background="@color/green"
                 app:contentScrim="?attr/colorAccent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
                 <LinearLayout
+                    android:id="@+id/f_mine_login_lay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/f_mine_login_lay"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    app:layout_collapseMode="parallax"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_collapseMode="parallax">
 
                     <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/f_mine_head_iv"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@mipmap/default_head"
-                        android:id="@+id/f_mine_head_iv" />
+                        android:src="@mipmap/default_head" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/f_mine_login_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:textSize="15dp"
                         android:text="登录账号"
-                        android:id="@+id/f_mine_login_tv"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
                 </LinearLayout>
+
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/f_mine_toolbar"
                     android:layout_width="match_parent"
-                    app:layout_collapseMode="pin"
-                    android:layout_height="45dp">
+                    android:layout_height="45dp"
+                    app:layout_collapseMode="pin">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <ImageView
+                            android:id="@+id/f_mine_setting"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/icon_setting"
-                            android:id="@+id/f_mine_setting"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="20dp"
-                            />
+                            android:src="@mipmap/icon_setting" />
                     </RelativeLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/f_mine_scrollView"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/f_mine_scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/f_mine_self"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="28dp"
-                android:background="#F4F1F2"
-                android:text="个人"
-                android:textColor="#060606"
-                android:textSize="15dp"
-                android:gravity="center_vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:paddingLeft="10dp" />
-            <LinearLayout
-                android:id="@+id/f_mine_account_security_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/f_mine_self"
-                android:orientation="vertical">
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:textColor="#060606"
-                    android:text="账户安全"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableLeft="@mipmap/icon_account_security"
-                    android:drawablePadding="50dp"
-                    android:paddingLeft="30dp"
-                    />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1.5dp"
-                    android:background="#F2F2F2"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/f_mine_self_info_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/f_mine_account_security_lay"
-                android:orientation="vertical">
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:textColor="#060606"
-                    android:text="个人信息"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableLeft="@mipmap/icon_self_info"
-                    android:drawablePadding="50dp"
-                    android:paddingLeft="30dp"
-                    />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1.5dp"
-                    android:background="#F2F2F2"/>
-            </LinearLayout>
+                android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/f_mine_system"
-                android:layout_width="match_parent"
-                android:layout_height="28dp"
-                android:background="#F4F1F2"
-                android:text="系统"
-                android:textColor="#060606"
-                android:textSize="15dp"
-                android:gravity="center_vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/f_mine_self_info_lay"
-                app:layout_constraintRight_toRightOf="parent"
-                android:paddingLeft="10dp" />
-            <LinearLayout
-                android:id="@+id/f_mine_booking_info_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/f_mine_system"
-                android:orientation="vertical">
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/f_mine_self"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="28dp"
+                    android:background="@color/gray_f4"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="个人"
+                    android:textColor="@color/black_06"
                     android:textSize="15dp"
-                    android:textColor="#060606"
-                    android:text="预订信息"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableLeft="@mipmap/icon_booking_info"
-                    android:drawablePadding="50dp"
-                    android:paddingLeft="30dp"
-                    />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1.5dp"
-                    android:background="#F2F2F2"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/f_mine_system_notification_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/f_mine_booking_info_lay"
-                android:orientation="vertical">
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:textColor="#060606"
-                    android:text="系统通知"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableLeft="@mipmap/icon_system_notification"
-                    android:drawablePadding="50dp"
-                    android:paddingLeft="30dp"
-                    />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1.5dp"
-                    android:background="#F2F2F2"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/f_mine_tel_service_lay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/f_mine_system_notification_lay"
-                android:orientation="vertical">
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15dp"
-                    android:textColor="#060606"
-                    android:text="联系客服"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableLeft="@mipmap/icon_tel_service"
-                    android:drawablePadding="50dp"
-                    android:paddingLeft="30dp"
-                    />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1.5dp"
-                    android:background="#F2F2F2"/>
-            </LinearLayout>
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/f_mine_tel_service_lay"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:text="oshagoihioshaoghohoisha后我哈日讴歌红我好IG覅偶荣哈工会奥is好过哦i会日哦砂锅荣IGhiorhiOA好过我我好肉一欧冠少IGhior画哦我爱过后我融安hi共is个hi哦豁日哦上供is誓师大会公费生公示给收到货龚日升过咯我然后给我哦华融IG我哦啊通IE我哦爱太过分hi融合古体诗囧哥我偶认识热死偶尔会IoT搜以后瘦 "
-                android:textSize="40dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <LinearLayout
+                    android:id="@+id/f_mine_account_security_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_selector"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/f_mine_self">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:drawableLeft="@mipmap/icon_account_security"
+                        android:drawablePadding="50dp"
+                        android:paddingLeft="30dp"
+                        android:text="账户安全"
+                        android:textColor="@color/black_06"
+                        android:textSize="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/gray_f2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/f_mine_self_info_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_selector"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/f_mine_account_security_lay">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:drawableLeft="@mipmap/icon_self_info"
+                        android:drawablePadding="50dp"
+                        android:paddingLeft="30dp"
+                        android:text="个人信息"
+                        android:textColor="@color/black_06"
+                        android:textSize="15dp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/f_mine_system"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:background="@color/gray_f4"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="系统"
+                    android:textColor="@color/black_06"
+                    android:textSize="15dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/f_mine_self_info_lay" />
+
+                <LinearLayout
+                    android:id="@+id/f_mine_booking_info_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_selector"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/f_mine_system">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:drawableLeft="@mipmap/icon_booking_info"
+                        android:drawablePadding="50dp"
+                        android:paddingLeft="30dp"
+                        android:text="预订信息"
+                        android:textColor="@color/black_06"
+                        android:textSize="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/gray_f2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/f_mine_system_notification_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_selector"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/f_mine_booking_info_lay">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:drawableLeft="@mipmap/icon_system_notification"
+                        android:drawablePadding="50dp"
+                        android:paddingLeft="30dp"
+                        android:text="系统通知"
+                        android:textColor="@color/black_06"
+                        android:textSize="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/gray_f2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/f_mine_tel_service_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_selector"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/f_mine_system_notification_lay">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:drawableLeft="@mipmap/icon_tel_service"
+                        android:drawablePadding="50dp"
+                        android:paddingLeft="30dp"
+                        android:text="联系客服"
+                        android:textColor="@color/black_06"
+                        android:textSize="15dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:background="@color/gray_f2" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:text="oshagoihioshaoghohoisha后我哈日讴歌红我好IG覅偶荣哈工会奥is好过哦i会日哦砂锅荣IGhiorhiOA好过我我好肉一欧冠少IGhior画哦我爱过后我融安hi共is个hi哦豁日哦上供is誓师大会公费生公示给收到货龚日升过咯我然后给我哦华融IG我哦啊通IE我哦爱太过分hi融合古体诗囧哥我偶认识热死偶尔会IoT搜以后瘦 "
+                    android:textSize="40dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/f_mine_tel_service_lay" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

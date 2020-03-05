@@ -66,6 +66,8 @@ dependencies {
     implementation 'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'    //经典刷新头
     //XBanner轮播图
     implementation 'com.github.xiaohaibin:XBanner:androidx_v1.0.5'
+    //时间选择器
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
 
     implementation 'com.android.support:recyclerview-v7:29.0.0'
 

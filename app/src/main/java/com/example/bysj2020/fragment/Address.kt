@@ -1,7 +1,9 @@
 package com.example.bysj2020.fragment
 
+import android.content.Intent
 import android.view.View
 import com.example.bysj2020.R
+import com.example.bysj2020.activity.Search
 import com.example.bysj2020.base.BaseFragment
 import com.example.bysj2020.statelayout.LoadHelper
 import kotlinx.android.synthetic.main.fragment_address.*
@@ -62,6 +64,7 @@ class Address :BaseFragment() {
             }
             R.id.f_address_search->{
                 //搜索
+                startActivity(Intent(activity, Search::class.java))
             }
             R.id.f_address_moreViewPoint_tv->{
                 //更多景点
@@ -81,5 +84,8 @@ class Address :BaseFragment() {
      */
     fun getDataList() {
         showContent()
+        if (f_address_smartRefreshLayout.isRefreshing) {
+            f_address_smartRefreshLayout.finishRefresh()
+        }
     }
 }

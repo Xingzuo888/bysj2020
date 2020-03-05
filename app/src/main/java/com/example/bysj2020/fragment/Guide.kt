@@ -71,7 +71,7 @@ class Guide : Fragment() {
         }
         guide_login?.setOnClickListener {
             SpUtil.Save(activity,"isFirstLaunch",false)
-            startActivity(Intent(activity, LoginVerificationCode::class.java).putExtra("type",1))//首次登录
+            startActivity(Intent(activity, LoginVerificationCode::class.java).putExtra("isBackArrow",false))
             activity?.finish()
         }
         guide_jump?.setOnClickListener{

@@ -40,7 +40,7 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
-        ImmersionBar.with(this).statusBarColor(R.color.colorPrimary).statusBarDarkFont(true).init()
+        ImmersionBar.with(this).statusBarColor(R.color.green).statusBarDarkFont(true).init()
         ActivityManagerUtil.addDestroyActivity(this, javaClass.name)
         EventBus.getDefault().register(this)
         initViews()

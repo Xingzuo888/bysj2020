@@ -30,7 +30,7 @@ import java.util.regex.Pattern
  */
 class LoginPassword : BaseActivity() {
 
-    private var type = 0 //登录类型(1.首次登录，跳转home)
+    private var isBackArrow:Boolean=true //登录来源（true 不是从引导页来的，有返回箭头）
     private var tipDialog: QMUITipDialog? = null
     private var clickTime: Long = 0 //记录第一次点击的时间
 
@@ -39,9 +39,12 @@ class LoginPassword : BaseActivity() {
     }
 
     override fun initViews() {
-        type = intent.getIntExtra("type", 0)
+        isBackArrow=intent.getBooleanExtra("isBackArrow",true)
         right_text.visibility = View.VISIBLE
         right_text.text = "注册"
+        if (isBackArrow) {
+            setBack()
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbar.elevation = 0f
         }
@@ -127,10 +130,10 @@ class LoginPassword : BaseActivity() {
                 //验证码登录
                 startActivity(
                     Intent(this, LoginVerificationCode::class.java).putExtra(
-                        "type",
-                        1
+                        "isBackArrow",
+                        isBackArrow
                     )
-                )//首次登录
+                )
                 finish()
             }
             R.id.login_password_forget_password -> {
@@ -179,7 +182,11 @@ class LoginPassword : BaseActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exit()
+            if (isBackArrow) {
+                finish()
+            } else {
+                exit()
+            }
             return true
         }
         return false
