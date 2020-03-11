@@ -30,7 +30,7 @@ public class FHomeRecyclerViewAdapter extends BaseAdapter<FHomeRecyclerBean> {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.home_recycler_view_item;
+        return R.layout.item_home_recycler_view;
     }
 
     @Override

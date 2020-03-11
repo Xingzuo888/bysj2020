@@ -30,7 +30,7 @@ import java.util.regex.Pattern
  */
 class LoginPassword : BaseActivity() {
 
-    private var isBackArrow:Boolean=true //登录来源（true 不是从引导页来的，有返回箭头）
+    private var isBackArrow: Boolean = true //登录来源（true 不是从引导页来的，有返回箭头）
     private var tipDialog: QMUITipDialog? = null
     private var clickTime: Long = 0 //记录第一次点击的时间
 
@@ -39,7 +39,7 @@ class LoginPassword : BaseActivity() {
     }
 
     override fun initViews() {
-        isBackArrow=intent.getBooleanExtra("isBackArrow",true)
+        isBackArrow = intent.getBooleanExtra("isBackArrow", true)
         right_text.visibility = View.VISIBLE
         right_text.text = "注册"
         if (isBackArrow) {
@@ -138,7 +138,7 @@ class LoginPassword : BaseActivity() {
             }
             R.id.login_password_forget_password -> {
                 //忘记密码
-                startActivity(Intent(this, ForgetLoginPassword::class.java))
+                startActivity(Intent(this, ModifyPassword::class.java).putExtra("titleId", 0))
             }
         }
     }

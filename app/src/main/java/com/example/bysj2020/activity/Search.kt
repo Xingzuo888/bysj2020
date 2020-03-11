@@ -42,7 +42,7 @@ class Search : BaseActivity() {
     private fun initData() {
         val list= listOf("dsgg","丢人事","发人数达","ouie4tr","偶尔他如何","出版包速度快","fkreadygri","大概i会都不能感知","sda","三个","s萨汗国")
         for (element in list) {
-            val view = layoutInflater.inflate(R.layout.search_float_item, null)
+            val view = layoutInflater.inflate(R.layout.item_search_float, null)
             val textView=view.findViewById<TextView>(R.id.search_float_item_content)
             textView.text= element
             search_history_content.addView(textView)

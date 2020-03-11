@@ -22,7 +22,7 @@ class SettingNoticeInfoAdapter(mList: MutableList<SettingNoticeInfoBean>?, conte
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.setting_notice_item
+        return R.layout.item_setting_notice
     }
 
     override fun getContentLength(): Int {

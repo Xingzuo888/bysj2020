@@ -14,7 +14,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.activity_forget_login_password.*
+import kotlinx.android.synthetic.main.activity_modify_password.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -25,18 +25,21 @@ import java.util.regex.Pattern
  * Time   : 2020/02/21
  * Desc   : 修改密码
  */
-class ForgetLoginPassword : BaseActivity() {
+class ModifyPassword : BaseActivity() {
 
+    private var titleID = 0 //0 找回密码 1 修改密码
+    private var titles = arrayListOf("找回密码", "修改密码")
     private var isTimerStart: Boolean = false
     private var timer: CountDownTimer? = null
     private var tipDialog: QMUITipDialog? = null
 
     override fun getLayoutId(): Int {
-        return R.layout.activity_forget_login_password
+        return R.layout.activity_modify_password
     }
 
     override fun initViews() {
-        setTitle("找回密码")
+        titleID = intent.getIntExtra("titleId", 0)
+        setTitle(titles[titleID])
         setBack()
         setToolbarColor(R.color.green)
         ImmersionBar.with(this).statusBarColor(R.color.green).statusBarDarkFont(true).init()

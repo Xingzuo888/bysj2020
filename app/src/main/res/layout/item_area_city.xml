@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/area_city_content"
+    android:layout_width="75dp"
+    android:layout_height="35dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginRight="6dp"
+    android:background="@drawable/area_item_normal_border"
+    android:ellipsize="end"
+    android:gravity="center"
+    android:lines="1"
+    android:padding="2dp"
+    android:text="全国"
+    android:textColor="@color/gray_8"
+    android:textSize="14dp" />

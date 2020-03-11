@@ -13,10 +13,27 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        flavorDimensions "1.0"
     }
+
+    productFlavors {
+        online {//线上环境
+            buildConfigField "String", "bysj2020_url", "${bysj2020_url}"
+            dimension "1.0"
+        }
+        local {//本地环境
+            buildConfigField "String", "bysj2020_url", "${test_bysj2020_url}"
+            dimension "1.0"
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled false //是否混淆
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false //是否混淆
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
