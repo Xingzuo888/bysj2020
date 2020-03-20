@@ -2,12 +2,18 @@ package com.example.bysj2020.activity
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.WindowManager
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
+import com.example.bysj2020.https.HttpResult
+import com.example.bysj2020.https.RxHttp
+import com.example.bysj2020.utils.MD5
 import com.example.bysj2020.utils.StringUtil
 import com.example.bysj2020.utils.VerifyUtils
+import com.google.gson.JsonObject
 import com.gyf.immersionbar.ImmersionBar
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
@@ -15,9 +21,6 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_modify_password.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 /**
@@ -29,12 +32,18 @@ class ModifyPassword : BaseActivity() {
 
     private var titleID = 0 //0 找回密码 1 修改密码
     private var titles = arrayListOf("找回密码", "修改密码")
+    private var msgUrls = arrayListOf("sendSmsForgetPassword", "sendSmsModifyPassword")
+    private var modifyPasswords = arrayListOf("forgetPassword", "modifyPassword")
     private var isTimerStart: Boolean = false
     private var timer: CountDownTimer? = null
     private var tipDialog: QMUITipDialog? = null
 
     override fun getLayoutId(): Int {
         return R.layout.activity_modify_password
+    }
+
+    override fun isRegisterEventBus(): Boolean {
+        return false
     }
 
     override fun initViews() {
@@ -51,37 +60,39 @@ class ModifyPassword : BaseActivity() {
     }
 
     private fun switchModifyPassword() {
-        val accountOb: Observable<out CharSequence> = RxTextView.textChanges(forget_lp_ed_phone)
-        val codeOb: Observable<out CharSequence> = RxTextView.textChanges(forget_lp_ed_code)
-        val passwordOb: Observable<out CharSequence> = RxTextView.textChanges(forget_lp_ed_password)
+        val accountOb: Observable<out CharSequence> = RxTextView.textChanges(mp_ed_phone)
+        val codeOb: Observable<out CharSequence> = RxTextView.textChanges(mp_ed_code)
+        val passwordOb: Observable<out CharSequence> = RxTextView.textChanges(mp_ed_password)
         Observable.combineLatest(accountOb, codeOb, passwordOb,
             Function3<CharSequence, CharSequence, CharSequence, Boolean> { account, code, password ->
                 verifyMth(account.toString(), code.toString(), password.toString())
             })
             .subscribe {
                 if (it) {
-                    forget_lp_btn.setOnTouchListener(this)
-                    forget_lp_btn.setBackgroundResource(R.drawable.button_green)
-                    forget_lp_btn.setOnClickListener(this)
+                    mp_btn.setOnTouchListener(this)
+                    mp_btn.setBackgroundResource(R.drawable.button_green)
+                    mp_btn.setOnClickListener(this)
                 } else {
-                    forget_lp_btn.setOnTouchListener(null)
-                    forget_lp_btn.setBackgroundResource(R.drawable.button_gray)
-                    forget_lp_btn.setOnClickListener(null)
+                    mp_btn.setOnTouchListener(null)
+                    mp_btn.setBackgroundResource(R.drawable.button_gray)
+                    mp_btn.setOnClickListener(null)
                 }
             }.addTo(compositeDisposable)
         //删除的图标
         accountOb.subscribe {
             if (it.isNotEmpty()) {
-                forget_lp_phone_img_close.visibility = View.VISIBLE
+                mp_phone_img_close.visibility = View.VISIBLE
             } else {
-                forget_lp_phone_img_close.visibility = View.GONE
+                mp_phone_img_close.visibility = View.GONE
             }
         }.addTo(compositeDisposable)
-        codeOb.subscribe {
+        passwordOb.subscribe {
             if (it.isNotEmpty()) {
-                forget_lp_password_img_close.visibility = View.VISIBLE
+                mp_password_img_close.visibility = View.VISIBLE
+                mp_password_tb.visibility = View.VISIBLE
             } else {
-                forget_lp_password_img_close.visibility = View.GONE
+                mp_password_img_close.visibility = View.GONE
+                mp_password_tb.visibility = View.GONE
             }
         }.addTo(compositeDisposable)
         //验证码
@@ -90,37 +101,49 @@ class ModifyPassword : BaseActivity() {
                 return@subscribe
             }
             if (VerifyUtils.verifyPhone(it.toString())) {
-                forget_lp_tv_code.setTextColor(resources.getColor(R.color.green))
-                forget_lp_tv_code.setOnClickListener(this)
+                mp_tv_code.setTextColor(resources.getColor(R.color.green))
+                mp_tv_code.setOnClickListener(this)
             } else {
-                forget_lp_tv_code.setTextColor(resources.getColor(R.color.gray_b))
-                forget_lp_tv_code.setOnClickListener(null)
+                mp_tv_code.setTextColor(resources.getColor(R.color.gray_b))
+                mp_tv_code.setOnClickListener(null)
             }
         }.addTo(compositeDisposable)
     }
 
     override fun setViewClick() {
-        forget_lp_phone_img_close.setOnClickListener(this)
-        forget_lp_password_img_close.setOnClickListener(this)
-        forget_lp_tv_code.setOnClickListener(this)
-        forget_lp_btn.setOnClickListener(this)
+        mp_phone_img_close.setOnClickListener(this)
+        mp_password_img_close.setOnClickListener(this)
+        mp_tv_code.setOnClickListener(this)
+        mp_btn.setOnClickListener(this)
+        mp_password_tb.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                //显示密码
+                mp_ed_password.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
+            } else {
+                //隐藏密码
+                mp_ed_password.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
+            }
+            mp_ed_password.setSelection(mp_ed_password.text.toString().length)
+        }
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.forget_lp_phone_img_close -> {
+            R.id.mp_phone_img_close -> {
                 //清除输入框的手机号
-                forget_lp_ed_phone.setText("")
+                mp_ed_phone.setText("")
             }
-            R.id.forget_lp_password_img_close -> {
+            R.id.mp_password_img_close -> {
                 //清除输入框的密码
-                forget_lp_ed_password.setText("")
+                mp_ed_password.setText("")
             }
-            R.id.forget_lp_tv_code -> {
+            R.id.mp_tv_code -> {
                 //获取验证码
                 getMsgCode()
             }
-            R.id.forget_lp_btn -> {
+            R.id.mp_btn -> {
                 //修改密码
                 modifyPassword()
             }
@@ -133,17 +156,46 @@ class ModifyPassword : BaseActivity() {
     }
 
     private fun getMsgCode() {
-        if (VerifyUtils.verifyPhone(forget_lp_ed_phone.text.toString())) {
-            startTimer()
-        }
+        tipDialog!!.show()
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        var body = JsonObject()
+
+        rxHttp.postWithJson(msgUrls[titleID], body, object : HttpResult<String> {
+            override fun OnSuccess(t: String?, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast("验证码已发送")
+                startTimer()
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast(msg!!)
+            }
+        })
     }
 
     private fun modifyPassword() {
         tipDialog?.show()
-        GlobalScope.launch {
-            delay(3000)
-            tipDialog?.dismiss()
-        }
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        var body = JsonObject()
+        body.addProperty("phone", mp_ed_phone.text.toString())
+        body.addProperty("code", mp_ed_code.text.toString())
+        val password = MD5.getMD5String(mp_ed_password.text.toString())
+        body.addProperty("password", password)
+        rxHttp.postWithJson(modifyPasswords[titleID], body, object : HttpResult<String> {
+            override fun OnSuccess(t: String?, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast("密码修改成功")
+                finish()
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast(msg!!)
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -185,14 +237,14 @@ class ModifyPassword : BaseActivity() {
         timer = object : CountDownTimer(60 * 1000, 1000) {
             override fun onFinish() {
                 isTimerStart = false
-                forget_lp_tv_code.setTextColor(resources.getColor(R.color.green))
-                forget_lp_tv_code.text = "重新获取验证码"
+                mp_tv_code.setTextColor(resources.getColor(R.color.green))
+                mp_tv_code.text = "重新获取验证码"
             }
 
             override fun onTick(millisUntilFinished: Long) {
                 isTimerStart = true
-                forget_lp_tv_code.setTextColor(resources.getColor(R.color.gray_b))
-                forget_lp_tv_code.text = "${millisUntilFinished / 1000}s"
+                mp_tv_code.setTextColor(resources.getColor(R.color.gray_b))
+                mp_tv_code.text = "${millisUntilFinished / 1000}s"
             }
         }.start()
     }

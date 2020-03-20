@@ -50,6 +50,16 @@ class LoadImageUtil {
     }
 
     /**
+     * 加载圆形图片
+     * @param view
+     * @param url
+     */
+    fun loadImage(view: ImageView, url: String?) {
+        val requestOptions = RequestOptions().placeholder(R.mipmap.default_picture).error(R.mipmap.default_picture)
+        manager?.applyDefaultRequestOptions(requestOptions)?.load(url)?.into(view)
+    }
+
+    /**
      * 加载普通图片
      * @param view
      * @param url

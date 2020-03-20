@@ -10,9 +10,16 @@ import android.view.WindowManager
 import android.widget.Toast
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
+import com.example.bysj2020.bean.LoginBean
+import com.example.bysj2020.event.LoginEvent
+import com.example.bysj2020.https.HttpResult
+import com.example.bysj2020.https.RxHttp
+import com.example.bysj2020.utils.LoginUtils
 import com.example.bysj2020.utils.SpUtil
 import com.example.bysj2020.utils.StringUtil
 import com.example.bysj2020.utils.VerifyUtils
+import com.google.gson.JsonObject
+import com.gyf.immersionbar.ImmersionBar
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import io.reactivex.Observable
@@ -20,9 +27,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_login_verification_code.*
 import kotlinx.android.synthetic.main.toolbar.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import java.util.regex.Pattern
 
 /**
@@ -32,7 +37,7 @@ import java.util.regex.Pattern
  */
 class LoginVerificationCode : BaseActivity() {
 
-    private var isBackArrow:Boolean=true //登录来源（true 不是从引导页来的，有返回箭头）
+    private var isBackArrow: Boolean = true //登录来源（true 不是从引导页来的，有返回箭头  false 是从引导页来，首次登录跳转home）
 
     private var isTimerStart: Boolean = false
     private var timer: CountDownTimer? = null
@@ -43,13 +48,19 @@ class LoginVerificationCode : BaseActivity() {
         return R.layout.activity_login_verification_code
     }
 
+    override fun isRegisterEventBus(): Boolean {
+        return false
+    }
+
     override fun initViews() {
-        isBackArrow=intent.getBooleanExtra("isBackArrow",true)
+        isBackArrow = intent.getBooleanExtra("isBackArrow", true)
         right_text.visibility = View.VISIBLE
         right_text.text = "注册"
         if (isBackArrow) {
             setBack()
         }
+        ImmersionBar.with(this).statusBarColor(R.color.white).init()
+        setToolbarColor(R.color.white)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbar.elevation = 0f
         }
@@ -139,7 +150,12 @@ class LoginVerificationCode : BaseActivity() {
             }
             R.id.login_vc_loginPassword_tv -> {
                 //密码登录
-                startActivity(Intent(this, LoginPassword::class.java).putExtra("isBackArrow", isBackArrow))
+                startActivity(
+                    Intent(this, LoginPassword::class.java).putExtra(
+                        "isBackArrow",
+                        isBackArrow
+                    )
+                )
                 finish()
             }
         }
@@ -151,18 +167,61 @@ class LoginVerificationCode : BaseActivity() {
     }
 
     private fun getMsgCode() {
-        if (VerifyUtils.verifyPhone(login_vc_ed_phone.text.toString())) {
+        tipDialog!!.show()
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        var body = JsonObject()
+        body.addProperty("phone", login_vc_ed_phone.text.toString())
+        rxHttp.postWithJson("sendLoginSms", body, object : HttpResult<String> {
+            override fun OnSuccess(t: String?, msg: String?) {
+                tipDialog?.dismiss()
+                showToast("验证码已发送")
+                startTimer()
+            }
 
-            startTimer()
-        }
+            override fun OnFail(code: Int, msg: String?) {
+                tipDialog?.dismiss()
+                showToast(msg!!)
+            }
+        })
     }
 
     private fun login() {
         tipDialog?.show()
-        GlobalScope.launch {
-            delay(3000)
-            tipDialog?.dismiss()
-        }
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        var body = JsonObject()
+        body.addProperty("phone", login_vc_ed_phone.text.toString())
+        body.addProperty("phoneCode", login_vc_ed_code.text.toString())
+        rxHttp.postWithJson("loginPhoneCode", body, object : HttpResult<LoginBean> {
+            override fun OnSuccess(t: LoginBean?, msg: String?) {
+                tipDialog!!.dismiss()
+                //保存登录数据
+                LoginUtils.saveLoginBean(this@LoginVerificationCode, t)
+                SpUtil.Save(
+                    this@LoginVerificationCode,
+                    "mobilePhone",
+                    login_vc_ed_phone.text.toString()
+                )
+                SpUtil.Save(
+                    this@LoginVerificationCode,
+                    "loginPhone",
+                    login_vc_ed_phone.text.toString()
+                )
+                showToast(msg!!)
+                //通知登录成功
+                EventBus.getDefault().post(LoginEvent(0))
+                if (!isBackArrow) {
+                    startActivity(Intent(this@LoginVerificationCode, Home::class.java))
+                }
+                finish()
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast(msg!!)
+            }
+        })
     }
 
     override fun onDestroy() {

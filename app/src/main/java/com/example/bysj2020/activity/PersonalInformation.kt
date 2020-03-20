@@ -26,6 +26,10 @@ class PersonalInformation : BaseActivity() {
         return R.layout.activity_personal_information
     }
 
+    override fun isRegisterEventBus(): Boolean {
+        return false
+    }
+
     override fun initViews() {
         setTitle("个人信息")
         setBack()

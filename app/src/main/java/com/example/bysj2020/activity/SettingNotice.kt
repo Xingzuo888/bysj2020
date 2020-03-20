@@ -24,6 +24,10 @@ class SettingNotice : BaseActivity() {
         return R.layout.activity_setting_notice
     }
 
+    override fun isRegisterEventBus(): Boolean {
+        return false
+    }
+
     override fun initViews() {
         setBack()
         setTitle("系统通知")

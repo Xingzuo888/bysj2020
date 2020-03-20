@@ -51,8 +51,8 @@ public class RxHttp implements LifecycleObserver {
         builder.writeTimeout(30, TimeUnit.SECONDS);
         builder.sslSocketFactory(getSSLSocketFactory());
         retrofitBuilder = new Retrofit.Builder();
-        retrofitBuilder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
-        retrofitBuilder.addConverterFactory(GsonConverterFactory.create());
+        retrofitBuilder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());//rx适配器
+        retrofitBuilder.addConverterFactory(GsonConverterFactory.create());//gson适配器
     }
 
     /**
@@ -90,8 +90,7 @@ public class RxHttp implements LifecycleObserver {
         this.context = context;
         builder.addInterceptor(new TokenInterceptor(context));
         builder.cookieJar(new PersistentCookieJar(context));
-        //TODO  url地址
-        retrofitBuilder.baseUrl("url");
+        retrofitBuilder.baseUrl(BuildConfig.bysj2020_url);
     }
 
     /**
@@ -103,7 +102,7 @@ public class RxHttp implements LifecycleObserver {
      */
     public void postWithJson(String method, JsonObject body, HttpResult result) {
         //body.addProperty("fromType",2);//登录渠道
-        body.addProperty("versionCode", BuildConfig.VERSION_CODE);//版本号 1
+        /*body.addProperty("versionCode", BuildConfig.VERSION_CODE);//版本号 1
         body.addProperty("version", BuildConfig.VERSION_NAME);//版本名 "1.0"
         //body.addProperty("channel", AppUtil.getAppMetaData(context, "UMENG_CHANNEL"));//版本来源渠道
         String loginToken = SpUtil.Obtain(context, "loginToken", "").toString();
@@ -111,8 +110,8 @@ public class RxHttp implements LifecycleObserver {
             body.addProperty("loginToken", "");
         } else {
             body.addProperty("loginToken", loginToken);
-        }
-        builder.addInterceptor(new ParamsInterceptor(body));
+        }*/
+        builder.addInterceptor(new ParamsInterceptor(body, context));
         retrofitBuilder.client(builder.build());
         retrofit = retrofitBuilder.build();
         send(method, new Class[]{JsonObject.class}, new JsonObject[]{body}, result);
@@ -127,16 +126,16 @@ public class RxHttp implements LifecycleObserver {
      */
     public void postPageWithJson(String method, JsonObject body, HttpPageResult result) {
         //body.addProperty("fromType",2);//登录渠道
-        body.addProperty("versionCode", BuildConfig.VERSION_CODE);//版本号 1
-        body.addProperty("version", BuildConfig.VERSION_NAME);//版本名 "1.0"
+//        body.addProperty("versionCode", BuildConfig.VERSION_CODE);//版本号 1
+//        body.addProperty("version", BuildConfig.VERSION_NAME);//版本名 "1.0"
         //body.addProperty("channel", AppUtil.getAppMetaData(context, "UMENG_CHANNEL"));//版本来源渠道
-        String loginToken = SpUtil.Obtain(context, "loginToken", "").toString();
+        /*String loginToken = SpUtil.Obtain(context, "loginToken", "").toString();
         if (loginToken.isEmpty() || method.equals("login")) {
             body.addProperty("loginToken", "");
         } else {
             body.addProperty("loginToken", loginToken);
-        }
-        builder.addInterceptor(new ParamsInterceptor(body));
+        }*/
+        builder.addInterceptor(new ParamsInterceptor(body, context));
         retrofitBuilder.client(builder.build());
         retrofit = retrofitBuilder.build();
         sendWithPage(method, new Class[]{JsonObject.class}, new JsonObject[]{body}, result);

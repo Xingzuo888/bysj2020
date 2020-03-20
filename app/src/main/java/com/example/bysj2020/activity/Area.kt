@@ -39,6 +39,10 @@ class Area : BaseActivity() {
         return R.layout.activity_area
     }
 
+    override fun isRegisterEventBus(): Boolean {
+        return false
+    }
+
     override fun getContentView(): View {
         return area_layout
     }

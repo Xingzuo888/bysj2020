@@ -1,8 +1,10 @@
 package com.example.bysj2020.https;
 
+import android.content.Context;
 import android.util.Base64;
 
 import com.example.bysj2020.BuildConfig;
+import com.example.bysj2020.utils.SpUtil;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -22,9 +24,11 @@ import okhttp3.Response;
 public class ParamsInterceptor implements Interceptor {
 
     private JsonObject body;
+    private Context context;
 
-    public ParamsInterceptor(JsonObject body) {
+    public ParamsInterceptor(JsonObject body,Context context) {
         this.body = body;
+        this.context = context;
     }
 
     @Override
@@ -43,6 +47,12 @@ public class ParamsInterceptor implements Interceptor {
         builder.addHeader("x-ca-version", "1");
         builder.addHeader("content-type", "application/json; charset=UTF-8");
         builder.addHeader("accept", "application/json; charset=utf-8");
+        String loginToken = SpUtil.Obtain(context, "loginToken", "").toString();
+        if (loginToken.isEmpty()) {
+            builder.addHeader("authorization", "");
+        } else {
+            builder.addHeader("authorization", loginToken);
+        }
         if (null != request.body()) {
             builder.addHeader("content-md5", base64AndMD5(body.toString().getBytes()));
         }

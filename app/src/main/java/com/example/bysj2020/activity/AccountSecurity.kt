@@ -13,6 +13,10 @@ import kotlinx.android.synthetic.main.activity_account_security.*
  *    Desc   : 账户安全
  */
 class AccountSecurity : BaseActivity() {
+    override fun isRegisterEventBus(): Boolean {
+        return false
+    }
+
     override fun getLayoutId(): Int {
         return R.layout.activity_account_security
     }

@@ -23,6 +23,10 @@ class Search : BaseActivity() {
         return R.layout.activity_search
     }
 
+    override fun isRegisterEventBus(): Boolean {
+        return false
+    }
+
     override fun initViews() {
         initStateLayout(object :LoadHelper.EmptyClickListener{
             override fun reload() {

@@ -1,7 +1,10 @@
 package com.example.bysj2020.https;
 
 import android.content.Context;
+import android.content.Intent;
 
+import com.example.bysj2020.activity.LoginVerificationCode;
+import com.example.bysj2020.utils.LoginUtils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -40,11 +43,12 @@ public class TokenInterceptor implements Interceptor {
         }
         String body = buffer.clone().readString(charset);
         HttpBean result = new Gson().fromJson(body, HttpBean.class);
-        //TODO
         synchronized (TokenInterceptor.class) {
-            if (result.getState() == -1006) {
+            if (result.getState() == -1) {
                 //token过期
                 //解除**绑定，并清除对应的数据
+                LoginUtils.clearData(context);
+                context.startActivity(new Intent(context, LoginVerificationCode.class).putExtra("isBackArrow",true));
             }
         }
         return response;

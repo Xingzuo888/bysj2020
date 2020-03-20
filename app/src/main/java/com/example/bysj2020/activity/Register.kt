@@ -2,12 +2,18 @@ package com.example.bysj2020.activity
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.WindowManager
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
+import com.example.bysj2020.https.HttpResult
+import com.example.bysj2020.https.RxHttp
+import com.example.bysj2020.utils.MD5
 import com.example.bysj2020.utils.StringUtil
 import com.example.bysj2020.utils.VerifyUtils
+import com.google.gson.JsonObject
 import com.gyf.immersionbar.ImmersionBar
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
@@ -16,9 +22,6 @@ import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.toolbar.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 /**
@@ -34,6 +37,10 @@ class Register : BaseActivity() {
 
     override fun getLayoutId(): Int {
         return R.layout.activity_register
+    }
+
+    override fun isRegisterEventBus(): Boolean {
+        return false
     }
 
     override fun initViews() {
@@ -77,11 +84,13 @@ class Register : BaseActivity() {
                 register_phone_img_close.visibility = View.GONE
             }
         }.addTo(compositeDisposable)
-        codeOb.subscribe {
+        passwordOb.subscribe {
             if (it.isNotEmpty()) {
                 register_password_img_close.visibility = View.VISIBLE
+                register_password_tb.visibility = View.VISIBLE
             } else {
                 register_password_img_close.visibility = View.GONE
+                register_password_tb.visibility = View.GONE
             }
         }.addTo(compositeDisposable)
         //验证码
@@ -105,6 +114,18 @@ class Register : BaseActivity() {
         register_password_img_close.setOnClickListener(this)
         register_tv_code.setOnClickListener(this)
         register_btn.setOnClickListener(this)
+        register_password_tb.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                //显示密码
+                register_ed_password.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
+            } else {
+                //隐藏密码
+                register_ed_password.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
+            }
+            register_ed_password.setSelection(register_ed_password.text.toString().length)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -137,18 +158,50 @@ class Register : BaseActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 
+    /**
+     * 获取验证码
+     */
     private fun getMsgCode() {
-        if (VerifyUtils.verifyPhone(register_ed_phone.text.toString())) {
-            startTimer()
-        }
+        tipDialog!!.show()
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        var body = JsonObject()
+        body.addProperty("phone", register_ed_phone.text.toString())
+        rxHttp.postWithJson("sendRegsSms", body, object : HttpResult<String> {
+            override fun OnSuccess(t: String?, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast("验证码已发送")
+                startTimer()
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast(msg!!)
+            }
+        })
     }
 
     private fun register() {
         tipDialog?.show()
-        GlobalScope.launch {
-            delay(3000)
-            tipDialog?.dismiss()
-        }
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        var body = JsonObject()
+        body.addProperty("phone", register_ed_phone.text.toString())
+        body.addProperty("code", register_ed_code.text.toString())
+        val password = MD5.getMD5String(register_ed_password.text.toString())
+        body.addProperty("password", password)
+        rxHttp.postWithJson("regsMobileCode", body, object : HttpResult<String> {
+            override fun OnSuccess(t: String?, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast("注册成功")
+                finish()
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                tipDialog!!.dismiss()
+                showToast(msg!!)
+            }
+        })
     }
 
     override fun onDestroy() {

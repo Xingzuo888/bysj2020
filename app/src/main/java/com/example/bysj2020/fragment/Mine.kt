@@ -5,8 +5,14 @@ import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.*
 import com.example.bysj2020.base.BaseFragment
+import com.example.bysj2020.event.LoginEvent
 import com.example.bysj2020.statelayout.LoadHelper
+import com.example.bysj2020.utils.LoadImageUtil
+import com.example.bysj2020.utils.SpUtil
 import kotlinx.android.synthetic.main.fragment_mine.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  *    Author : wxz
@@ -39,12 +45,22 @@ class Mine : BaseFragment() {
     }
 
     override fun initViews() {
+        EventBus.getDefault().register(this)
         initStateLayout(object : LoadHelper.EmptyClickListener {
             override fun reload() {
                 getDataList()
             }
-
         })
+
+        val loginToken=SpUtil.Obtain(context,"loginToken","").toString()
+        if (loginToken.isBlank()) {
+            f_mine_login_tv.visibility = View.VISIBLE
+        } else {
+            f_mine_login_tv.visibility = View.GONE
+            val imgUrl=SpUtil.Obtain(context,"avatar","").toString()
+            LoadImageUtil(this).loadCircularImage(f_mine_head_iv,imgUrl,R.mipmap.default_head)
+        }
+        LoadImageUtil(context!!).loadImage(mine_img,"https://bysj2020.oss-cn-beijing.aliyuncs.com/attractions/scene/18/small_img/18_smallimg.jpg")
     }
 
     override fun onClick(v: View?) {
@@ -83,5 +99,25 @@ class Mine : BaseFragment() {
     private fun getDataList() {
 
         showContent()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun loginEvent(event:LoginEvent) {
+        when (event.code) {
+            0->{
+                //登录成功
+                val imgUrl=SpUtil.Obtain(context,"avatar","").toString()
+                LoadImageUtil(this).loadCircularImage(f_mine_head_iv,imgUrl,R.mipmap.default_head)
+            }
+            1->{
+               //退出登录
+                LoadImageUtil(this).loadCircularImage(f_mine_head_iv,"",R.mipmap.default_head)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 }

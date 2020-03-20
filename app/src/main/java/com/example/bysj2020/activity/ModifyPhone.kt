@@ -33,6 +33,10 @@ class ModifyPhone : BaseActivity() {
         return R.layout.activity_modify_phone
     }
 
+    override fun isRegisterEventBus(): Boolean {
+        return false
+    }
+
     override fun getContentView(): View {
         return modify
     }

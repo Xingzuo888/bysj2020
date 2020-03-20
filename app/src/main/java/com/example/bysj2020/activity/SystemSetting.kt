@@ -25,6 +25,10 @@ class SystemSetting : BaseActivity() {
         return R.layout.activity_system_setting
     }
 
+    override fun isRegisterEventBus(): Boolean {
+        return false
+    }
+
     override fun initViews() {
         setBack()
         setTitle("系统设置")
@@ -37,6 +41,12 @@ class SystemSetting : BaseActivity() {
             .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
             .setTipWord("加载中...")
             .create()
+        val loginToken = SpUtil.Obtain(this, "loginToken", "").toString()
+        if (loginToken.isBlank()) {
+            logout.visibility = View.GONE
+        } else {
+            logout.visibility=View.VISIBLE
+        }
     }
 
     override fun setViewClick() {

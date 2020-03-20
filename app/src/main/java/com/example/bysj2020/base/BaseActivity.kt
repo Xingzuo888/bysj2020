@@ -42,7 +42,9 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
         setContentView(getLayoutId())
         ImmersionBar.with(this).statusBarColor(R.color.green).statusBarDarkFont(true).init()
         ActivityManagerUtil.addDestroyActivity(this, javaClass.name)
-        EventBus.getDefault().register(this)
+        if (isRegisterEventBus()) {
+            EventBus.getDefault().register(this)
+        }
         initViews()
         setViewClick()
     }
@@ -50,7 +52,9 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
     override fun onDestroy() {
         ActivityManagerUtil.destroyActivity(javaClass.name)
         compositeDisposable.clear()
-        EventBus.getDefault().unregister(this)
+        if (isRegisterEventBus()) {
+            EventBus.getDefault().unregister(this)
+        }
         super.onDestroy()
     }
 
@@ -222,6 +226,11 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
      * 设置点击事件
      */
     protected abstract fun setViewClick()
+
+    /**
+     * 是否注册EventBus
+     */
+    protected abstract fun isRegisterEventBus():Boolean
 
     /**
      * 空布局
