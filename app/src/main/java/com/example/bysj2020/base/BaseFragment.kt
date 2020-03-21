@@ -163,6 +163,13 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener, View.OnClickList
     }
 
     /**
+     * 显示错误布局
+     */
+    fun showError(title:String,content:String) {
+        helper?.showError(title,content)
+    }
+
+    /**
      * 显示空布局
      */
     fun showEmpty() {

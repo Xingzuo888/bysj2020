@@ -13,8 +13,8 @@ import com.example.bysj2020.R
  *    Time   : 2020/02/15
  *    Desc   : 错误布局界面
  */
-class ErrorView(val mContext: Context, val resourceId: Int, val title: String) : ViewLoader() {
-    constructor(mContext: Context) : this(mContext, 0, "")
+class ErrorView(val mContext: Context, val resourceId: Int, val title: String,val content:String) : ViewLoader() {
+    constructor(mContext: Context) : this(mContext, 0, "","")
 
     private lateinit var mErrorView: View
     override fun createView(): View {
@@ -26,6 +26,10 @@ class ErrorView(val mContext: Context, val resourceId: Int, val title: String) :
         if (!TextUtils.isEmpty(title)) {
             var errorTitle: TextView = mErrorView.findViewById(R.id.error_title)
             errorTitle.text = title
+        }
+        if (!TextUtils.isEmpty(content)) {
+            var errorContent: TextView = mErrorView.findViewById(R.id.error_content)
+            errorContent.text = content
         }
         return mErrorView
     }

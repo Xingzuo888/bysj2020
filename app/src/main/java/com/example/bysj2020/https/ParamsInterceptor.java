@@ -3,7 +3,6 @@ package com.example.bysj2020.https;
 import android.content.Context;
 import android.util.Base64;
 
-import com.example.bysj2020.BuildConfig;
 import com.example.bysj2020.utils.SpUtil;
 import com.google.gson.JsonObject;
 
@@ -14,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -25,9 +25,15 @@ public class ParamsInterceptor implements Interceptor {
 
     private JsonObject body;
     private Context context;
+    private Map map;
 
-    public ParamsInterceptor(JsonObject body,Context context) {
+    public ParamsInterceptor(JsonObject body, Context context) {
         this.body = body;
+        this.context = context;
+    }
+
+    public ParamsInterceptor(Map map, Context context) {
+        this.map = map;
         this.context = context;
     }
 
@@ -54,7 +60,11 @@ public class ParamsInterceptor implements Interceptor {
             builder.addHeader("authorization", loginToken);
         }
         if (null != request.body()) {
-            builder.addHeader("content-md5", base64AndMD5(body.toString().getBytes()));
+            if (body == null) {
+                builder.addHeader("content-md5", base64AndMD5(map.toString().getBytes()));
+            } else {
+                builder.addHeader("content-md5", base64AndMD5(body.toString().getBytes()));
+            }
         }
 
         return chain.proceed(builder.build());

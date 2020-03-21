@@ -280,6 +280,12 @@ abstract class BaseActivity : AppCompatActivity(), View.OnTouchListener, View.On
     fun showError() {
         helper.showError()
     }
+    /**
+     * 显示错误布局
+     */
+    fun showError(title:String,content:String) {
+        helper.showError(title,content)
+    }
 
     /**
      * 显示空布局

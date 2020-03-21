@@ -95,6 +95,23 @@ class LoadHelper(builder: Builder) : View.OnClickListener {
     }
 
     /**
+     * 显示错误布局
+     */
+    fun showError(title:String,content:String) {
+        contentView.visibility = View.GONE
+        emptyView.visibility = View.GONE
+        errorView.visibility = View.VISIBLE
+        loadingView.visibility = View.GONE
+        isShowContent = false
+        if (title.isNotBlank()) {
+            errorView.findViewById<TextView>(R.id.error_title).text=title
+        }
+        if (content.isNotBlank()) {
+            errorView.findViewById<TextView>(R.id.error_content).text=content
+        }
+    }
+
+    /**
      * 显示加载布局
      */
     fun showLoading() {

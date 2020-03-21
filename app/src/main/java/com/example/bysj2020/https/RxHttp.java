@@ -9,13 +9,13 @@ import androidx.lifecycle.OnLifecycleEvent;
 import com.example.bysj2020.BuildConfig;
 import com.example.bysj2020.https.GsonConverter.ResultJsonDeser;
 import com.example.bysj2020.https.GsonConverter.StringNullAdapter;
-import com.example.bysj2020.utils.SpUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.security.SecureRandom;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -142,7 +142,110 @@ public class RxHttp implements LifecycleObserver {
     }
 
     /**
-     * 网络请求 支持post、get方式，多参数类型
+     * get请求
+     *
+     * @param method
+     * @param map
+     * @param result
+     */
+    public void getWithJson(String method, Map map, HttpResult result) {
+        //body.addProperty("fromType",2);//登录渠道
+        /*body.addProperty("versionCode", BuildConfig.VERSION_CODE);//版本号 1
+        body.addProperty("version", BuildConfig.VERSION_NAME);//版本名 "1.0"
+        //body.addProperty("channel", AppUtil.getAppMetaData(context, "UMENG_CHANNEL"));//版本来源渠道
+        String loginToken = SpUtil.Obtain(context, "loginToken", "").toString();
+        if (loginToken.isEmpty() || method.equals("login")) {
+            body.addProperty("loginToken", "");
+        } else {
+            body.addProperty("loginToken", loginToken);
+        }*/
+        builder.addInterceptor(new ParamsInterceptor(map, context));
+        retrofitBuilder.client(builder.build());
+        retrofit = retrofitBuilder.build();
+        sendGet(method, new Class[]{Map.class}, map, result);
+    }
+
+    /**
+     * get分页请求
+     *
+     * @param method
+     * @param map
+     * @param result
+     */
+    public void getPageWithJson(String method, Map map, HttpPageResult result) {
+        //body.addProperty("fromType",2);//登录渠道
+//        body.addProperty("versionCode", BuildConfig.VERSION_CODE);//版本号 1
+//        body.addProperty("version", BuildConfig.VERSION_NAME);//版本名 "1.0"
+        //body.addProperty("channel", AppUtil.getAppMetaData(context, "UMENG_CHANNEL"));//版本来源渠道
+        /*String loginToken = SpUtil.Obtain(context, "loginToken", "").toString();
+        if (loginToken.isEmpty() || method.equals("login")) {
+            body.addProperty("loginToken", "");
+        } else {
+            body.addProperty("loginToken", loginToken);
+        }*/
+        builder.addInterceptor(new ParamsInterceptor(map, context));
+        retrofitBuilder.client(builder.build());
+        retrofit = retrofitBuilder.build();
+        sendGetWithPage(method, new Class[]{Map.class}, map, result);
+    }
+
+    /**
+     * 网络请求 支持get方式  多参数类型
+     *
+     * @param method
+     * @param parameterTypes
+     * @param map
+     * @param result
+     */
+    public void sendGet(String method, Class[] parameterTypes, Map map, HttpResult result) {
+        RxHttpService service = retrofit.create(RxHttpService.class);
+        try {
+            Observable observable;
+            if (parameterTypes == null || parameterTypes.length == 0) {
+                observable = (Observable) service.getClass().getMethod(method).invoke(service);
+            } else {
+                observable = (Observable) service.getClass().getMethod(method, parameterTypes).invoke(service, map);
+            }
+            observable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxHttpObserver(method, result));
+            this.method = method;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 网络请求分页 支持get方式 多参数类型
+     *
+     * @param method
+     * @param parameterTypes
+     * @param map
+     * @param result
+     */
+    public void sendGetWithPage(String method, Class[] parameterTypes, Map map, HttpPageResult result) {
+        RxHttpService service = retrofit.create(RxHttpService.class);
+        try {
+            Observable observable;
+            if (parameterTypes == null || parameterTypes.length == 0) {
+                observable = (Observable) service.getClass().getMethod(method).invoke(service);
+            } else {
+                observable = (Observable) service.getClass().getMethod(method, parameterTypes).invoke(service, map);
+            }
+            observable.subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxHttpObserver(method, result));
+            this.method = method;
+        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException e) {
+        }
+    }
+
+    /**
+     * 网络请求 支持post方式，多参数类型
      *
      * @param method
      * @param parameterTypes
@@ -171,7 +274,7 @@ public class RxHttp implements LifecycleObserver {
     }
 
     /**
-     * 网络请求分页，支持post、get方式，多参数类型
+     * 网络请求分页，支持post方式，多参数类型
      *
      * @param method
      * @param parameterTypes
