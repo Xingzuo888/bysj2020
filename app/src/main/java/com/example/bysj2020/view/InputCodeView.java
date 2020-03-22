@@ -94,10 +94,20 @@ public class InputCodeView extends RelativeLayout {
         void invalidContent();
     }
 
+    /**
+     * 获取文本信息
+     *
+     * @return
+     */
     public String getEditContent() {
         return inputContent;
     }
 
+    /**
+     * 设置文本信息
+     *
+     * @param txt
+     */
     public void setEditContent(String txt) {
         editText.setText(txt);
     }

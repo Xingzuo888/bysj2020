@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
+import com.example.bysj2020.global.Config
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.utils.MD5
@@ -94,6 +95,9 @@ class ModifyPassword : BaseActivity() {
                 mp_password_img_close.visibility = View.GONE
                 mp_password_tb.visibility = View.GONE
             }
+            if (it.length in 8..20) {
+                mp_password_prompt.visibility = View.GONE
+            }
         }.addTo(compositeDisposable)
         //验证码
         accountOb.subscribe {
@@ -114,7 +118,6 @@ class ModifyPassword : BaseActivity() {
         mp_phone_img_close.setOnClickListener(this)
         mp_password_img_close.setOnClickListener(this)
         mp_tv_code.setOnClickListener(this)
-        mp_btn.setOnClickListener(this)
         mp_password_tb.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 //显示密码
@@ -141,11 +144,26 @@ class ModifyPassword : BaseActivity() {
             }
             R.id.mp_tv_code -> {
                 //获取验证码
-                getMsgCode()
+                hideKeyboard()
+                if (VerifyUtils.verifyPhone(mp_ed_phone.text.toString())) {
+                    getMsgCode()
+                } else {
+                    showToast(Config.PHONE_FORMAT_NOT_CORRECT)
+                }
             }
             R.id.mp_btn -> {
                 //修改密码
-                modifyPassword()
+                hideKeyboard()
+                if (VerifyUtils.verifyPhone(mp_ed_phone.text.toString())) {
+                    if (mp_ed_password.text.toString().length in 8..20) {
+                        modifyPassword()
+                    } else {
+                        mp_password_prompt.visibility = View.VISIBLE
+                        showToast(Config.PASSWORD_FORMAT_INCORRECT)
+                    }
+                } else {
+                    showToast(Config.PHONE_FORMAT_NOT_CORRECT)
+                }
             }
         }
     }
@@ -160,11 +178,11 @@ class ModifyPassword : BaseActivity() {
         val rxHttp = RxHttp(this)
         addLifecycle(rxHttp)
         var body = JsonObject()
-
+        body.addProperty("phone", mp_ed_phone.text.toString())
         rxHttp.postWithJson(msgUrls[titleID], body, object : HttpResult<String> {
             override fun OnSuccess(t: String?, msg: String?) {
                 tipDialog!!.dismiss()
-                showToast("验证码已发送")
+                showToast(Config.VERIFY_CODE)
                 startTimer()
             }
 

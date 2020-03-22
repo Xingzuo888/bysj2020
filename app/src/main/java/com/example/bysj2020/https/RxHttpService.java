@@ -2,13 +2,20 @@ package com.example.bysj2020.https;
 
 import com.example.bysj2020.bean.ImgCodeBean;
 import com.example.bysj2020.bean.LoginBean;
+import com.example.bysj2020.bean.UserInfoBean;
 import com.google.gson.JsonObject;
+
+import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.QueryMap;
 
 public interface RxHttpService {
+
+    /*----------关于登录接口----------*/
 
     //获取登录短信验证码
     @POST("sendLoginSms")
@@ -26,6 +33,13 @@ public interface RxHttpService {
     @POST("verifyCode")
     Observable<HttpBean<ImgCodeBean>> verifyCode(@Body JsonObject body);
 
+    //退出登录
+    @POST("loginOut")
+    Observable<HttpBean<String>> loginOut(@Body JsonObject body);
+
+
+    /*----------关于注册接口----------*/
+
     //获取注册短信验证码
     @POST("sendRegsSms")
     Observable<HttpBean<String>> sendRegsSms(@Body JsonObject body);
@@ -33,6 +47,8 @@ public interface RxHttpService {
     //注册
     @POST("regsMobileCode")
     Observable<HttpBean<String>> regsMobileCode(@Body JsonObject body);
+
+    /*----------关于密码接口----------*/
 
     //获取忘记密码短信验证码
     @POST("passwordOpt/sendSmsForgetPassword")
@@ -49,4 +65,26 @@ public interface RxHttpService {
     //修改密码
     @POST("passwordOpt/modifyPassword")
     Observable<HttpBean<String>> modifyPassword(@Body JsonObject body);
+
+
+    /*----------关于页面初始化接口----------*/
+
+    //获取个人信息
+    @GET("index/basicUserInfo")
+    Observable<HttpBean<UserInfoBean>> basicUserInfo(@QueryMap Map<String,String> map);
+
+
+    /*----------关于用户----------*/
+
+    //获取更改手机号验证码
+    @POST("axUser/modifyBindPhoneSendSms")
+    Observable<HttpBean<String>> modifyBindPhoneSendSms(@Body JsonObject body);
+
+    //更改手机号
+    @POST("axUser/modifyBindPhone")
+    Observable<HttpBean<String>> modifyBindPhone(@Body JsonObject body);
+
+    //更改手机号
+    @POST("axUser/modifyUserInfo")
+    Observable<HttpBean<String>> modifyUserInfo(@Body JsonObject body);
 }

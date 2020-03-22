@@ -6,9 +6,13 @@ import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
 import com.example.bysj2020.dialog.CustomDialog
 import com.example.bysj2020.global.Config
+import com.example.bysj2020.https.HttpResult
+import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.utils.CacheUtil
+import com.example.bysj2020.utils.LoginUtils
 import com.example.bysj2020.utils.SpUtil
 import com.example.bysj2020.utils.ToastUtil
+import com.google.gson.JsonObject
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import kotlinx.android.synthetic.main.activity_system_setting.*
 import java.io.File
@@ -120,7 +124,22 @@ class SystemSetting : BaseActivity() {
      * 退出登录
      */
     private fun outLogin() {
+        tipDialog?.show()
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        rxHttp.postWithJson("loginOut", JsonObject(),object :HttpResult<String>{
+            override fun OnSuccess(t: String?, msg: String?) {
+                tipDialog?.dismiss()
+                LoginUtils.clearData(this@SystemSetting)
+                showToast("成功退出登录")
+                logout.visibility = View.GONE
+            }
 
+            override fun OnFail(code: Int, msg: String?) {
+                tipDialog?.dismiss()
+                showToast(msg!!)
+            }
+        })
     }
 
     override fun onDestroy() {

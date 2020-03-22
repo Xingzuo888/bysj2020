@@ -31,4 +31,5 @@
 
     <color name="gray_b2">#b2b2b2</color>
     <color name="main_blue">#0057FF</color>
+    <color name="prompt_red">#DCF57272</color>
 </resources>

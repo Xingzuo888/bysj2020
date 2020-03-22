@@ -52,7 +52,7 @@ public class RxHttp implements LifecycleObserver {
         builder.sslSocketFactory(getSSLSocketFactory());
         retrofitBuilder = new Retrofit.Builder();
         retrofitBuilder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());//rx适配器
-        retrofitBuilder.addConverterFactory(GsonConverterFactory.create());//gson适配器
+        retrofitBuilder.addConverterFactory(GsonConverterFactory.create(gson));//gson适配器
     }
 
     /**

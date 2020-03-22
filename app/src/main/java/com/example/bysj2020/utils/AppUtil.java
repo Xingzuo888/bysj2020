@@ -53,7 +53,10 @@ public class AppUtil {
             }
         } else {
             List<ActivityManager.RunningTaskInfo> taskInfos = am.getRunningTasks(1);
-            ComponentName componentName = taskInfos.get(0).topActivity;
+            ComponentName componentName = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                componentName = taskInfos.get(0).topActivity;
+            }
             if (componentName.getPackageName().equals(context.getPackageName())) {
                 isInBackground = false;
             }
@@ -72,7 +75,10 @@ public class AppUtil {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(1);
         if (runningTaskInfos != null) {
-            ComponentName f = runningTaskInfos.get(0).topActivity;
+            ComponentName f = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                f = runningTaskInfos.get(0).topActivity;
+            }
             topActivityClassName = f.getClassName();
         }
         return topActivityClassName;

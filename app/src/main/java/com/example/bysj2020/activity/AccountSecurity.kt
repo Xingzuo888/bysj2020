@@ -5,6 +5,8 @@ import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
 import com.example.bysj2020.statelayout.LoadHelper
+import com.example.bysj2020.utils.LoadImageUtil
+import com.example.bysj2020.utils.SpUtil
 import kotlinx.android.synthetic.main.activity_account_security.*
 
 /**
@@ -55,6 +57,8 @@ class AccountSecurity : BaseActivity() {
     }
 
     private fun getDataList() {
+        val headUrl = SpUtil.Obtain(this, "avatar", "") as String
+        LoadImageUtil(this).loadCircularImage(account_security_head, headUrl, R.mipmap.default_head)
         showContent()
     }
 

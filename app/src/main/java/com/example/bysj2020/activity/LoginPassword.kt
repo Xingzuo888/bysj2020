@@ -3,6 +3,8 @@ package com.example.bysj2020.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.KeyEvent
@@ -14,6 +16,7 @@ import com.example.bysj2020.base.BaseActivity
 import com.example.bysj2020.bean.ImgCodeBean
 import com.example.bysj2020.bean.LoginBean
 import com.example.bysj2020.event.LoginEvent
+import com.example.bysj2020.global.Config
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.utils.*
@@ -40,7 +43,7 @@ class LoginPassword : BaseActivity() {
     private var isBackArrow: Boolean = true //登录来源（true 不是从引导页来的，有返回箭头）
     private var tipDialog: QMUITipDialog? = null
     private var clickTime: Long = 0 //记录第一次点击的时间
-
+    private var loginCount: Int = 0  //由于判断是否需要显示图片验证码，大于等于3则显示
     private var imgCodeBean: ImgCodeBean? = null
 
     override fun getLayoutId(): Int {
@@ -70,8 +73,12 @@ class LoginPassword : BaseActivity() {
             .create()
         var phone = SpUtil.Obtain(this, "loginPhone", "").toString()
         if (!phone.isNullOrEmpty()) login_password_ed_phone.setText(phone)
-        if (login_password_imgCode_layout.visibility == View.VISIBLE) {
+        loginCount = SpUtil.Obtain(this, "showImgCode", 0) as Int
+        if (loginCount >= 3) {
+            login_password_imgCode_layout.visibility = View.VISIBLE
             getImaCode()
+        } else {
+            login_password_imgCode_layout.visibility = View.GONE
         }
     }
 
@@ -139,6 +146,9 @@ class LoginPassword : BaseActivity() {
                 login_password_code_img_close.visibility = View.GONE
                 login_password_code_tb.visibility = View.GONE
             }
+            if (it.length in 8..20) {
+                login_password_code_prompt.visibility = View.GONE
+            }
         }.addTo(compositeDisposable)
     }
 
@@ -146,7 +156,6 @@ class LoginPassword : BaseActivity() {
         right_text.setOnClickListener(this)
         login_password_phone_img_close.setOnClickListener(this)
         login_password_code_img_close.setOnClickListener(this)
-        login_password_login_btn.setOnClickListener(this)
         login_password_login_vc_tv.setOnClickListener(this)
         login_password_forget_password.setOnClickListener(this)
         login_password_code_img_imgCode.setOnClickListener(this)
@@ -180,7 +189,17 @@ class LoginPassword : BaseActivity() {
             }
             R.id.login_password_login_btn -> {
                 //登录
-                login()
+                hideKeyboard()
+                if (VerifyUtils.verifyPhone(login_password_ed_phone.text.toString())) {
+                    if (login_password_ed_password.text.toString().length in 8..20) {
+                        login()
+                    } else {
+                        login_password_code_prompt.visibility = View.VISIBLE
+                        showToast(Config.PASSWORD_FORMAT_INCORRECT)
+                    }
+                } else {
+                    showToast(Config.PHONE_FORMAT_NOT_CORRECT)
+                }
             }
             R.id.login_password_login_vc_tv -> {
                 //验证码登录
@@ -259,6 +278,8 @@ class LoginPassword : BaseActivity() {
                     "loginPhone",
                     login_password_ed_phone.text.toString()
                 )
+                SpUtil.Save(this@LoginPassword, "showImgCode", 0)
+                login_password_imgCode_layout.visibility = View.GONE
                 showToast(msg!!)
                 EventBus.getDefault().post(LoginEvent(0))
                 if (!isBackArrow) {
@@ -269,6 +290,14 @@ class LoginPassword : BaseActivity() {
 
             override fun OnFail(code: Int, msg: String?) {
                 tipDialog!!.dismiss()
+                if (code == 103) {
+                    loginCount++
+                    if (loginCount >= 3) {
+                        login_password_imgCode_layout.visibility = View.VISIBLE
+                        getImaCode()
+                    }
+                    SpUtil.Save(this@LoginPassword, "showImgCode", loginCount)
+                }
                 showToast(msg!!)
             }
         })

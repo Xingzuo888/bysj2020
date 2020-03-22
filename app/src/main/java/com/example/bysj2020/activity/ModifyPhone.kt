@@ -5,15 +5,18 @@ import android.os.CountDownTimer
 import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
+import com.example.bysj2020.global.Config
+import com.example.bysj2020.https.HttpResult
+import com.example.bysj2020.https.RxHttp
+import com.example.bysj2020.utils.SpUtil
+import com.example.bysj2020.utils.VerifyUtils
 import com.example.bysj2020.view.InputCodeView
+import com.google.gson.JsonObject
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_modify_phone.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 /**
@@ -50,20 +53,20 @@ class ModifyPhone : BaseActivity() {
             .setTipWord("加载中...")
             .create()
         if (page == 0) {
-            modify_phone.visibility = View.VISIBLE
-            modify_code.visibility = View.GONE
+            modify_phone_lay.visibility = View.VISIBLE
+            modify_code_lay.visibility = View.GONE
         } else {
-            modify_phone.visibility = View.GONE
-            modify_code.visibility = View.VISIBLE
+            modify_phone_lay.visibility = View.GONE
+            modify_code_lay.visibility = View.VISIBLE
         }
         switch()
         modify_input_code.setInputCompleteListener(object : InputCodeView.InputCompleteListener {
             override fun inputComplete() {
-                modify_code_btn.visibility = View.VISIBLE
+                modify_define_btn.visibility = View.VISIBLE
             }
 
             override fun invalidContent() {
-                modify_code_btn.visibility = View.GONE
+                modify_define_btn.visibility = View.GONE
             }
 
         })
@@ -71,7 +74,7 @@ class ModifyPhone : BaseActivity() {
 
     override fun setViewClick() {
         modify_getCode.setOnClickListener(this)
-        modify_code_btn.setOnClickListener(this)
+        modify_define_btn.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -79,21 +82,26 @@ class ModifyPhone : BaseActivity() {
             R.id.modify_getCode -> {
                 //获取验证码
                 if (!isTimerStart) {
-                    getMsgCode()
+                    if (VerifyUtils.verifyPhone(modify_phone_input.text.toString())) {
+                        getMsgCode()
+                    } else {
+                        showToast(Config.PHONE_FORMAT_NOT_CORRECT)
+                    }
                 }
             }
             R.id.modify_next_step -> {
                 //下一步
-                if (verifyMth(modify_phone_input.text.toString())) {
+                hideKeyboard()
+                if (VerifyUtils.verifyPhone(modify_phone_input.text.toString())) {
                     //隐藏软盘
-                    hideKeyboard(modify_input_code)
                     getMsgCode()
                 } else {
-                    showToast("手机号格式不正确！")
+                    showToast(Config.PHONE_FORMAT_NOT_CORRECT)
                 }
             }
-            R.id.modify_code_btn -> {
+            R.id.modify_define_btn -> {
                 //确定
+                hideKeyboard()
                 changePhone()
             }
         }
@@ -153,16 +161,36 @@ class ModifyPhone : BaseActivity() {
      * 获取短信验证码
      */
     private fun getMsgCode() {
-        modify_phone.visibility = View.GONE
-        modify_code.visibility = View.VISIBLE
-        modify_sendTip.text = "已发送验证码至${modify_phone_input.text.toString().substring(
-            0,
-            3
-        )}****${modify_phone_input.text.toString().substring(
-            modify_phone_input.text.toString().length - 4,
-            modify_phone_input.text.toString().length
-        )}"
-        startTimer()
+        loading?.show()
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        val body = JsonObject()
+        body.addProperty("phone", modify_phone_input.text.toString())
+        rxHttp.postWithJson("modifyBindPhoneSendSms", body, object : HttpResult<String> {
+            override fun OnSuccess(t: String?, msg: String?) {
+                loading?.dismiss()
+                showToast(Config.VERIFY_CODE)
+                page = 1
+                setTitle(pages[page])
+                modify_phone_lay.visibility = View.GONE
+                modify_code_lay.visibility = View.VISIBLE
+                modify_sendTip.text = "已发送验证码至${modify_phone_input.text.toString().substring(
+                    0,
+                    3
+                )}****${modify_phone_input.text.toString().substring(
+                    modify_phone_input.text.toString().length - 4,
+                    modify_phone_input.text.toString().length
+                )}"
+                startTimer()
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                loading?.dismiss()
+                showToast(msg!!)
+            }
+        })
+
+
     }
 
     /**
@@ -170,10 +198,33 @@ class ModifyPhone : BaseActivity() {
      */
     private fun changePhone() {
         loading?.show()
-        GlobalScope.launch {
-            delay(3000)
-            loading?.dismiss()
-        }
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        val body = JsonObject()
+        body.addProperty("phone", modify_phone_input.text.toString())
+        body.addProperty("code", modify_input_code.editContent)
+        rxHttp.postWithJson("modifyBindPhone", body, object : HttpResult<String> {
+            override fun OnSuccess(t: String?, msg: String?) {
+                loading?.dismiss()
+                showToast("修改成功")
+                SpUtil.Save(
+                    this@ModifyPhone,
+                    "mobilePhone",
+                    modify_phone_input.text.toString()
+                )
+                SpUtil.Save(
+                    this@ModifyPhone,
+                    "loginPhone",
+                    modify_phone_input.text.toString()
+                )
+                finish()
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                loading?.dismiss()
+                showToast(msg!!)
+            }
+        })
     }
 
     override fun onDestroy() {

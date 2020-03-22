@@ -12,6 +12,7 @@ import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
 import com.example.bysj2020.bean.LoginBean
 import com.example.bysj2020.event.LoginEvent
+import com.example.bysj2020.global.Config
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.utils.LoginUtils
@@ -124,7 +125,6 @@ class LoginVerificationCode : BaseActivity() {
         right_text.setOnClickListener(this)
         login_vc_img_close.setOnClickListener(this)
         login_vc_tv_code.setOnClickListener(this)
-        login_vc_login_btn.setOnClickListener(this)
         login_vc_loginPassword_tv.setOnClickListener(this)
     }
 
@@ -140,13 +140,23 @@ class LoginVerificationCode : BaseActivity() {
             }
             R.id.login_vc_tv_code -> {
                 //获取验证码
+                hideKeyboard()
                 if (!isTimerStart) {
-                    getMsgCode()
+                    if (VerifyUtils.verifyPhone(login_vc_ed_phone.text.toString())) {
+                        getMsgCode()
+                    } else {
+                        showToast(Config.PHONE_FORMAT_NOT_CORRECT)
+                    }
                 }
             }
             R.id.login_vc_login_btn -> {
                 //登录
-                login()
+                hideKeyboard()
+                if (VerifyUtils.verifyPhone(login_vc_ed_phone.text.toString())) {
+                    login()
+                } else {
+                    showToast(Config.PHONE_FORMAT_NOT_CORRECT)
+                }
             }
             R.id.login_vc_loginPassword_tv -> {
                 //密码登录
@@ -175,7 +185,7 @@ class LoginVerificationCode : BaseActivity() {
         rxHttp.postWithJson("sendLoginSms", body, object : HttpResult<String> {
             override fun OnSuccess(t: String?, msg: String?) {
                 tipDialog?.dismiss()
-                showToast("验证码已发送")
+                showToast(Config.VERIFY_CODE)
                 startTimer()
             }
 

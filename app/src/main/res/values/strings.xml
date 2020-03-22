@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">去哪</string>
+
+    <string name="password_prompt">请输入密码长度范围在8-20个字符</string>
 </resources>

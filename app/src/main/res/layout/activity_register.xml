@@ -119,6 +119,19 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/register_code_layout">
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/register_password_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/password_prompt"
+                android:textColor="@color/prompt_red"
+                android:textSize="10dp"
+                android:visibility="gone"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/register_ed_password"
                 android:layout_width="match_parent"

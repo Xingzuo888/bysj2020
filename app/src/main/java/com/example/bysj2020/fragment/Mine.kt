@@ -33,7 +33,6 @@ class Mine : BaseFragment() {
     }
 
     override fun setViewClick() {
-        f_mine_login_tv.setOnClickListener(this)
         f_mine_self_info_lay.setOnClickListener(this)
         f_mine_account_security_lay.setOnClickListener(this)
         f_mine_system_notification_lay.setOnClickListener(this)
@@ -52,20 +51,26 @@ class Mine : BaseFragment() {
             }
         })
 
-        val loginToken=SpUtil.Obtain(context,"loginToken","").toString()
+        val loginToken = SpUtil.Obtain(context, "loginToken", "").toString()
         if (loginToken.isBlank()) {
-            f_mine_login_tv.visibility = View.VISIBLE
+            f_mine_top_tv.text = "登录账号"
+            f_mine_top_tv.setOnClickListener(this)
         } else {
-            f_mine_login_tv.visibility = View.GONE
-            val imgUrl=SpUtil.Obtain(context,"avatar","").toString()
-            LoadImageUtil(this).loadCircularImage(f_mine_head_iv,imgUrl,R.mipmap.default_head)
+            f_mine_top_tv.text = SpUtil.Obtain(context, "nickname", "").toString()
+            f_mine_top_tv.setOnClickListener(null)
+            val imgUrl = SpUtil.Obtain(context, "avatar", "").toString()
+            LoadImageUtil(this).loadCircularImage(f_mine_head_iv, imgUrl, R.mipmap.default_head)
         }
-        LoadImageUtil(context!!).loadImage(mine_img,"https://bysj2020.oss-cn-beijing.aliyuncs.com/attractions/scene/18/small_img/18_smallimg.jpg")
+        LoadImageUtil(context!!).loadImage(
+            mine_img,
+            "https://bysj2020.oss-cn-beijing.aliyuncs.com/attractions/scene/18/small_img/18_smallimg.jpg"
+        )
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.f_mine_login_tv -> {
+            R.id.f_mine_top_tv -> {
+                //登录
                 startActivity(
                     Intent(
                         activity,
@@ -75,11 +80,31 @@ class Mine : BaseFragment() {
             }
             R.id.f_mine_account_security_lay -> {
                 //账户安全
-                startActivity(Intent(activity, AccountSecurity::class.java))
+                val loginToken = SpUtil.Obtain(context, "loginToken", "").toString()
+                if (loginToken.isBlank()) {
+                    startActivity(
+                        Intent(
+                            activity,
+                            LoginVerificationCode::class.java
+                        ).putExtra("isBackArrow", true)
+                    )
+                } else {
+                    startActivity(Intent(activity, AccountSecurity::class.java))
+                }
             }
             R.id.f_mine_self_info_lay -> {
                 //个人信息
-                startActivity(Intent(activity, PersonalInformation::class.java))
+                val loginToken = SpUtil.Obtain(context, "loginToken", "").toString()
+                if (loginToken.isBlank()) {
+                    startActivity(
+                        Intent(
+                            activity,
+                            LoginVerificationCode::class.java
+                        ).putExtra("isBackArrow", true)
+                    )
+                } else {
+                    startActivity(Intent(activity, PersonalInformation::class.java))
+                }
             }
             R.id.f_mine_system_notification_lay -> {
                 //系统通知
@@ -102,16 +127,20 @@ class Mine : BaseFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public fun loginEvent(event:LoginEvent) {
+    public fun loginEvent(event: LoginEvent) {
         when (event.code) {
-            0->{
+            0 -> {
                 //登录成功
-                val imgUrl=SpUtil.Obtain(context,"avatar","").toString()
-                LoadImageUtil(this).loadCircularImage(f_mine_head_iv,imgUrl,R.mipmap.default_head)
+                val imgUrl = SpUtil.Obtain(context, "avatar", "").toString()
+                LoadImageUtil(this).loadCircularImage(f_mine_head_iv, imgUrl, R.mipmap.default_head)
+                f_mine_top_tv.text = SpUtil.Obtain(context, "nickname", "").toString()
+                f_mine_top_tv.setOnClickListener(null)
             }
-            1->{
-               //退出登录
-                LoadImageUtil(this).loadCircularImage(f_mine_head_iv,"",R.mipmap.default_head)
+            1 -> {
+                //退出登录
+                LoadImageUtil(this).loadCircularImage(f_mine_head_iv, "", R.mipmap.default_head)
+                f_mine_top_tv.text = "登录账号"
+                f_mine_top_tv.setOnClickListener(this)
             }
         }
     }
