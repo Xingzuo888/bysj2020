@@ -86,7 +86,7 @@
                     android:textSize="17dp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/account_security_phone_tv"
+                    android:id="@+id/account_security_phone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="20dp"

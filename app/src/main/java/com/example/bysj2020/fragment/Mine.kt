@@ -5,6 +5,7 @@ import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.*
 import com.example.bysj2020.base.BaseFragment
+import com.example.bysj2020.event.InfoEvent
 import com.example.bysj2020.event.LoginEvent
 import com.example.bysj2020.statelayout.LoadHelper
 import com.example.bysj2020.utils.LoadImageUtil
@@ -61,10 +62,6 @@ class Mine : BaseFragment() {
             val imgUrl = SpUtil.Obtain(context, "avatar", "").toString()
             LoadImageUtil(this).loadCircularImage(f_mine_head_iv, imgUrl, R.mipmap.default_head)
         }
-        LoadImageUtil(context!!).loadImage(
-            mine_img,
-            "https://bysj2020.oss-cn-beijing.aliyuncs.com/attractions/scene/18/small_img/18_smallimg.jpg"
-        )
     }
 
     override fun onClick(v: View?) {
@@ -141,6 +138,16 @@ class Mine : BaseFragment() {
                 LoadImageUtil(this).loadCircularImage(f_mine_head_iv, "", R.mipmap.default_head)
                 f_mine_top_tv.text = "登录账号"
                 f_mine_top_tv.setOnClickListener(this)
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun infoEvent(event: InfoEvent) {
+        when (event.type) {
+            0 -> {
+                //信息保存成功
+                f_mine_top_tv.text = SpUtil.Obtain(context, "nickname", "").toString()
             }
         }
     }

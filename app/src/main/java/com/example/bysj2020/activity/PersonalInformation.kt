@@ -1,5 +1,7 @@
 package com.example.bysj2020.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
@@ -7,6 +9,7 @@ import com.example.bysj2020.bean.UserInfoBean
 import com.example.bysj2020.common.Format
 import com.example.bysj2020.dialog.TimePickerDialog
 import com.example.bysj2020.dialog.WheelDialog
+import com.example.bysj2020.event.InfoEvent
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
@@ -18,6 +21,7 @@ import com.google.gson.JsonObject
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import kotlinx.android.synthetic.main.activity_personal_information.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 /**
@@ -61,12 +65,28 @@ class PersonalInformation : BaseActivity() {
         right_text.setOnClickListener(this)
         personal_info_sex_lay.setOnClickListener(this)
         personal_info_birthday_lay.setOnClickListener(this)
+        personal_info_hobby_lay.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.right_text->{
+            R.id.right_text -> {
                 //保存
+                //进行验证
+                if (personal_info_name_et.text.toString().length > 12) {
+                    showToast("名称不能超过12个字符")
+                    return
+                }
+                val birthday = DateUtil.stringToDate(
+                    personal_info_birthday_tv.text.toString(),
+                    Format.YEAR_MONTH_DAY_CROSS
+                )
+                val current =
+                    DateUtil.longToDate(System.currentTimeMillis(), Format.YEAR_MONTH_DAY_CROSS)
+                if (birthday != null && birthday > current) {
+                    showToast("生日时间不能大于当天时间!")
+                    return
+                }
                 saveInfo()
             }
             R.id.personal_info_sex_lay -> {
@@ -76,6 +96,27 @@ class PersonalInformation : BaseActivity() {
             R.id.personal_info_birthday_lay -> {
                 //选择出生日期
                 showBirthdayDialog()
+            }
+            R.id.personal_info_hobby_lay -> {
+                //编辑爱好
+                startActivityForResult(
+                    Intent(this, MyInfoEdit::class.java)
+                        .putExtra("type", 1)
+                        .putExtra(
+                            "content",
+                            if (userInfoBean!!.hobbit.isNotBlank()) userInfoBean!!.hobbit else ""
+                        ), 0
+                )
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                userInfoBean!!.hobbit = data.getStringExtra("editContent")
+                personal_info_hobby_tv.text = "已完善"
+                personal_info_hobby_tv.setTextColor(resources.getColor(R.color.gray_8))
             }
         }
     }
@@ -131,7 +172,6 @@ class PersonalInformation : BaseActivity() {
                 userInfoBean = t
                 setData()
                 showContent()
-                showToast("成功")
             }
 
             override fun OnFail(code: Int, msg: String?) {
@@ -151,10 +191,16 @@ class PersonalInformation : BaseActivity() {
             R.mipmap.default_head
         )
         personal_info_name_et.setText(userInfoBean?.nickname)
+        personal_info_name_et.hint = "原名称为（${userInfoBean?.nickname}）"
         personal_info_sex_tv.text = MyInfoUtils.myInfoSex[userInfoBean!!.sex]
-        personal_info_birthday_tv.text =
-            DateUtil.stringToDate(userInfoBean?.birthDay, Format.YEAR_MONTH_DAY_CROSS).toString()
-        personal_info_hobby_et.setText(userInfoBean?.hobbit)
+        personal_info_birthday_tv.text = userInfoBean?.birthDay
+        if (userInfoBean?.hobbit.isNullOrBlank()) {
+            personal_info_hobby_tv.text = "未完善"
+            personal_info_hobby_tv.setTextColor(resources.getColor(R.color.prompt_red))
+        } else {
+            personal_info_hobby_tv.text = "已完善"
+            personal_info_hobby_tv.setTextColor(resources.getColor(R.color.gray_8))
+        }
         personal_info_phone_tv.text = userInfoBean?.phone
     }
 
@@ -166,17 +212,26 @@ class PersonalInformation : BaseActivity() {
         val rxHttp = RxHttp(this)
         addLifecycle(rxHttp)
         val body = JsonObject()
-        body.addProperty("avatar",userInfoBean?.avatar)
-        body.addProperty("nickname",personal_info_name_et.text.toString())
-        body.addProperty("sex",personal_info_sex_tv.text.toString())
-        body.addProperty("birthDay",personal_info_birthday_tv.text.toString())
-        body.addProperty("hobbit",personal_info_hobby_et.text.toString())
-        rxHttp.postWithJson("modifyUserInfo",body,object :HttpResult<String>{
+        body.addProperty("avatar", userInfoBean?.avatar)
+        body.addProperty("nickname", personal_info_name_et.text.toString())
+        body.addProperty("sex", userInfoBean?.sex)
+        body.addProperty("birthDay", personal_info_birthday_tv.text.toString())
+        body.addProperty("hobbit", userInfoBean?.hobbit)
+        rxHttp.postWithJson("modifyUserInfo", body, object : HttpResult<String> {
             override fun OnSuccess(t: String?, msg: String?) {
                 loading?.dismiss()
                 showToast("保存成功")
                 SpUtil.Save(this@PersonalInformation, "avatar", userInfoBean?.avatar)
-                SpUtil.Save(this@PersonalInformation, "nickname", personal_info_name_et.text.toString())
+                if (personal_info_name_et.text.toString().isNotBlank()) {
+                    SpUtil.Save(
+                        this@PersonalInformation,
+                        "nickname",
+                        personal_info_name_et.text.toString()
+                    )
+                    EventBus.getDefault().post(InfoEvent(0))
+                } else {
+                    personal_info_name_et.setText(userInfoBean?.nickname)
+                }
                 SpUtil.Save(this@PersonalInformation, "sex", personal_info_sex_tv.text.toString())
             }
 

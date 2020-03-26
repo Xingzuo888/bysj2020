@@ -14,3 +14,6 @@
 .cxx
 app/build
 app/local/
+app/src/main/java/com/example/bysj2020/greendao/DaoMaster.java
+app/src/main/java/com/example/bysj2020/greendao/SearchHistoryBeanDao.java
+app/src/main/java/com/example/bysj2020/greendao/DaoSession.java

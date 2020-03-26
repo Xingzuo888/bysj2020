@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_f2"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <EditText
+        android:id="@+id/edit_info"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/colorPrimary"
+        android:gravity="start"
+        android:hint="个性化简约的简介能够让人快速记住你。"
+        android:paddingLeft="12dp"
+        android:paddingTop="17dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="17dp"
+        android:textColor="@color/black_2"
+        android:textColorHint="@color/gray_b"
+        android:textSize="14dp" />
+
+
+</LinearLayout>

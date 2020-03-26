@@ -59,6 +59,7 @@ class AccountSecurity : BaseActivity() {
     private fun getDataList() {
         val headUrl = SpUtil.Obtain(this, "avatar", "") as String
         LoadImageUtil(this).loadCircularImage(account_security_head, headUrl, R.mipmap.default_head)
+        account_security_phone.text=SpUtil.Obtain(this,"mobilePhone","").toString()
         showContent()
     }
 

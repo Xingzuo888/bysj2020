@@ -243,25 +243,6 @@
                         android:layout_height="1.5dp"
                         android:background="@color/gray_f2" />
                 </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/f_mine_tel_service_lay"
-                    android:id="@+id/mine_img" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:text="oshagoihioshaoghohoisha后我哈日讴歌红我好IG覅偶荣哈工会奥is好过哦i会日哦砂锅荣IGhiorhiOA好过我我好肉一欧冠少IGhior画哦我爱过后我融安hi共is个hi哦豁日哦上供is誓师大会公费生公示给收到货龚日升过咯我然后给我哦华融IG我哦啊通IE我哦爱太过分hi融合古体诗囧哥我偶认识热死偶尔会IoT搜以后瘦 "
-                    android:textSize="40dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/mine_img" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

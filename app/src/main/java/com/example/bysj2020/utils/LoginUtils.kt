@@ -35,7 +35,7 @@ object LoginUtils {
         SpUtil.Save(context, "role", "")
         SpUtil.Save(context, "nickname", "")
         SpUtil.Save(context, "sex", 0)
-        SpUtil.Save(context, "mobile", "")
+        SpUtil.Save(context, "mobilePhone", "")
         EventBus.getDefault().post(LoginEvent(1))
     }
 }

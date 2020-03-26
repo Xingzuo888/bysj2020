@@ -32,7 +32,10 @@
                 android:background="@drawable/search_border"
                 android:drawableLeft="@mipmap/icon_search"
                 android:drawablePadding="10dp"
+                android:inputType="text"
                 android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:selectAllOnFocus="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/search_toolbar_top_tv"
@@ -90,15 +93,24 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.qmuiteam.qmui.widget.QMUIFloatLayout
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/search_history_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="清空"
+                    android:textColor="@color/green"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/search_history"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/search_history" />
+
+                <com.example.bysj2020.view.flow.FlowTagLayout
                     android:id="@+id/search_history_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/search_history"
-                    app:qmui_childHorizontalSpacing="20dp"
-                    app:qmui_childVerticalSpacing="15dp" />
+                    app:layout_constraintTop_toBottomOf="@id/search_history" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -124,16 +136,14 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.qmuiteam.qmui.widget.QMUIFloatLayout
+                <com.example.bysj2020.view.flow.FlowTagLayout
                     android:id="@+id/search_recommend_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/search_recommend"
-                    app:qmui_childHorizontalSpacing="20dp"
-                    app:qmui_childVerticalSpacing="15dp"
-                    app:qmui_maxNumber="4" />
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/search_recommend" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -144,6 +154,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="18dp"
+                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/search_recommend_lay">
@@ -158,16 +169,13 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.qmuiteam.qmui.widget.QMUIFloatLayout
+                <com.example.bysj2020.view.flow.FlowTagLayout
                     android:id="@+id/search_everyone_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/search_everyone"
-                    app:qmui_childHorizontalSpacing="20dp"
-                    app:qmui_childVerticalSpacing="15dp"
-                    app:qmui_maxNumber="4" />
+                    app:layout_constraintTop_toBottomOf="@id/search_everyone" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

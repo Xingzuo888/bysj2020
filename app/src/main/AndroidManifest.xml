@@ -17,8 +17,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.Area"
+            android:name=".activity.SearchList"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.MyInfoEdit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Area"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ModifyPhone"
             android:screenOrientation="portrait" />

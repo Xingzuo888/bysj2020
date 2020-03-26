@@ -293,58 +293,72 @@
                         android:id="@+id/f_home_mustPlay_lay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="13dp"
-                        android:layout_marginRight="16dp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/f_home_xBanner_lay">
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/f_home_mustPlay_te"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="必玩景点"
-                            android:textColor="@color/black"
-                            android:textSize="20dp"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/f_home_moreViewPoint_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:drawableRight="@mipmap/right_arrow"
-                            android:drawablePadding="10dp"
-                            android:text="更多"
-                            android:textColor="@color/gray_6"
-                            android:textSize="15dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <View
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/f_home_mustPlay_text_lay"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="2dp"
-                            android:background="@color/gray_b"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginRight="16dp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/f_home_mustPlay_te" />
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/f_home_mustPlay_te"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="必玩景点"
+                                android:textColor="@color/black"
+                                android:textSize="20dp"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/f_home_moreViewPoint_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:drawableRight="@mipmap/right_arrow"
+                                android:drawablePadding="10dp"
+                                android:text="更多"
+                                android:textColor="@color/gray_6"
+                                android:textSize="15dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="2dp"
+                                android:background="@color/gray_b"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/f_home_mustPlay_te" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginBottom="12dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/f_home_mustPlay_text_lay">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/f_home_recyclerView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/f_home_recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginRight="15dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/f_home_mustPlay_lay" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>

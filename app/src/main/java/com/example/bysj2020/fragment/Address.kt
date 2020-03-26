@@ -9,9 +9,6 @@ import com.example.bysj2020.activity.Search
 import com.example.bysj2020.base.BaseFragment
 import com.example.bysj2020.statelayout.LoadHelper
 import kotlinx.android.synthetic.main.fragment_address.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  *    Author : wxz

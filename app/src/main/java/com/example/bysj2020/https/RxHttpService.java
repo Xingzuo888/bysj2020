@@ -1,7 +1,10 @@
 package com.example.bysj2020.https;
 
+import com.example.bysj2020.bean.FHomeBean;
+import com.example.bysj2020.bean.FHomeSceneBean;
 import com.example.bysj2020.bean.ImgCodeBean;
 import com.example.bysj2020.bean.LoginBean;
+import com.example.bysj2020.bean.SearchRecommendBean;
 import com.example.bysj2020.bean.UserInfoBean;
 import com.google.gson.JsonObject;
 
@@ -71,7 +74,19 @@ public interface RxHttpService {
 
     //获取个人信息
     @GET("index/basicUserInfo")
-    Observable<HttpBean<UserInfoBean>> basicUserInfo(@QueryMap Map<String,String> map);
+    Observable<HttpBean<UserInfoBean>> basicUserInfo(@QueryMap Map<String, String> map);
+
+    //获取首页信息
+    @GET("index/homeIndex")
+    Observable<HttpBean<FHomeBean>> homeIndex(@QueryMap Map<String, String> map);
+
+    //获取首页景点信息
+    @GET("index/homeIndexScene")
+    Observable<HttpBean<FHomeSceneBean>> homeIndexScene(@QueryMap Map<String, String> map);
+
+    //获取首页景点信息
+    @GET("index/searchRecommend")
+    Observable<HttpBean<SearchRecommendBean>> searchRecommend(@QueryMap Map<String, String> map);
 
 
     /*----------关于用户----------*/
@@ -84,7 +99,7 @@ public interface RxHttpService {
     @POST("axUser/modifyBindPhone")
     Observable<HttpBean<String>> modifyBindPhone(@Body JsonObject body);
 
-    //更改手机号
+    //修改用户信息
     @POST("axUser/modifyUserInfo")
     Observable<HttpBean<String>> modifyUserInfo(@Body JsonObject body);
 }

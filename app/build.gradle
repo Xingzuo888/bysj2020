@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 29
@@ -47,6 +48,12 @@ android {
             outputFileName = "bysj2020-${variant.versionName}.apk"
         }
     }
+
+    greendao {
+        targetGenDir 'src/main/java'
+        schemaVersion 1
+        daoPackage "com.example.bysj2020.greendao"
+    }
 }
 
 dependencies {
@@ -88,4 +95,7 @@ dependencies {
 
     implementation 'com.android.support:recyclerview-v7:29.0.0'
 
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    //数据库
+    implementation 'org.greenrobot:greendao:3.2.2'
 }
