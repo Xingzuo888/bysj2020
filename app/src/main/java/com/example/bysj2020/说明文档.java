@@ -2,6 +2,7 @@ package com.example.bysj2020;
 /**
  RefreshLayout 上拉加载 下拉刷新
  网络请求 retrofit+okhttp+gson
+ greenDao 数据库
  {@link com.example.bysj2020.view.flow}FlowTagLayout 标签流布局
 
 

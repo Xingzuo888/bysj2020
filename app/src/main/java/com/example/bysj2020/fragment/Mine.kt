@@ -5,7 +5,7 @@ import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.*
 import com.example.bysj2020.base.BaseFragment
-import com.example.bysj2020.event.InfoEvent
+import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.event.LoginEvent
 import com.example.bysj2020.statelayout.LoadHelper
 import com.example.bysj2020.utils.LoadImageUtil
@@ -143,7 +143,7 @@ class Mine : BaseFragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public fun infoEvent(event: InfoEvent) {
+    public fun userInfoEvent(event: UserInfoEvent) {
         when (event.type) {
             0 -> {
                 //信息保存成功

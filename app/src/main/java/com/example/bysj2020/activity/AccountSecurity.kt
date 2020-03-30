@@ -4,10 +4,13 @@ import android.content.Intent
 import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
+import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.statelayout.LoadHelper
 import com.example.bysj2020.utils.LoadImageUtil
 import com.example.bysj2020.utils.SpUtil
 import kotlinx.android.synthetic.main.activity_account_security.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  *    Author : wxz
@@ -16,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_account_security.*
  */
 class AccountSecurity : BaseActivity() {
     override fun isRegisterEventBus(): Boolean {
-        return false
+        return true
     }
 
     override fun getLayoutId(): Int {
@@ -63,4 +66,13 @@ class AccountSecurity : BaseActivity() {
         showContent()
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun userInfoEvent(event: UserInfoEvent) {
+        when (event.type) {
+            1 -> {
+                //修改手机号
+                account_security_phone.text = SpUtil.Obtain(this, "mobilePhone", "").toString()
+            }
+        }
+    }
 }

@@ -1,14 +1,18 @@
 package com.example.bysj2020.https;
 
+import com.example.bysj2020.bean.FAddressBean;
 import com.example.bysj2020.bean.FHomeBean;
 import com.example.bysj2020.bean.FHomeSceneBean;
 import com.example.bysj2020.bean.ImgCodeBean;
 import com.example.bysj2020.bean.LoginBean;
+import com.example.bysj2020.bean.SearchListHotelBean;
+import com.example.bysj2020.bean.SearchListSceneBean;
 import com.example.bysj2020.bean.SearchRecommendBean;
 import com.example.bysj2020.bean.UserInfoBean;
 import com.google.gson.JsonObject;
 
 import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -74,19 +78,23 @@ public interface RxHttpService {
 
     //获取个人信息
     @GET("index/basicUserInfo")
-    Observable<HttpBean<UserInfoBean>> basicUserInfo(@QueryMap Map<String, String> map);
+    Observable<HttpBean<UserInfoBean>> basicUserInfo(@QueryMap Map<String, Objects> map);
 
     //获取首页信息
     @GET("index/homeIndex")
-    Observable<HttpBean<FHomeBean>> homeIndex(@QueryMap Map<String, String> map);
+    Observable<HttpBean<FHomeBean>> homeIndex(@QueryMap Map<String, Objects> map);
 
     //获取首页景点信息
     @GET("index/homeIndexScene")
-    Observable<HttpBean<FHomeSceneBean>> homeIndexScene(@QueryMap Map<String, String> map);
+    Observable<HttpBean<FHomeSceneBean>> homeIndexScene(@QueryMap Map<String, Objects> map);
 
-    //获取首页景点信息
+    //获取搜索推荐信息
     @GET("index/searchRecommend")
-    Observable<HttpBean<SearchRecommendBean>> searchRecommend(@QueryMap Map<String, String> map);
+    Observable<HttpBean<SearchRecommendBean>> searchRecommend(@QueryMap Map<String, Objects> map);
+
+    //获取目的地信息
+    @GET("index/mdd")
+    Observable<HttpBean<FAddressBean>> mdd(@QueryMap Map<String, Objects> map);
 
 
     /*----------关于用户----------*/
@@ -102,4 +110,16 @@ public interface RxHttpService {
     //修改用户信息
     @POST("axUser/modifyUserInfo")
     Observable<HttpBean<String>> modifyUserInfo(@Body JsonObject body);
+
+    /*----------景点-----------*/
+
+    //获取搜索列表的景点
+    @GET("scene/searchScene")
+    Observable<HttpBean<SearchListSceneBean>> searchScene(@QueryMap Map<String, Objects> map);
+
+    /*----------酒店-----------*/
+
+    //获取搜索列表的酒店
+    @GET("hotel/searchHotel")
+    Observable<HttpBean<SearchListHotelBean>> searchHotel(@QueryMap Map<String, Objects> map);
 }

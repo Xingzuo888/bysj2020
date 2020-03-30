@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".activity.SearchList">
 
     <include layout="@layout/toolbar" />
@@ -16,6 +17,7 @@
         android:orientation="vertical">
 
         <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/search_list_slidingTabLayout"
             android:layout_width="match_parent"
             android:layout_height="57dp"
             android:background="#ffffff"
@@ -27,7 +29,10 @@
             app:tl_textUnselectColor="#999999"
             app:tl_textsize="16dp" />
 
+        <View style="@style/viewLine" />
+
         <androidx.viewpager.widget.ViewPager
+            android:id="@+id/search_list_viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

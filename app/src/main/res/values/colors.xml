@@ -12,6 +12,7 @@
     <color name="black_5">#555555</color>
     <color name="black_2">#222222</color>
     <color name="black_06">#060606</color>
+    <color name="black_14">#141414</color>
     <color name="gray_a">#aaaaaa</color>
     <color name="gray_b">#bbbbbb</color>
     <color name="gray_c">#cccccc</color>
@@ -27,5 +28,7 @@
 
     <color name="gray_b2">#b2b2b2</color>
     <color name="main_blue">#0057FF</color>
+    <color name="blue_border">#4893E7</color>
     <color name="prompt_red">#DCF57272</color>
+    <color name="yellow">#F6DA40</color>
 </resources>

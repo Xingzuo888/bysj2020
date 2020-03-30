@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+        android:id="@+id/item_search_list_img"
+        android:layout_width="120dp"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:src="@mipmap/default_picture"
+        app:qmui_corner_radius="10dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_search_list_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="成都大熊猫繁育研究基地"
+            android:textColor="@color/black_14"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/item_search_list_score_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_search_list_title"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/item_search_list_score1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="4.5分"
+                android:textColor="@color/yellow"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/item_search_list_score2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="2.0万条点评"
+                android:textColor="@color/gray_e6"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_search_list_label_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_search_list_score_lay"
+            android:layout_marginTop="5dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_search_list_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_search_list_label_lay"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="80dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="距您19.9KM·熊猫基地附近"
+            android:textColor="@color/gray_e6"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_search_list_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/item_search_list_address"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="2dp"
+            android:text="42元起"
+            android:textColor="#E63939"
+            android:textSize="10dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</LinearLayout>

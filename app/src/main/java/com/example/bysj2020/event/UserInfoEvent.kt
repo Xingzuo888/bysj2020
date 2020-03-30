@@ -7,6 +7,7 @@ package com.example.bysj2020.event
  */
 
 /**
- * 0 保存信息
+ * 0 保存个人信息
+ * 1 修改手机号
  */
-class InfoEvent(val type: Int)
+class UserInfoEvent(val type: Int)

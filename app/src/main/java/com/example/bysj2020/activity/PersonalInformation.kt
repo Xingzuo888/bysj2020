@@ -9,7 +9,7 @@ import com.example.bysj2020.bean.UserInfoBean
 import com.example.bysj2020.common.Format
 import com.example.bysj2020.dialog.TimePickerDialog
 import com.example.bysj2020.dialog.WheelDialog
-import com.example.bysj2020.event.InfoEvent
+import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
@@ -228,7 +228,7 @@ class PersonalInformation : BaseActivity() {
                         "nickname",
                         personal_info_name_et.text.toString()
                     )
-                    EventBus.getDefault().post(InfoEvent(0))
+                    EventBus.getDefault().post(UserInfoEvent(0))
                 } else {
                     personal_info_name_et.setText(userInfoBean?.nickname)
                 }

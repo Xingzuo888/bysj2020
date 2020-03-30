@@ -5,6 +5,7 @@ import android.os.CountDownTimer
 import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.base.BaseActivity
+import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.global.Config
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
@@ -17,6 +18,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_modify_phone.*
+import org.greenrobot.eventbus.EventBus
 import java.util.regex.Pattern
 
 /**
@@ -217,6 +219,7 @@ class ModifyPhone : BaseActivity() {
                     "loginPhone",
                     modify_phone_input.text.toString()
                 )
+                EventBus.getDefault().post(UserInfoEvent(1))
                 finish()
             }
 

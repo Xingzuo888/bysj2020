@@ -1,5 +1,6 @@
 package com.example.bysj2020.activity
 
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.view.MenuItem
 import android.view.View
@@ -13,9 +14,7 @@ import com.example.bysj2020.greendao.SearchHistoryDBManager
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
-import com.example.bysj2020.utils.ToastUtil
 import com.example.bysj2020.view.flow.FlowTagLayout
-import com.example.bysj2020.view.flow.OnTagClickListener
 import com.example.bysj2020.view.flow.TagAdapter
 import kotlinx.android.synthetic.main.activity_search.*
 
@@ -46,7 +45,6 @@ class Search : BaseActivity() {
             override fun reload() {
                 getDataList()
             }
-
         })
         //设置标题栏
         val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_keyboard_arrow_left_black)
@@ -64,19 +62,43 @@ class Search : BaseActivity() {
         //初始化标签布局
         searchHistoryAdapter = TagAdapter(this)
         search_history_content.adapter = searchHistoryAdapter
-        search_history_content.setOnTagClickListener(object : OnTagClickListener {
-            override fun onItemClick(parent: FlowTagLayout?, view: View?, position: Int) {
-                showToast(parent!!.adapter.getItem(position) as String)
+        search_history_content.setOnTagClickListener { parent, view, position ->
+            if (!historyList.contains(parent!!.adapter.getItem(position) as String)) {
+                searchHistoryDBManager.insert(
+                    SearchHistoryBean(
+                        historyList.size.toLong(),
+                        parent.adapter.getItem(position) as String
+                    )
+                )
+                getSearchHistoryData()
             }
-        })
+            startActivity(
+                Intent(this@Search, SearchList::class.java).putExtra(
+                    "searchContent",
+                    parent!!.adapter.getItem(position) as String
+                )
+            )
+        }
         searchRecommendAdapter = TagAdapter(this)
         search_recommend_content.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_NONE)
         search_recommend_content.adapter = searchRecommendAdapter
-        search_recommend_content.setOnTagClickListener(object : OnTagClickListener {
-            override fun onItemClick(parent: FlowTagLayout?, view: View?, position: Int) {
-                showToast(parent!!.adapter.getItem(position) as String)
+        search_recommend_content.setOnTagClickListener { parent, view, position ->
+            if (!historyList.contains(parent!!.adapter.getItem(position) as String)) {
+                searchHistoryDBManager.insert(
+                    SearchHistoryBean(
+                        historyList.size.toLong(),
+                        parent.adapter.getItem(position) as String
+                    )
+                )
+                getSearchHistoryData()
             }
-        })
+            startActivity(
+                Intent(this@Search, SearchList::class.java).putExtra(
+                    "searchContent",
+                    parent!!.adapter.getItem(position) as String
+                )
+            )
+        }
 
         getDataList()
     }
@@ -119,11 +141,14 @@ class Search : BaseActivity() {
                                 search_searchView.text.toString()
                             )
                         )
-                        ToastUtil.setToast(this, "搜索")
                         getSearchHistoryData()
-                    } else {
-                        showToast("数据库已有")
                     }
+                    startActivity(
+                        Intent(this, SearchList::class.java).putExtra(
+                            "searchContent",
+                            search_searchView.text.toString()
+                        )
+                    )
                 } else {
                     showToast("请输入要搜索的内容")
                 }
@@ -131,7 +156,6 @@ class Search : BaseActivity() {
             R.id.search_history_clear -> {
                 //清空历史搜索
                 showClearDialog()
-
             }
         }
     }
