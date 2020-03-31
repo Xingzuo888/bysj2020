@@ -29,7 +29,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * Author : wxz
  * Time   : 2020/03/30
- * Desc   :
+ * Desc   : 城市选择器弹框
  */
 public class PopupAreaSelector {
 
@@ -54,7 +54,7 @@ public class PopupAreaSelector {
         init();
     }
 
-    public static PopupAreaSelector Build(Context context, View parent) {
+    public static PopupAreaSelector Builder(Context context, View parent) {
         return new PopupAreaSelector(context, parent);
     }
 

@@ -17,7 +17,7 @@
             android:layout_marginLeft="10dp"
             android:drawableLeft="@mipmap/icon_position"
             android:drawablePadding="5dp"
-            android:text="成都"
+            android:text="全国"
             android:textColor="@color/white"
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -15,6 +16,15 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "1.0"
+    }
+
+    signingConfigs{
+        bysj2020{
+            keyAlias 'bysj2020'
+            keyPassword 'bysj2020'
+            storeFile file('./sign/bysj2020.jks')
+            storePassword 'bysj2020'
+        }
     }
 
     productFlavors {
@@ -32,15 +42,23 @@ android {
         release {
             minifyEnabled false //是否混淆
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.bysj2020
         }
         debug {
             minifyEnabled false //是否混淆
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.bysj2020
         }
     }
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    repositories{
+        flatDir{
+            dirs 'libs'
+        }
     }
 
     android.applicationVariants.all { variant ->
@@ -50,7 +68,7 @@ android {
     }
 
     greendao {
-        targetGenDir 'src/main/java'
+//        targetGenDir 'src/main/java'
         schemaVersion 1
         daoPackage "com.example.bysj2020.greendao"
     }
@@ -58,6 +76,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -75,6 +94,7 @@ dependencies {
     //图片加载
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
     //加载动画
     implementation 'com.wang.avi:library:2.1.3'
     //沉浸式
@@ -98,4 +118,10 @@ dependencies {
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     //数据库
     implementation 'org.greenrobot:greendao:3.2.2'
+    //百度定位
+    implementation(name: 'BaiduLBS_aar_android_V1.1.9_2048',ext: 'aar')
+    //权限管理
+    implementation "org.permissionsdispatcher:permissionsdispatcher:4.7.0"
+//    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.7.0"
+    kapt "org.permissionsdispatcher:permissionsdispatcher-processor:4.7.0"
 }

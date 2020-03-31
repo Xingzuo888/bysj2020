@@ -69,7 +69,6 @@ class SearchAttractions : BaseFragment() {
         sceneRecords = ArrayList()
         smartRefreshLayout.setOnRefreshListener {
             page = 0
-            sceneRecords.removeAll(sceneRecords)
             getDataList()
         }
         smartRefreshLayout.setOnLoadMoreListener {
@@ -121,6 +120,9 @@ class SearchAttractions : BaseFragment() {
                 if (t == null) {
                     showEmpty()
                 } else {
+                    if (page == 0) {
+                        sceneRecords.removeAll(sceneRecords)
+                    }
                     searchListSceneBean = t
                     if (t.records.isNotEmpty()) {
                         sceneRecords.addAll(t.records)

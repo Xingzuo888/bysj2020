@@ -4,6 +4,9 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import com.baidu.location.LocationClient
+import com.baidu.location.LocationClientOption
+import com.example.bysj2020.BaiduLBS.MyLocationListener
 import com.example.bysj2020.Interface.ItemClick
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.Area
@@ -14,10 +17,14 @@ import com.example.bysj2020.base.BaseFragment
 import com.example.bysj2020.bean.FAddressBean
 import com.example.bysj2020.bean.HotelImgTopInfo
 import com.example.bysj2020.bean.SceneImgTopInfo
+import com.example.bysj2020.event.LocationEvent
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
 import kotlinx.android.synthetic.main.fragment_address.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  *    Author : wxz
@@ -29,6 +36,9 @@ class Address : BaseFragment() {
     private lateinit var fAddressBean: FAddressBean
     private var sceneAdapter: FAddressSceneAdapter? = null
     private var hotelAdapter: FAddressHotelAdapter? = null
+    private var locationClient: LocationClient? = null
+    private var myListener = MyLocationListener()
+    private var option = LocationClientOption()
 
     private var cityId: String = "0"
     private var cityName: String = ""
@@ -58,6 +68,7 @@ class Address : BaseFragment() {
     }
 
     override fun initViews() {
+        EventBus.getDefault().register(this)
         initStateLayout(object : LoadHelper.EmptyClickListener {
             override fun reload() {
                 getDataList()
@@ -71,6 +82,21 @@ class Address : BaseFragment() {
         f_address_smartRefreshLayout.setDisableContentWhenRefresh(true)
         f_address_smartRefreshLayout.setDisableContentWhenLoading(true)
         f_address_smartRefreshLayout.setEnableLoadMore(false)
+        //声明LocationClient类
+        locationClient = LocationClient(activity!!.applicationContext)
+        //注册监听函数
+        locationClient?.registerLocationListener(myListener)
+        option.locationMode = LocationClientOption.LocationMode.Battery_Saving
+        //可选，是否需要地址信息，默认为不需要，即参数为false
+        //如果开发者需要获得当前点的地址信息，此处必须为true
+        option.setIsNeedAddress(true)
+        //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
+        option.setOpenAutoNotifyMode()
+        //可选，默认false，设置是否开启Gps定位
+        option.isOpenGps=true
+
+        locationClient!!.locOption = option
+        locationClient!!.start()
     }
 
     override fun onClick(v: View?) {
@@ -105,7 +131,7 @@ class Address : BaseFragment() {
      * 初始化景点信息
      */
     private fun initSceneInfo() {
-        if (fAddressBean.sceneImgTopInfoList != null && fAddressBean.sceneImgTopInfoList.isNotEmpty()) {
+        if (fAddressBean.sceneImgTopInfoList.isNotEmpty()) {
             f_address_scene_lay.visibility = View.VISIBLE
             if (sceneAdapter == null) {
                 sceneAdapter = FAddressSceneAdapter(fAddressBean.sceneImgTopInfoList, context!!)
@@ -127,7 +153,7 @@ class Address : BaseFragment() {
      * 初始化酒店信息
      */
     private fun initHotelInfo() {
-        if (fAddressBean.hotelImgTopInfos != null && fAddressBean.hotelImgTopInfos.isNotEmpty()) {
+        if (fAddressBean.hotelImgTopInfos.isNotEmpty()) {
             f_address_hotel_lay.visibility = View.VISIBLE
             if (hotelAdapter == null) {
                 hotelAdapter = FAddressHotelAdapter(fAddressBean.hotelImgTopInfos, context!!)
@@ -161,7 +187,11 @@ class Address : BaseFragment() {
                     fAddressBean = t
                     initSceneInfo()
                     initHotelInfo()
-                    showContent()
+                    if (t.sceneImgTopInfoList.isEmpty() && t.hotelImgTopInfos.isEmpty()) {
+                        showEmpty()
+                    } else {
+                        showContent()
+                    }
                 }
                 if (f_address_smartRefreshLayout.isRefreshing) {
                     f_address_smartRefreshLayout.finishRefresh()
@@ -188,6 +218,26 @@ class Address : BaseFragment() {
                     provincesName = data.getStringExtra("provincesName")
                     f_address_positionName_tv.text =
                         if (cityName == "不限") provincesName else cityName
+                    getDataList()
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+        locationClient!!.stop()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun locationEvent(event: LocationEvent) {
+        when (event.code) {
+            3 -> {
+                f_address_positionName_tv.text = if (event.str.endsWith("市")) {
+                    event.str.substring(0, (event.str.length - 1))
+                } else {
+                    event.str
                 }
             }
         }

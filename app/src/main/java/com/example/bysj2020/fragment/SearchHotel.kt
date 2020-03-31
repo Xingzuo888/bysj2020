@@ -69,7 +69,6 @@ class SearchHotel : BaseFragment() {
         hotelRecords = ArrayList()
         smartRefreshLayout.setOnRefreshListener {
             page = 0
-            hotelRecords.removeAll(hotelRecords)
             getDataList()
         }
         smartRefreshLayout.setOnLoadMoreListener {
@@ -121,6 +120,9 @@ class SearchHotel : BaseFragment() {
                 if (t == null) {
                     showEmpty()
                 } else {
+                    if (page == 0) {
+                        hotelRecords.removeAll(hotelRecords)
+                    }
                     searchListHotelBean = t
                     if (t.records.isNotEmpty()) {
                         hotelRecords.addAll(t.records)

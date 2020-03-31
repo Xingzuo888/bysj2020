@@ -70,7 +70,7 @@ class SearchList : BaseActivity() {
             R.id.right_text -> {
                 //目的地弹框
                 if (popupAreaSelector == null) {
-                    popupAreaSelector = PopupAreaSelector.Build(this, right_text)
+                    popupAreaSelector = PopupAreaSelector.Builder(this, right_text)
                     popupAreaSelector!!.setPopupAreaSelectorClick { provinceId, provinceName, cityId, cityName ->
                         EventBus.getDefault().post(AreaSelectorEvent(1, provinceName, cityName))
                         popupAreaSelector!!.dismiss()
