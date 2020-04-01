@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.bysj2020.Interface.ItemClick
 import com.example.bysj2020.R
+import com.example.bysj2020.activity.SceneList
 import com.example.bysj2020.activity.Search
 import com.example.bysj2020.adapter.FHomeRecyclerViewAdapter
 import com.example.bysj2020.base.BaseFragment
@@ -16,12 +17,14 @@ import com.example.bysj2020.bean.FHomeBean
 import com.example.bysj2020.bean.FHomeSceneBean
 import com.example.bysj2020.bean.MustPlayScene
 import com.example.bysj2020.bean.XBannerBean
+import com.example.bysj2020.event.SwitchFragmentEvent
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
 import com.example.bysj2020.utils.ToastUtil
 import com.stx.xhb.androidx.XBanner
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  *    Author : wxz
@@ -34,9 +37,9 @@ class Home : BaseFragment() {
     private var timer: CountDownTimer? = null //达到20秒后，触发界面显示，则自动刷新
     private var canRefresh: Boolean = false
     private var isLoading = false//是否正在加载数据,用于防止加载中时操作崩溃
-    private lateinit var fHomeBean:FHomeBean
+    private lateinit var fHomeBean: FHomeBean
     private lateinit var fHomeSceneBean: FHomeSceneBean
-    private var list= mutableListOf<XBannerBean>()
+    private var list = mutableListOf<XBannerBean>()
 
     companion object {
         fun newInstance(): Home {
@@ -92,16 +95,16 @@ class Home : BaseFragment() {
             }
             return
         }
-        isLoading=true
+        isLoading = true
         val rxHttp = RxHttp(context)
         addLifecycle(rxHttp)
-        rxHttp.getWithJson("homeIndex", mapOf<String,String>(),object :HttpResult<FHomeBean>{
+        rxHttp.getWithJson("homeIndex", mapOf<String, String>(), object : HttpResult<FHomeBean> {
             override fun OnSuccess(t: FHomeBean?, msg: String?) {
                 isLoading = false
                 if (t == null) {
                     showEmpty()
                 } else {
-                    fHomeBean=t
+                    fHomeBean = t
                     setData()
                     showContent()
                     getSceneData(t.hotCityList[0])
@@ -124,16 +127,16 @@ class Home : BaseFragment() {
      * 获取景点数据
      */
     private fun getSceneData(cityName: String) {
-        f_home_mustPlay_lay.visibility=View.GONE
+        f_home_mustPlay_lay.visibility = View.GONE
         val rxHttp = RxHttp(context)
         addLifecycle(rxHttp)
-        var map= mutableMapOf<String,String>()
+        var map = mutableMapOf<String, String>()
         map["city"] = cityName
-        rxHttp.getWithJson("homeIndexScene",map,object :HttpResult<FHomeSceneBean>{
+        rxHttp.getWithJson("homeIndexScene", map, object : HttpResult<FHomeSceneBean> {
             override fun OnSuccess(t: FHomeSceneBean?, msg: String?) {
                 if (t != null) {
-                    f_home_mustPlay_lay.visibility=View.VISIBLE
-                    fHomeSceneBean=t
+                    f_home_mustPlay_lay.visibility = View.VISIBLE
+                    fHomeSceneBean = t
                     setSceneData()
                 }
             }
@@ -148,19 +151,21 @@ class Home : BaseFragment() {
      * 设置城市和轮播图
      */
     private fun setData() {
-        f_home_hotCity1_tv.text=fHomeBean.hotCityList[0]
-        f_home_hotCity2_tv.text=fHomeBean.hotCityList[1]
-        f_home_hotCity3_tv.text=fHomeBean.hotCityList[2]
-        f_home_hotCity4_tv.text=fHomeBean.hotCityList[3]
-        f_home_hotCity5_tv.text=fHomeBean.hotCityList[4]
+        f_home_hotCity1_tv.text = fHomeBean.hotCityList[0]
+        f_home_hotCity2_tv.text = fHomeBean.hotCityList[1]
+        f_home_hotCity3_tv.text = fHomeBean.hotCityList[2]
+        f_home_hotCity4_tv.text = fHomeBean.hotCityList[3]
+        f_home_hotCity5_tv.text = fHomeBean.hotCityList[4]
         showLine(1)
         list.removeAll(list)
         for (indexLoopInfo in fHomeBean.indexLoopInfoList) {
-            list.add(XBannerBean(indexLoopInfo.name,indexLoopInfo.img))
+            list.add(XBannerBean(indexLoopInfo.name, indexLoopInfo.img))
         }
         //初始化轮播图
         f_home_xBanner.setBannerData(list)
-        f_home_xBanner.loadImage { banner, model, view, position -> Glide.with(this@Home).load(list[position].url).into(view as ImageView) }
+        f_home_xBanner.loadImage { banner, model, view, position ->
+            Glide.with(this@Home).load(list[position].url).into(view as ImageView)
+        }
         f_home_xBanner.setOnItemClickListener { xBanner: XBanner, any: Any, view: View, i: Int ->
             ToastUtil.setToast(activity, "")
         }
@@ -173,9 +178,9 @@ class Home : BaseFragment() {
         adapter = FHomeRecyclerViewAdapter(fHomeSceneBean.mustPlaySceneList, context)
 //        f_home_recyclerView.setHasFixedSize(true)
 //        f_home_recyclerView.isNestedScrollingEnabled=false
-        f_home_recyclerView.layoutManager=GridLayoutManager(context,3)
-        f_home_recyclerView.adapter=adapter
-        adapter!!.addItemClickListener(object :ItemClick<MustPlayScene>{
+        f_home_recyclerView.layoutManager = GridLayoutManager(context, 3)
+        f_home_recyclerView.adapter = adapter
+        adapter!!.addItemClickListener(object : ItemClick<MustPlayScene> {
             override fun onItemClick(view: View?, t: MustPlayScene?, position: Int) {
                 t?.name?.let { showToast(it) }
             }
@@ -206,13 +211,15 @@ class Home : BaseFragment() {
             }
             R.id.search_lay -> {
                 //跳转到搜索界面
-                startActivity(Intent(activity,Search::class.java))
+                startActivity(Intent(activity, Search::class.java))
             }
             R.id.f_home_moreCity_tv -> {
                 //更多城市
+                EventBus.getDefault().post(SwitchFragmentEvent(0, 1))
             }
             R.id.f_home_moreViewPoint_tv -> {
                 //更多景点
+                startActivity(Intent(activity, SceneList::class.java))
             }
         }
     }
@@ -227,63 +234,63 @@ class Home : BaseFragment() {
     private fun showLine(showLine: Int) {
         when (showLine) {
             1 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!,R.color.black))
+                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                 f_home_hotCity1_v.visibility = View.VISIBLE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity2_v.visibility = View.GONE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity3_v.visibility = View.GONE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity4_v.visibility = View.GONE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity5_v.visibility = View.GONE
             }
             2 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity1_v.visibility = View.GONE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!,R.color.black))
+                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                 f_home_hotCity2_v.visibility = View.VISIBLE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity3_v.visibility = View.GONE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity4_v.visibility = View.GONE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity5_v.visibility = View.GONE
             }
             3 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity1_v.visibility = View.GONE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity2_v.visibility = View.GONE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!,R.color.black))
+                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                 f_home_hotCity3_v.visibility = View.VISIBLE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity4_v.visibility = View.GONE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity5_v.visibility = View.GONE
             }
             4 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity1_v.visibility = View.GONE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity2_v.visibility = View.GONE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity3_v.visibility = View.GONE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!,R.color.black))
+                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                 f_home_hotCity4_v.visibility = View.VISIBLE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity5_v.visibility = View.GONE
             }
             5 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity1_v.visibility = View.GONE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity2_v.visibility = View.GONE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity3_v.visibility = View.GONE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!,R.color.gray_6))
+                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
                 f_home_hotCity4_v.visibility = View.GONE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!,R.color.black))
+                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
                 f_home_hotCity5_v.visibility = View.VISIBLE
             }
         }

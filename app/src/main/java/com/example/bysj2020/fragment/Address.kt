@@ -10,6 +10,8 @@ import com.example.bysj2020.BaiduLBS.MyLocationListener
 import com.example.bysj2020.Interface.ItemClick
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.Area
+import com.example.bysj2020.activity.HotelList
+import com.example.bysj2020.activity.SceneList
 import com.example.bysj2020.activity.Search
 import com.example.bysj2020.adapter.FAddressHotelAdapter
 import com.example.bysj2020.adapter.FAddressSceneAdapter
@@ -93,7 +95,7 @@ class Address : BaseFragment() {
         //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
         option.setOpenAutoNotifyMode()
         //可选，默认false，设置是否开启Gps定位
-        option.isOpenGps=true
+        option.isOpenGps = true
 
         locationClient!!.locOption = option
         locationClient!!.start()
@@ -116,9 +118,11 @@ class Address : BaseFragment() {
             }
             R.id.f_address_moreScene_tv -> {
                 //更多景点
+                startActivity(Intent(activity, SceneList::class.java))
             }
             R.id.f_address_moreHotel_tv -> {
                 //更多酒店
+                startActivity(Intent(activity, HotelList::class.java))
             }
         }
     }

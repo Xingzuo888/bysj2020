@@ -7,11 +7,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.baidu.location.LocationClient
-import com.baidu.location.LocationClientOption
-import com.example.bysj2020.BaiduLBS.MyLocationListener
 import com.example.bysj2020.R
 import com.example.bysj2020.adapter.ViewPagerAdapters
+import com.example.bysj2020.event.SwitchFragmentEvent
 import com.example.bysj2020.fragment.Address
 import com.example.bysj2020.fragment.Home
 import com.example.bysj2020.fragment.Mine
@@ -20,6 +18,9 @@ import com.example.bysj2020.utils.ToastUtil
 import com.gyf.immersionbar.ImmersionBar
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.bottom_bar.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import permissions.dispatcher.*
 
 /**
@@ -41,11 +42,12 @@ class Home : AppCompatActivity(), View.OnClickListener {
         ActivityManagerUtil.addDestroyActivity(this@Home, javaClass.name)
         showAllPermission()
         initViews()
-
+        EventBus.getDefault().register(this)
     }
 
     override fun onDestroy() {
         ActivityManagerUtil.destroyActivity(javaClass.name)
+        EventBus.getDefault().unregister(this)
         super.onDestroy()
     }
 
@@ -83,18 +85,12 @@ class Home : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.bottom_radio_home -> {
-                ImmersionBar.with(this).statusBarColor(R.color.green).statusBarDarkFont(true)
-                    .init()//切换页面，顶部沉浸式修改
                 home_viewPager.currentItem = 0
             }
             R.id.bottom_radio_address -> {
-                ImmersionBar.with(this).statusBarColor(R.color.green).statusBarDarkFont(true)
-                    .init()//切换页面，顶部沉浸式修改
                 home_viewPager.currentItem = 1
             }
             R.id.bottom_radio_mine -> {
-                ImmersionBar.with(this).statusBarColor(R.color.green).statusBarDarkFont(true)
-                    .init()//切换页面，顶部沉浸式修改
                 home_viewPager.currentItem = 2
             }
         }
@@ -107,7 +103,7 @@ class Home : AppCompatActivity(), View.OnClickListener {
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
+    )
     fun showAllPermission() {
 
     }
@@ -115,9 +111,11 @@ class Home : AppCompatActivity(), View.OnClickListener {
     /**
      * 注释执行需要一个或多个权限的操作的方法
      */
-    @OnShowRationale(Manifest.permission.ACCESS_COARSE_LOCATION,
+    @OnShowRationale(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
     fun ShowRationaleForAllPermission(request: PermissionRequest) {
         request.proceed()
     }
@@ -131,8 +129,9 @@ class Home : AppCompatActivity(), View.OnClickListener {
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
     fun onPermissionDenied() {
-        ToastUtil.setToast(this,"未授权，部分功能将无法使用")
+        ToastUtil.setToast(this, "未授权，部分功能将无法使用")
     }
+
     /**
      * 注释一个方法，如果用户选择让设备“不再询问”权限，则调用该方法
      */
@@ -142,7 +141,7 @@ class Home : AppCompatActivity(), View.OnClickListener {
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
     fun onNeverAskAgain() {
-        ToastUtil.setToast(this,"未授权，部分功能将无法使用,如果要使用，请到设置中打开")
+        ToastUtil.setToast(this, "未授权，部分功能将无法使用,如果要使用，请到设置中打开")
     }
 
     override fun onRequestPermissionsResult(
@@ -151,7 +150,7 @@ class Home : AppCompatActivity(), View.OnClickListener {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        onRequestPermissionsResult(requestCode,grantResults)
+        onRequestPermissionsResult(requestCode, grantResults)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -174,4 +173,17 @@ class Home : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun switchFragmentEvent(event: SwitchFragmentEvent) {
+        when (event.code) {
+            0 -> {
+                home_viewPager.currentItem = event.num
+                when (event.num) {
+                    0 -> bottom_group.check(R.id.bottom_radio_home)
+                    1 -> bottom_group.check(R.id.bottom_radio_address)
+                    2 -> bottom_group.check(R.id.bottom_radio_mine)
+                }
+            }
+        }
+    }
 }

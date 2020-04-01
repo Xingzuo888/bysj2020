@@ -18,8 +18,8 @@ android {
         flavorDimensions "1.0"
     }
 
-    signingConfigs{
-        bysj2020{
+    signingConfigs {
+        bysj2020 {
             keyAlias 'bysj2020'
             keyPassword 'bysj2020'
             storeFile file('./sign/bysj2020.jks')
@@ -55,8 +55,8 @@ android {
         targetCompatibility = 1.8
     }
 
-    repositories{
-        flatDir{
+    repositories {
+        flatDir {
             dirs 'libs'
         }
     }
@@ -119,7 +119,7 @@ dependencies {
     //数据库
     implementation 'org.greenrobot:greendao:3.2.2'
     //百度定位
-    implementation(name: 'BaiduLBS_aar_android_V1.1.9_2048',ext: 'aar')
+    implementation(name: 'BaiduLBS_aar_android_V1.1.9_2048', ext: 'aar')
     //权限管理
     implementation "org.permissionsdispatcher:permissionsdispatcher:4.7.0"
 //    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.7.0"

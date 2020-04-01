@@ -13,10 +13,10 @@ import com.example.bysj2020.utils.TextViewUtil
 
 /**
  *    Author : wxz
- *    Time   : 2020/03/28
- *    Desc   : 搜索列表酒店适配器
+ *    Time   : 2020/04/01
+ *    Desc   : 酒店列表适配器
  */
-class SearchListHotelAdapter(mList: List<HotelRecord>, val context: Context) :
+class HotelListAdapter(mList: List<HotelRecord>, val context: Context) :
     BaseAdapter<HotelRecord>(mList, context) {
     override fun covert(
         holder: BaseRecyclerHolder,

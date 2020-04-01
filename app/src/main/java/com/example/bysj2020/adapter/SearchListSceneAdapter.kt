@@ -55,7 +55,7 @@ class SearchListSceneAdapter(mList: List<SceneRecord>, val context: Context) :
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.item_search_list
+        return R.layout.item_list
     }
 
     override fun getContentLength(): Int {
