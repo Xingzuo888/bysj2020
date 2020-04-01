@@ -93,7 +93,7 @@ class SearchAttractions : BaseFragment() {
                 }
             })
         }
-        adapter!!.notifyDataSetChanged()
+        adapter!!.notifyItemChanged(sceneRecords.size)
     }
 
     /**

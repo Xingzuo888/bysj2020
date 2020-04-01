@@ -112,7 +112,7 @@ class SceneList : BaseActivity() {
                 }
             })
         }
-        adapter!!.notifyDataSetChanged()
+        adapter!!.notifyItemChanged(sceneRecords.size)
     }
 
     override fun setViewClick() {

@@ -61,11 +61,12 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <LinearLayout
+        <com.qmuiteam.qmui.widget.QMUIFloatLayout
             android:id="@+id/item_search_list_label_lay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_below="@id/item_search_list_score_lay"
+            app:qmui_maxNumber="3"
             android:layout_marginTop="5dp" />
 
         <androidx.appcompat.widget.AppCompatTextView

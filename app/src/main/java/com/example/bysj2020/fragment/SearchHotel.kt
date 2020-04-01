@@ -93,7 +93,7 @@ class SearchHotel : BaseFragment() {
                 }
             })
         }
-        adapter!!.notifyDataSetChanged()
+        adapter!!.notifyItemChanged(hotelRecords.size)
     }
 
     /**

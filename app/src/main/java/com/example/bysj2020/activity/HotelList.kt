@@ -113,7 +113,7 @@ class HotelList : BaseActivity() {
                 }
             })
         }
-        adapter!!.notifyDataSetChanged()
+        adapter!!.notifyItemChanged(hotelRecord.size)
     }
 
     override fun setViewClick() {

@@ -3,13 +3,13 @@ package com.example.bysj2020.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import com.example.bysj2020.R
 import com.example.bysj2020.bean.SceneRecord
 import com.example.bysj2020.common.BaseAdapter
 import com.example.bysj2020.common.BaseRecyclerHolder
 import com.example.bysj2020.utils.TextViewUtil
+import com.qmuiteam.qmui.widget.QMUIFloatLayout
 
 /**
  *    Author : wxz
@@ -42,7 +42,7 @@ class SearchListSceneAdapter(mList: List<SceneRecord>, val context: Context) :
 
         if (mList[position].tag.isNotBlank()) {
             val tagList = mList[position].tag.split(",").toList()
-            val linearLayout = holder.getView<LinearLayout>(R.id.item_search_list_label_lay)
+            val linearLayout = holder.getView<QMUIFloatLayout>(R.id.item_search_list_label_lay)
             for (i in tagList.indices) {
                 val view =
                     LayoutInflater.from(context).inflate(R.layout.item_search_list_label, null)
