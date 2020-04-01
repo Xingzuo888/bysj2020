@@ -80,11 +80,11 @@ class SceneList : BaseActivity() {
                 if (t == null) {
                     showEmpty()
                 } else {
-                    if (page == 0) {
-                        sceneRecords.removeAll(sceneRecords)
-                    }
                     searchListSceneBean = t
                     if (t.records.isNotEmpty()) {
+                        if (page == 0) {
+                            sceneRecords.removeAll(sceneRecords)
+                        }
                         sceneRecords.addAll(t.records)
                         setData()
                         showContent()
@@ -112,7 +112,11 @@ class SceneList : BaseActivity() {
                 }
             })
         }
-        adapter!!.notifyItemChanged(sceneRecords.size)
+        if (page == 0) {
+            adapter!!.notifyDataSetChanged()
+        } else {
+            adapter!!.notifyItemChanged(sceneRecords.size)
+        }
     }
 
     override fun setViewClick() {
@@ -132,8 +136,9 @@ class SceneList : BaseActivity() {
                     popupAreaSelector!!.setPopupAreaSelectorClick { provinceId, provinceName, cityId, cityName ->
                         setRightText(if (cityName == "不限") provinceName else cityName)
                         city = if (cityName == "不限") provinceName else cityName
-                        popupAreaSelector!!.dismiss()
+                        page = 0
                         getDataList()
+                        popupAreaSelector!!.dismiss()
                     }
                 }
                 if (!popupAreaSelector!!.isShow) {

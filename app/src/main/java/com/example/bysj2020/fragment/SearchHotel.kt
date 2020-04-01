@@ -93,7 +93,11 @@ class SearchHotel : BaseFragment() {
                 }
             })
         }
-        adapter!!.notifyItemChanged(hotelRecords.size)
+        if (page == 0) {
+            adapter!!.notifyDataSetChanged()
+        } else {
+            adapter!!.notifyItemChanged(hotelRecords.size)
+        }
     }
 
     /**
@@ -120,11 +124,11 @@ class SearchHotel : BaseFragment() {
                 if (t == null) {
                     showEmpty()
                 } else {
-                    if (page == 0) {
-                        hotelRecords.removeAll(hotelRecords)
-                    }
                     searchListHotelBean = t
                     if (t.records.isNotEmpty()) {
+                        if (page == 0) {
+                            hotelRecords.removeAll(hotelRecords)
+                        }
                         hotelRecords.addAll(t.records)
                         setData()
                         showContent()
@@ -154,6 +158,7 @@ class SearchHotel : BaseFragment() {
         when (event.code) {
             1 -> {
                 city = if (event.cityName == "不限") event.provinceName else event.cityName
+                page = 0
                 getDataList()
             }
         }

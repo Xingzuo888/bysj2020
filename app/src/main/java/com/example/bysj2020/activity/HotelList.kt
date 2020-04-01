@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 class HotelList : BaseActivity() {
 
     private var adapter: HotelListAdapter? = null
-    private lateinit var hotelRecord: MutableList<HotelRecord>
+    private lateinit var hotelRecords: MutableList<HotelRecord>
     private var searchListHotelBean: SearchListHotelBean? = null
     private var page: Int = 0
     private var city: String = ""
@@ -42,7 +42,7 @@ class HotelList : BaseActivity() {
                 getDataList()
             }
         })
-        hotelRecord = ArrayList()
+        hotelRecords = ArrayList()
         //禁止下拉刷新或上滑加载时操作列表
         smartRefreshLayout.setDisableContentWhenRefresh(true)
         smartRefreshLayout.setDisableContentWhenLoading(true)
@@ -81,12 +81,12 @@ class HotelList : BaseActivity() {
                 if (t == null) {
                     showEmpty()
                 } else {
-                    if (page == 0) {
-                        hotelRecord.removeAll(hotelRecord)
-                    }
                     searchListHotelBean = t
                     if (t.records.isNotEmpty()) {
-                        hotelRecord.addAll(t.records)
+                        if (page == 0) {
+                            hotelRecords.removeAll(hotelRecords)
+                        }
+                        hotelRecords.addAll(t.records)
                         setData()
                         showContent()
                     } else {
@@ -104,7 +104,7 @@ class HotelList : BaseActivity() {
 
     private fun setData() {
         if (adapter == null) {
-            adapter = HotelListAdapter(hotelRecord, this)
+            adapter = HotelListAdapter(hotelRecords, this)
             recyclerView.layoutManager = LinearLayoutManager(this)
             recyclerView.adapter = adapter
             adapter!!.addItemClickListener(object : ItemClick<HotelRecord> {
@@ -113,7 +113,11 @@ class HotelList : BaseActivity() {
                 }
             })
         }
-        adapter!!.notifyItemChanged(hotelRecord.size)
+        if (page == 0) {
+            adapter!!.notifyDataSetChanged()
+        } else {
+            adapter!!.notifyItemChanged(hotelRecords.size)
+        }
     }
 
     override fun setViewClick() {
@@ -133,8 +137,9 @@ class HotelList : BaseActivity() {
                     popupAreaSelector!!.setPopupAreaSelectorClick { provinceId, provinceName, cityId, cityName ->
                         setRightText(if (cityName == "不限") provinceName else cityName)
                         city = if (cityName == "不限") provinceName else cityName
-                        popupAreaSelector!!.dismiss()
+                        page = 0
                         getDataList()
+                        popupAreaSelector!!.dismiss()
                     }
                 }
                 if (!popupAreaSelector!!.isShow) {

@@ -93,7 +93,11 @@ class SearchAttractions : BaseFragment() {
                 }
             })
         }
-        adapter!!.notifyItemChanged(sceneRecords.size)
+        if (page == 0) {
+            adapter!!.notifyDataSetChanged()
+        } else {
+            adapter!!.notifyItemChanged(sceneRecords.size)
+        }
     }
 
     /**
@@ -120,11 +124,11 @@ class SearchAttractions : BaseFragment() {
                 if (t == null) {
                     showEmpty()
                 } else {
-                    if (page == 0) {
-                        sceneRecords.removeAll(sceneRecords)
-                    }
                     searchListSceneBean = t
                     if (t.records.isNotEmpty()) {
+                        if (page == 0) {
+                            sceneRecords.removeAll(sceneRecords)
+                        }
                         sceneRecords.addAll(t.records)
                         setData()
                         showContent()
@@ -154,6 +158,7 @@ class SearchAttractions : BaseFragment() {
         when (event.code) {
             1 -> {
                 city = if (event.cityName == "不限") event.provinceName else event.cityName
+                page = 0
                 getDataList()
             }
         }
