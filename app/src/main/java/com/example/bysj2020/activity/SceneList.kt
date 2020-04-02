@@ -33,9 +33,10 @@ class SceneList : BaseActivity() {
     }
 
     override fun initViews() {
+        city = intent.getStringExtra("city").toString()
         setBack()
         setTitle("景点")
-        setRightText("全国")
+        setRightText(if (city.isNotBlank()) city else "全国")
         initStateLayout(object : LoadHelper.EmptyClickListener {
             override fun reload() {
                 getDataList()
@@ -132,7 +133,7 @@ class SceneList : BaseActivity() {
             R.id.right_text -> {
                 //目的地弹框
                 if (popupAreaSelector == null) {
-                    popupAreaSelector = PopupAreaSelector.Builder(this, right_text)
+                    popupAreaSelector = PopupAreaSelector.Builder(this, right_text, true)
                     popupAreaSelector!!.setPopupAreaSelectorClick { provinceId, provinceName, cityId, cityName ->
                         setRightText(if (cityName == "不限") provinceName else cityName)
                         city = if (cityName == "不限") provinceName else cityName

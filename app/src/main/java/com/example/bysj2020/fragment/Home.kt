@@ -40,6 +40,7 @@ class Home : BaseFragment() {
     private lateinit var fHomeBean: FHomeBean
     private lateinit var fHomeSceneBean: FHomeSceneBean
     private var list = mutableListOf<XBannerBean>()
+    private var city: String = ""
 
     companion object {
         fun newInstance(): Home {
@@ -107,6 +108,7 @@ class Home : BaseFragment() {
                     fHomeBean = t
                     setData()
                     showContent()
+                    city = t.hotCityList[0]
                     getSceneData(t.hotCityList[0])
                 }
                 if (f_home_smartRefreshLayout.isRefreshing) {
@@ -191,22 +193,27 @@ class Home : BaseFragment() {
         when (v?.id) {
             R.id.f_home_hotCity1_lay -> {
                 showLine(1)
+                city = fHomeBean.hotCityList[0]
                 getSceneData(fHomeBean.hotCityList[0])
             }
             R.id.f_home_hotCity2_lay -> {
                 showLine(2)
+                city = fHomeBean.hotCityList[1]
                 getSceneData(fHomeBean.hotCityList[1])
             }
             R.id.f_home_hotCity3_lay -> {
                 showLine(3)
+                city = fHomeBean.hotCityList[2]
                 getSceneData(fHomeBean.hotCityList[2])
             }
             R.id.f_home_hotCity4_lay -> {
                 showLine(4)
+                city = fHomeBean.hotCityList[3]
                 getSceneData(fHomeBean.hotCityList[3])
             }
             R.id.f_home_hotCity5_lay -> {
                 showLine(5)
+                city = fHomeBean.hotCityList[4]
                 getSceneData(fHomeBean.hotCityList[4])
             }
             R.id.search_lay -> {
@@ -219,7 +226,7 @@ class Home : BaseFragment() {
             }
             R.id.f_home_moreViewPoint_tv -> {
                 //更多景点
-                startActivity(Intent(activity, SceneList::class.java))
+                startActivity(Intent(activity, SceneList::class.java).putExtra("city", city))
             }
         }
     }

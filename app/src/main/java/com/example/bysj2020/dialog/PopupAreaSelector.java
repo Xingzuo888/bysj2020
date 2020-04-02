@@ -21,6 +21,7 @@ import com.example.bysj2020.utils.AreaUtils;
 import com.example.bysj2020.utils.ToastUtil;
 import com.example.bysj2020.view.LinearItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -42,20 +43,22 @@ public class PopupAreaSelector {
     private PopupAreaSelectorRightAdapter rightAdapter;
     private List<AreaProvincesBean> provincesBeanList;
     private PopupAreaSelectorClick popupAreaSelectorClick;
+    private boolean preciseChoice; //是否是精确选择（不包含全国和省份不限的选择）
 
     private String provinceId;
     private String provinceName;
     private String cityId;
     private String cityName;
 
-    public PopupAreaSelector(Context context, View parent) {
+    public PopupAreaSelector(Context context, View parent, boolean preciseChoice) {
         this.context = context;
         this.parent = parent;
+        this.preciseChoice = preciseChoice;
         init();
     }
 
-    public static PopupAreaSelector Builder(Context context, View parent) {
-        return new PopupAreaSelector(context, parent);
+    public static PopupAreaSelector Builder(Context context, View parent, boolean preciseChoice) {
+        return new PopupAreaSelector(context, parent, preciseChoice);
     }
 
     private void init() {
@@ -116,7 +119,12 @@ public class PopupAreaSelector {
             provinceName = areaProvincesBean.getName();
             leftAdapter.setProvincesId(areaProvincesBean.getCode());
             leftAdapter.notifyDataSetChanged();
-            initRightAdapter(areaProvincesBean.getCitys());
+            //适配城市数据
+            if (!preciseChoice) {
+                initRightAdapter(AreaUtils.getCityOfAll(areaProvincesBean.getCitys()));
+            } else {
+                initRightAdapter(areaProvincesBean.getCitys());
+            }
         });
     }
 
@@ -136,7 +144,7 @@ public class PopupAreaSelector {
     }
 
     private void getDataList() {
-        AreaUtils.getAreaData(context, new Observer<List<AreaProvincesBean>>() {
+        AreaUtils.getAreaDataList(context, new Observer<List<AreaProvincesBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -145,10 +153,13 @@ public class PopupAreaSelector {
             @Override
             public void onNext(List<AreaProvincesBean> areaProvincesBeans) {
                 provincesBeanList = areaProvincesBeans;
-                if (provincesBeanList != null && provincesBeanList.size() > 0) {
-                    initLeftAdapter();
-                } else {
-                    onError(new Exception("暂无数据"));
+                if (!preciseChoice) {
+                    if (provincesBeanList != null && provincesBeanList.size() > 0) {
+                        provincesBeanList.add(0, new AreaProvincesBean("0", "全国", "quanguo", new ArrayList<>()));
+                        initLeftAdapter();
+                    } else {
+                        onError(new Exception("暂无数据"));
+                    }
                 }
             }
 

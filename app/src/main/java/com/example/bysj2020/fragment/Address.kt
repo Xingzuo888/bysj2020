@@ -118,11 +118,21 @@ class Address : BaseFragment() {
             }
             R.id.f_address_moreScene_tv -> {
                 //更多景点
-                startActivity(Intent(activity, SceneList::class.java))
+                startActivity(
+                    Intent(activity, SceneList::class.java).putExtra(
+                        "city",
+                        f_address_positionName_tv.text.toString()
+                    )
+                )
             }
             R.id.f_address_moreHotel_tv -> {
                 //更多酒店
-                startActivity(Intent(activity, HotelList::class.java))
+                startActivity(
+                    Intent(activity, HotelList::class.java).putExtra(
+                        "city",
+                        f_address_positionName_tv.text.toString()
+                    )
+                )
             }
         }
     }
