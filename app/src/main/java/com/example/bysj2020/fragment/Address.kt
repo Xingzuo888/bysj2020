@@ -35,7 +35,8 @@ import org.greenrobot.eventbus.ThreadMode
  */
 class Address : BaseFragment() {
 
-    private lateinit var fAddressBean: FAddressBean
+    private var scenes: MutableList<SceneImgTopInfo> = ArrayList()
+    private var hotels: MutableList<HotelImgTopInfo> = ArrayList()
     private var sceneAdapter: FAddressSceneAdapter? = null
     private var hotelAdapter: FAddressHotelAdapter? = null
     private var locationClient: LocationClient? = null
@@ -145,44 +146,34 @@ class Address : BaseFragment() {
      * 初始化景点信息
      */
     private fun initSceneInfo() {
-        if (fAddressBean.sceneImgTopInfoList.isNotEmpty()) {
-            f_address_scene_lay.visibility = View.VISIBLE
-            if (sceneAdapter == null) {
-                sceneAdapter = FAddressSceneAdapter(fAddressBean.sceneImgTopInfoList, context!!)
-                sceneAdapter?.addItemClickListener(object : ItemClick<SceneImgTopInfo> {
-                    override fun onItemClick(view: View?, t: SceneImgTopInfo?, position: Int) {
-                        showToast(t!!.name)
-                    }
-                })
-                f_address_scene_recycler.adapter = sceneAdapter
-                f_address_scene_recycler.layoutManager = GridLayoutManager(context, 3)
-            }
-            sceneAdapter?.notifyDataSetChanged()
-        } else {
-            f_address_scene_lay.visibility = View.GONE
+        if (sceneAdapter == null) {
+            sceneAdapter = FAddressSceneAdapter(scenes!!, context!!)
+            sceneAdapter?.addItemClickListener(object : ItemClick<SceneImgTopInfo> {
+                override fun onItemClick(view: View?, t: SceneImgTopInfo?, position: Int) {
+                    showToast(t!!.name)
+                }
+            })
+            f_address_scene_recycler.adapter = sceneAdapter
+            f_address_scene_recycler.layoutManager = GridLayoutManager(context, 3)
         }
+        sceneAdapter?.notifyDataSetChanged()
     }
 
     /**
      * 初始化酒店信息
      */
     private fun initHotelInfo() {
-        if (fAddressBean.hotelImgTopInfos.isNotEmpty()) {
-            f_address_hotel_lay.visibility = View.VISIBLE
-            if (hotelAdapter == null) {
-                hotelAdapter = FAddressHotelAdapter(fAddressBean.hotelImgTopInfos, context!!)
-                hotelAdapter?.addItemClickListener(object : ItemClick<HotelImgTopInfo> {
-                    override fun onItemClick(view: View?, t: HotelImgTopInfo?, position: Int) {
-                        showToast(t!!.name)
-                    }
-                })
-                f_address_hotel_recycler.adapter = hotelAdapter
-                f_address_hotel_recycler.layoutManager = GridLayoutManager(context, 3)
-            }
-            hotelAdapter?.notifyDataSetChanged()
-        } else {
-            f_address_hotel_lay.visibility = View.GONE
+        if (hotelAdapter == null) {
+            hotelAdapter = FAddressHotelAdapter(hotels!!, context!!)
+            hotelAdapter?.addItemClickListener(object : ItemClick<HotelImgTopInfo> {
+                override fun onItemClick(view: View?, t: HotelImgTopInfo?, position: Int) {
+                    showToast(t!!.name)
+                }
+            })
+            f_address_hotel_recycler.layoutManager = GridLayoutManager(context, 3)
+            f_address_hotel_recycler.adapter = hotelAdapter
         }
+        hotelAdapter?.notifyDataSetChanged()
     }
 
     /**
@@ -195,24 +186,40 @@ class Address : BaseFragment() {
         map["city"] = f_address_positionName_tv.text.toString()
         rxHttp.getWithJson("mdd", map, object : HttpResult<FAddressBean> {
             override fun OnSuccess(t: FAddressBean?, msg: String?) {
+                if (f_address_smartRefreshLayout.isRefreshing) {
+                    f_address_smartRefreshLayout.finishRefresh()
+                }
                 if (t == null) {
                     showEmpty()
                 } else {
-                    fAddressBean = t
-                    initSceneInfo()
-                    initHotelInfo()
                     if (t.sceneImgTopInfoList.isEmpty() && t.hotelImgTopInfos.isEmpty()) {
                         showEmpty()
                     } else {
+                        if (t.sceneImgTopInfoList.isEmpty()) {
+                            f_address_scene_lay.visibility = View.GONE
+                        } else {
+                            scenes.removeAll(scenes)
+                            scenes.addAll(t.sceneImgTopInfoList)
+                            initSceneInfo()
+                            f_address_scene_lay.visibility = View.VISIBLE
+                        }
+                        if (t.hotelImgTopInfos.isEmpty()) {
+                            f_address_hotel_lay.visibility = View.GONE
+                        } else {
+                            hotels.removeAll(hotels)
+                            hotels.addAll(t.hotelImgTopInfos)
+                            initHotelInfo()
+                            f_address_hotel_lay.visibility = View.VISIBLE
+                        }
                         showContent()
                     }
-                }
-                if (f_address_smartRefreshLayout.isRefreshing) {
-                    f_address_smartRefreshLayout.finishRefresh()
                 }
             }
 
             override fun OnFail(code: Int, msg: String?) {
+                if (f_address_smartRefreshLayout.isRefreshing) {
+                    f_address_smartRefreshLayout.finishRefresh()
+                }
                 showError()
                 showToast(msg!!)
             }
