@@ -129,9 +129,9 @@ class Area : BaseActivity() {
                 val dataList: MutableList<AreaProvincesBean> = data.toMutableList()
                 if (!preciseChoice) {
                     dataList.add(0, AreaProvincesBean("0", "全国", "quanguo", ArrayList()))
-                    provincesList = dataList
-                    initProvincesAdapter()
                 }
+                provincesList = dataList
+                initProvincesAdapter()
             }
 
             override fun onError(e: Throwable) {

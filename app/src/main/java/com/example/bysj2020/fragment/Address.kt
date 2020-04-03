@@ -108,7 +108,7 @@ class Address : BaseFragment() {
                 startActivityForResult(
                     Intent(activity, Area::class.java).putExtra(
                         "PreciseChoice",
-                        false
+                        true
                     ), 1
                 )
             }

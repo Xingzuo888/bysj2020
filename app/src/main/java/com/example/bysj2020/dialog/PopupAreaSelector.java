@@ -153,13 +153,13 @@ public class PopupAreaSelector {
             @Override
             public void onNext(List<AreaProvincesBean> areaProvincesBeans) {
                 provincesBeanList = areaProvincesBeans;
-                if (!preciseChoice) {
-                    if (provincesBeanList != null && provincesBeanList.size() > 0) {
+                if (provincesBeanList != null && provincesBeanList.size() > 0) {
+                    if (!preciseChoice) {
                         provincesBeanList.add(0, new AreaProvincesBean("0", "全国", "quanguo", new ArrayList<>()));
-                        initLeftAdapter();
-                    } else {
-                        onError(new Exception("暂无数据"));
                     }
+                    initLeftAdapter();
+                } else {
+                    onError(new Exception("暂无数据"));
                 }
             }
 

@@ -39,10 +39,10 @@ class SearchListSceneAdapter(mList: List<SceneRecord>, val context: Context) :
             mList[position].price.toString(),
             26
         ).create()
-
+        val linearLayout = holder.getView<QMUIFloatLayout>(R.id.item_search_list_label_lay)
+        linearLayout.removeAllViews()
         if (mList[position].tag.isNotBlank()) {
             val tagList = mList[position].tag.split(",").toList()
-            val linearLayout = holder.getView<QMUIFloatLayout>(R.id.item_search_list_label_lay)
             for (i in tagList.indices) {
                 val view =
                     LayoutInflater.from(context).inflate(R.layout.item_search_list_label, null)

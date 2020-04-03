@@ -36,7 +36,7 @@ class HotelList : BaseActivity() {
     override fun initViews() {
         city = intent.getStringExtra("city").toString()
         setBack()
-        setTitle("景点")
+        setTitle("酒店")
         setRightText(if (city.isNotBlank()) city else "全国")
         initStateLayout(object : LoadHelper.EmptyClickListener {
             override fun reload() {
