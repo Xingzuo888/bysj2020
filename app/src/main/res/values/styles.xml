@@ -70,4 +70,10 @@
         <item name="android:textColor">@color/black_2</item>
         <item name="android:textSize">20dp</item>
     </style>
+
+    <!--底部弹框-->
+    <style name="AnimBottom" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/bottom_out</item>
+    </style>
 </resources>

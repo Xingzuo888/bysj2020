@@ -25,6 +25,10 @@ package com.example.bysj2020;
 {@link com.example.bysj2020.activity.SearchList} 搜索列表
 {@link com.example.bysj2020.activity.SettingNotice} 系统通知
 {@link com.example.bysj2020.activity.SystemSetting} 系统设置
+{@link com.example.bysj2020.activity.SceneList} 景点列表
+{@link com.example.bysj2020.activity.HotelList} 酒店列表
+{@link com.example.bysj2020.activity.SceneDetails} 景点详情
+{@link com.example.bysj2020.activity.HotelDetails} 酒店详情
 
 
  */

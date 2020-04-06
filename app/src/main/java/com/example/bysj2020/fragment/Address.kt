@@ -9,10 +9,7 @@ import com.baidu.location.LocationClientOption
 import com.example.bysj2020.BaiduLBS.MyLocationListener
 import com.example.bysj2020.Interface.ItemClick
 import com.example.bysj2020.R
-import com.example.bysj2020.activity.Area
-import com.example.bysj2020.activity.HotelList
-import com.example.bysj2020.activity.SceneList
-import com.example.bysj2020.activity.Search
+import com.example.bysj2020.activity.*
 import com.example.bysj2020.adapter.FAddressHotelAdapter
 import com.example.bysj2020.adapter.FAddressSceneAdapter
 import com.example.bysj2020.base.BaseFragment
@@ -150,7 +147,12 @@ class Address : BaseFragment() {
             sceneAdapter = FAddressSceneAdapter(scenes!!, context!!)
             sceneAdapter?.addItemClickListener(object : ItemClick<SceneImgTopInfo> {
                 override fun onItemClick(view: View?, t: SceneImgTopInfo?, position: Int) {
-                    showToast(t!!.name)
+                    startActivity(
+                        Intent(
+                            activity,
+                            SceneDetails::class.java
+                        ).putExtra("sceneId", t!!.sceneId.toString())
+                    )
                 }
             })
             f_address_scene_recycler.adapter = sceneAdapter
@@ -165,11 +167,14 @@ class Address : BaseFragment() {
     private fun initHotelInfo() {
         if (hotelAdapter == null) {
             hotelAdapter = FAddressHotelAdapter(hotels!!, context!!)
-            hotelAdapter?.addItemClickListener(object : ItemClick<HotelImgTopInfo> {
-                override fun onItemClick(view: View?, t: HotelImgTopInfo?, position: Int) {
-                    showToast(t!!.name)
-                }
-            })
+            hotelAdapter?.addItemClickListener { view, t, position ->
+                startActivity(
+                    Intent(
+                        activity,
+                        HotelDetails::class.java
+                    ).putExtra("hotelId", t!!.hotelId.toString())
+                )
+            }
             f_address_hotel_recycler.layoutManager = GridLayoutManager(context, 3)
             f_address_hotel_recycler.adapter = hotelAdapter
         }

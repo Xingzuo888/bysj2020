@@ -18,6 +18,7 @@ data class SearchListSceneBean(
 
 data class SceneRecord(
     val address: String, //地址
+    val sceneId: Int, //景点id
     val name: String, //景点名
     val overview: String, //景点简略介绍
     val price: Int, //门票（以分为单位。如 1元 = 100分）
@@ -41,6 +42,7 @@ data class SearchListHotelBean(
 
 data class HotelRecord(
     val address: String, //地址
+    val hotelId: Int, //酒店id
     val img: String, //酒店图
     val name: String, //酒店名
     val price: Int, //酒店价格

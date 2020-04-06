@@ -22,8 +22,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.HotelList"
+            android:name=".activity.HotelBooking"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.HotelDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SceneDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HotelList"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SceneList"
             android:screenOrientation="portrait" />

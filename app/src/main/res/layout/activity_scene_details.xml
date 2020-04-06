@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activity.SceneDetails">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:id="@+id/scene_details_rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.stx.xhb.androidx.XBanner
+                    android:id="@+id/scene_details_XBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    app:AutoPlayTime="3000"
+                    app:isShowNumberIndicator="true"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:numberIndicatorBacgroud="@drawable/xbanner_num_bg"
+                    app:pointContainerPosition="BOTTOM"
+                    app:pointsPosition="RIGHT"
+                    app:tipTextSize="15dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/scene_details_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="大熊猫培育基地"
+                    android:textColor="@color/black"
+                    android:textSize="25dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/scene_details_score_lay"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_XBanner" />
+
+                <LinearLayout
+                    android:id="@+id/scene_details_score_lay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_XBanner">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scene_details_score_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="5.0"
+                        android:textColor="@color/green"
+                        android:textSize="15dp" />
+
+                    <RatingBar
+                        android:id="@+id/scene_details_score_rb"
+                        style="@style/fiveRatingBarSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="2dp"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:rating="5"
+                        android:stepSize="0.5" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scene_details_score_ranking_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="第1名"
+                        android:textColor="@color/green"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
+                <com.qmuiteam.qmui.widget.QMUIFloatLayout
+                    android:id="@+id/scene_details_label_lay"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/scene_details_score_lay"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_name" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/scene_details_open_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="10dp"
+                    android:text="最晚17：30点入园"
+                    android:textColor="@color/green"
+                    android:textSize="18dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_label_lay" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/scene_details_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="成都市成华区外北大熊猫1375号"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_open_time" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/scene_details_traffic_bus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="乘坐661a路到熊猫基地站下，步行241米可到达"
+                    android:textColor="@color/black_3"
+                    android:textSize="11dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_address" />
+
+                <LinearLayout
+                    android:id="@+id/scene_details_overView_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_traffic_bus">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:background="@color/gray_e6" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="简介/攻略："
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scene_details_overView_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="杀的故事梵蒂冈我金额东方日报你觉得白帝水宫"
+                        android:textColor="@color/black_3"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/scene_details_rule_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_overView_lay">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:background="@color/gray_e6" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="入景规则："
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scene_details_rule_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="杀的故事梵蒂冈我金额东方日报你觉得白帝水宫"
+                        android:textColor="@color/black_3"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/scene_details_recommend_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_rule_lay">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:background="@color/gray_e6" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="推荐："
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scene_details_recommend_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="杀的故事梵蒂冈我金额东方日报你觉得白帝水宫"
+                        android:textColor="@color/black_3"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/scene_details_booking_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_recommend_lay">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scene_details_booking_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="门票类型："
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scene_details_booking_notice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:text="预订须知"
+                        android:textColor="@color/gray_9"
+                        android:textSize="16dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/scene_details_booking_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/scene_details_booking_title"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/scene_details_related_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_booking_lay">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="相似景点："
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/scene_details_related_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/green"
+            android:gravity="center">
+
+            <CheckBox
+                android:id="@+id/scene_details_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:button="@drawable/select_favorite_img"
+                android:padding="10dp"
+                android:text="收藏"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

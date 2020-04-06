@@ -3,8 +3,10 @@ package com.example.bysj2020.https;
 import com.example.bysj2020.bean.FAddressBean;
 import com.example.bysj2020.bean.FHomeBean;
 import com.example.bysj2020.bean.FHomeSceneBean;
+import com.example.bysj2020.bean.HotelDetailsBean;
 import com.example.bysj2020.bean.ImgCodeBean;
 import com.example.bysj2020.bean.LoginBean;
+import com.example.bysj2020.bean.SceneDetailsBean;
 import com.example.bysj2020.bean.SearchListHotelBean;
 import com.example.bysj2020.bean.SearchListSceneBean;
 import com.example.bysj2020.bean.SearchRecommendBean;
@@ -117,9 +119,17 @@ public interface RxHttpService {
     @GET("scene/searchScene")
     Observable<HttpBean<SearchListSceneBean>> searchScene(@QueryMap Map<String, Objects> map);
 
+    //获取景点详情
+    @GET("scene/sceneDetail")
+    Observable<HttpBean<SceneDetailsBean>> sceneDetail(@QueryMap Map<String, Objects> map);
+
     /*----------酒店-----------*/
 
     //获取搜索列表的酒店
     @GET("hotel/searchHotel")
     Observable<HttpBean<SearchListHotelBean>> searchHotel(@QueryMap Map<String, Objects> map);
+
+    //获取酒店详情
+    @GET("hotel/hotelDetail")
+    Observable<HttpBean<HotelDetailsBean>> hotelDetail(@QueryMap Map<String, Objects> map);
 }

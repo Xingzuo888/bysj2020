@@ -205,6 +205,9 @@ public static java.lang.String TABLENAME;
 # If you do NOT use RxJava:
 -dontwarn rx.**
 
+#XBanner 图片轮播混淆配置
+-keep class com.stx.xhb.xbanner.**{*;}
+
 ## ---------Retrofit混淆方法---------------
 -dontwarn javax.annotation.**
 -dontwarn javax.inject.**

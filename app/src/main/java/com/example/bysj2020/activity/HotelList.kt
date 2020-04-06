@@ -1,8 +1,8 @@
 package com.example.bysj2020.activity
 
+import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bysj2020.Interface.ItemClick
 import com.example.bysj2020.R
 import com.example.bysj2020.adapter.HotelListAdapter
 import com.example.bysj2020.base.BaseActivity
@@ -108,11 +108,14 @@ class HotelList : BaseActivity() {
             adapter = HotelListAdapter(hotelRecords, this)
             recyclerView.layoutManager = LinearLayoutManager(this)
             recyclerView.adapter = adapter
-            adapter!!.addItemClickListener(object : ItemClick<HotelRecord> {
-                override fun onItemClick(view: View?, t: HotelRecord?, position: Int) {
-                    showToast(t!!.name)
-                }
-            })
+            adapter!!.addItemClickListener { view, t, position ->
+                startActivity(
+                    Intent(
+                        this@HotelList,
+                        HotelDetails::class.java
+                    ).putExtra("hotelId", t!!.hotelId.toString())
+                )
+            }
         }
         if (page == 0) {
             adapter!!.notifyDataSetChanged()

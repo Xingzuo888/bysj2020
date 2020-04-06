@@ -7,15 +7,14 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.example.bysj2020.Interface.ItemClick
 import com.example.bysj2020.R
+import com.example.bysj2020.activity.SceneDetails
 import com.example.bysj2020.activity.SceneList
 import com.example.bysj2020.activity.Search
 import com.example.bysj2020.adapter.FHomeRecyclerViewAdapter
 import com.example.bysj2020.base.BaseFragment
 import com.example.bysj2020.bean.FHomeBean
 import com.example.bysj2020.bean.FHomeSceneBean
-import com.example.bysj2020.bean.MustPlayScene
 import com.example.bysj2020.bean.XBannerBean
 import com.example.bysj2020.event.SwitchFragmentEvent
 import com.example.bysj2020.https.HttpResult
@@ -178,15 +177,16 @@ class Home : BaseFragment() {
      */
     private fun setSceneData() {
         adapter = FHomeRecyclerViewAdapter(fHomeSceneBean.mustPlaySceneList, context)
-//        f_home_recyclerView.setHasFixedSize(true)
-//        f_home_recyclerView.isNestedScrollingEnabled=false
         f_home_recyclerView.layoutManager = GridLayoutManager(context, 3)
         f_home_recyclerView.adapter = adapter
-        adapter!!.addItemClickListener(object : ItemClick<MustPlayScene> {
-            override fun onItemClick(view: View?, t: MustPlayScene?, position: Int) {
-                t?.name?.let { showToast(it) }
-            }
-        })
+        adapter!!.addItemClickListener { view, t, position ->
+            startActivity(
+                Intent(
+                    activity,
+                    SceneDetails::class.java
+                ).putExtra("sceneId", t!!.sceneId.toString())
+            )
+        }
     }
 
     override fun onClick(v: View?) {

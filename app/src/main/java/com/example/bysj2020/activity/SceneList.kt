@@ -1,8 +1,8 @@
 package com.example.bysj2020.activity
 
+import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bysj2020.Interface.ItemClick
 import com.example.bysj2020.R
 import com.example.bysj2020.adapter.SceneListAdapter
 import com.example.bysj2020.base.BaseActivity
@@ -107,11 +107,14 @@ class SceneList : BaseActivity() {
             adapter = SceneListAdapter(sceneRecords, this)
             recyclerView.layoutManager = LinearLayoutManager(this)
             recyclerView.adapter = adapter
-            adapter!!.addItemClickListener(object : ItemClick<SceneRecord> {
-                override fun onItemClick(view: View?, t: SceneRecord?, position: Int) {
-                    showToast(t!!.name)
-                }
-            })
+            adapter!!.addItemClickListener { view, t, position ->
+                startActivity(
+                    Intent(
+                        this@SceneList,
+                        SceneDetails::class.java
+                    ).putExtra("sceneId", t!!.sceneId.toString())
+                )
+            }
         }
         if (page == 0) {
             adapter!!.notifyDataSetChanged()
