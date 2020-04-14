@@ -15,6 +15,7 @@ data class HotelDetailsBean(
     val hotelRoomInfoList: List<HotelRoomInfo>, //酒店房间
     val hotelServiceInfoList: List<HotelServiceInfo>, //酒店服务
     val img: List<Img>, //图片
+    val isSave: Boolean,//是否收藏
     val name: String, //酒店名
     val overview: String, //酒店介绍
     val policy: String, //入住政策
@@ -76,4 +77,14 @@ data class HotelPolicyBean(
     val depositPrepaid: String,
     val pet: String,
     val requirements: String
+)
+
+data class HotelRoomInfos(
+    val id: Int, //房间id
+    val img: String, //图片
+    var num: Int = 0,
+    val price: Int, //价格 分单位
+    val roomSize: String, //房间大小
+    val roomTag: String, //房间标签
+    val roomType: String //房间类型
 )

@@ -22,8 +22,26 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.HotelBooking"
+            android:name=".activity.PaySuccess"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.OrderList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Favorite"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SceneOrderDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HotelOrderDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SceneBooking"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HotelBooking"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.HotelDetails"
             android:screenOrientation="portrait" />

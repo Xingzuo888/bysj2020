@@ -3,9 +3,13 @@ package com.example.bysj2020.https;
 import com.example.bysj2020.bean.FAddressBean;
 import com.example.bysj2020.bean.FHomeBean;
 import com.example.bysj2020.bean.FHomeSceneBean;
+import com.example.bysj2020.bean.FavoriteBean;
 import com.example.bysj2020.bean.HotelDetailsBean;
 import com.example.bysj2020.bean.ImgCodeBean;
 import com.example.bysj2020.bean.LoginBean;
+import com.example.bysj2020.bean.OrderDetailsBean;
+import com.example.bysj2020.bean.OrderListBean;
+import com.example.bysj2020.bean.PayInfoBean;
 import com.example.bysj2020.bean.SceneDetailsBean;
 import com.example.bysj2020.bean.SearchListHotelBean;
 import com.example.bysj2020.bean.SearchListSceneBean;
@@ -132,4 +136,44 @@ public interface RxHttpService {
     //获取酒店详情
     @GET("hotel/hotelDetail")
     Observable<HttpBean<HotelDetailsBean>> hotelDetail(@QueryMap Map<String, Objects> map);
+
+    /*----------用户收藏-----------*/
+
+    //收藏景点
+    @POST("userSave/saveScene")
+    Observable<HttpBean<String>> saveScene(@Body JsonObject body);
+
+    //收藏酒店
+    @POST("userSave/saveHotel")
+    Observable<HttpBean<String>> saveHotel(@Body JsonObject body);
+
+    //收藏列表
+    @GET("userSave/saveList")
+    Observable<HttpBean<FavoriteBean>> saveList(@QueryMap Map<String, Objects> map);
+
+    /*----------支付接口-----------*/
+
+    //创建景点门票订单
+    @POST("pay/createSceneOrder")
+    Observable<HttpBean<PayInfoBean>> createSceneOrder(@Body JsonObject body);
+
+    //创建酒店房间订单
+    @POST("pay/createHotelOrder")
+    Observable<HttpBean<PayInfoBean>> createHotelOrder(@Body JsonObject body);
+
+    //取消订单
+    @POST("pay/cancelOrder")
+    Observable<HttpBean<String>> cancelOrder(@Body JsonObject body);
+
+    //继续支付订单
+    @POST("pay/continueOrder")
+    Observable<HttpBean<PayInfoBean>> continueOrder(@Body JsonObject body);
+
+    //订单列表
+    @GET("pay/orderList")
+    Observable<HttpBean<OrderListBean>> orderList(@QueryMap Map<String, Objects> map);
+
+    //获取订单详情
+    @GET("pay/orderDetail")
+    Observable<HttpBean<OrderDetailsBean>> orderDetail(@QueryMap Map<String, Objects> map);
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="10dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/item_booking_type_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="成人票"
+        android:textColor="@color/black"
+        android:textSize="18dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/item_booking_type_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@id/item_booking_type_num_lay"
+        android:text="￥200"
+        android:textColor="@color/prompt_red"
+        android:textSize="18dp" />
+
+    <LinearLayout
+        android:id="@+id/item_booking_type_num_lay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_booking_type_reduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_black"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="—"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_booking_type_num"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_black"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="0"
+            android:textColor="@color/gray_6"
+            android:textSize="18dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_booking_type_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_black"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="+"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
+    </LinearLayout>
+</RelativeLayout>

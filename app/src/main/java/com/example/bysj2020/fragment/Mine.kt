@@ -5,8 +5,8 @@ import android.view.View
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.*
 import com.example.bysj2020.base.BaseFragment
-import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.event.LoginEvent
+import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.statelayout.LoadHelper
 import com.example.bysj2020.utils.LoadImageUtil
 import com.example.bysj2020.utils.SpUtil
@@ -35,6 +35,8 @@ class Mine : BaseFragment() {
 
     override fun setViewClick() {
         f_mine_self_info_lay.setOnClickListener(this)
+        f_mine_self_favorite_lay.setOnClickListener(this)
+        f_mine_booking_info_lay.setOnClickListener(this)
         f_mine_account_security_lay.setOnClickListener(this)
         f_mine_system_notification_lay.setOnClickListener(this)
         f_mine_setting.setOnClickListener(this)
@@ -77,30 +79,26 @@ class Mine : BaseFragment() {
             }
             R.id.f_mine_account_security_lay -> {
                 //账户安全
-                val loginToken = SpUtil.Obtain(context, "loginToken", "").toString()
-                if (loginToken.isBlank()) {
-                    startActivity(
-                        Intent(
-                            activity,
-                            LoginVerificationCode::class.java
-                        ).putExtra("isBackArrow", true)
-                    )
-                } else {
+                if (isLogin()) {
                     startActivity(Intent(activity, AccountSecurity::class.java))
                 }
             }
             R.id.f_mine_self_info_lay -> {
                 //个人信息
-                val loginToken = SpUtil.Obtain(context, "loginToken", "").toString()
-                if (loginToken.isBlank()) {
-                    startActivity(
-                        Intent(
-                            activity,
-                            LoginVerificationCode::class.java
-                        ).putExtra("isBackArrow", true)
-                    )
-                } else {
+                if (isLogin()) {
                     startActivity(Intent(activity, PersonalInformation::class.java))
+                }
+            }
+            R.id.f_mine_self_favorite_lay -> {
+                //个人收藏
+                if (isLogin()) {
+                    startActivity(Intent(activity, Favorite::class.java))
+                }
+            }
+            R.id.f_mine_booking_info_lay -> {
+                //预订信息
+                if (isLogin()) {
+                    startActivity(Intent(activity, OrderList::class.java))
                 }
             }
             R.id.f_mine_system_notification_lay -> {
@@ -112,6 +110,23 @@ class Mine : BaseFragment() {
                 startActivity(Intent(activity, SystemSetting::class.java))
             }
         }
+    }
+
+    /**
+     * 判断是否登录过
+     */
+    private fun isLogin(): Boolean {
+        val loginToken = SpUtil.Obtain(context, "loginToken", "").toString()
+        if (loginToken.isBlank()) {
+            startActivity(
+                Intent(
+                    activity,
+                    LoginVerificationCode::class.java
+                ).putExtra("isBackArrow", true)
+            )
+            return false
+        }
+        return true
     }
 
     override fun getContentView(): View? {

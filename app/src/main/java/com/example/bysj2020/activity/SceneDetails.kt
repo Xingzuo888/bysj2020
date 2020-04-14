@@ -1,5 +1,6 @@
 package com.example.bysj2020.activity
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -10,14 +11,19 @@ import com.example.bysj2020.R
 import com.example.bysj2020.adapter.SceneDetailsTicketAdapter
 import com.example.bysj2020.base.BaseActivity
 import com.example.bysj2020.bean.SceneDetailsBean
-import com.example.bysj2020.bean.SceneTickInfo
 import com.example.bysj2020.bean.XBannerBean
 import com.example.bysj2020.dialog.PopupBookingNotice
+import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
 import com.example.bysj2020.utils.LoadImageUtil
+import com.example.bysj2020.utils.SpUtil
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import kotlinx.android.synthetic.main.activity_scene_details.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Author : wxz
@@ -26,6 +32,7 @@ import kotlinx.android.synthetic.main.activity_scene_details.*
  */
 class SceneDetails : BaseActivity() {
 
+    private var loading: QMUITipDialog? = null
     private var sceneDetailsBean: SceneDetailsBean? = null
     private var sceneId = ""
     private var xBanners = mutableListOf<XBannerBean>()
@@ -46,11 +53,29 @@ class SceneDetails : BaseActivity() {
                 getData()
             }
         })
+        loading = QMUITipDialog.Builder(this)
+            .setIconType(QMUITipDialog.Builder.ICON_TYPE_LOADING)
+            .setTipWord("正在处理收藏...")
+            .create()
+
         getData()
     }
 
     override fun setViewClick() {
         scene_details_booking_notice.setOnClickListener(this)
+
+        //收藏
+        scene_details_favorite.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isLogin()) {
+                scene_details_favorite.isChecked = false
+                return@setOnCheckedChangeListener
+            }
+            if (isChecked) {
+                setFavorite(1)
+            } else {
+                setFavorite(2)
+            }
+        }
     }
 
     override fun isRegisterEventBus(): Boolean {
@@ -96,11 +121,15 @@ class SceneDetails : BaseActivity() {
         scene_details_score_ranking_tv.text = "第${sceneDetailsBean?.ranking}名"
 
         //标签
-        val tags = sceneDetailsBean?.tag?.split(",")
-        for (i in tags!!.indices) {
-            val view = LayoutInflater.from(this).inflate(R.layout.item_float, null)
-            view.findViewById<AppCompatTextView>(R.id.item_float_content).text = tags[i]
-            scene_details_label_lay.addView(view)
+        if (sceneDetailsBean?.tag != null && sceneDetailsBean?.tag!!.isNotBlank()) {
+            val tags = sceneDetailsBean?.tag?.split(",")
+            for (i in tags!!.indices) {
+                val view = LayoutInflater.from(this).inflate(R.layout.item_tag, null)
+                view.findViewById<AppCompatTextView>(R.id.item_tag_content).text = tags[i]
+                scene_details_label_lay.addView(view)
+            }
+        } else {
+            scene_details_label_lay.visibility = View.GONE
         }
 
         scene_details_open_time.text = sceneDetailsBean?.openTime
@@ -124,12 +153,23 @@ class SceneDetails : BaseActivity() {
             scene_details_booking_recycler.adapter = ticketAdapter
             ticketAdapter.setClickBack(object : BookingClickBack {
                 override fun clickBack(data: Any) {
-                    showToast((data as SceneTickInfo).name)
+                    if (isLogin()) {
+                        return
+                    }
+                    val json = Gson().toJson(sceneDetailsBean?.sceneTickInfoList)
+                    startActivity(
+                        Intent(this@SceneDetails, SceneBooking::class.java).putExtra(
+                            "json",
+                            json
+                        )
+                    )
                 }
             })
         } else {
             scene_details_booking_lay.visibility = View.GONE
         }
+        scene_details_related_lay.visibility = View.GONE
+        scene_details_favorite.isChecked = sceneDetailsBean?.isSave!!
     }
 
     /**
@@ -156,5 +196,46 @@ class SceneDetails : BaseActivity() {
                 showError()
             }
         })
+    }
+
+    /**
+     * 收藏
+     */
+    private fun setFavorite(type: Int) {
+        loading?.show()
+        val rxHttp = RxHttp(this)
+        addLifecycle(rxHttp)
+        val body = JsonObject()
+        body.addProperty("sceneId", sceneId)
+        body.addProperty("type", type) //1-收藏 2- 取消
+        rxHttp.postWithJson("saveScene", body, object : HttpResult<String> {
+            override fun OnSuccess(t: String?, msg: String?) {
+                loading?.dismiss()
+                showToast(if (type == 1) "收藏成功" else "已取消收藏")
+                EventBus.getDefault().post(UserInfoEvent(2))
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                loading?.dismiss()
+                showToast(msg!!)
+            }
+        })
+    }
+
+    /**
+     * 判断是否登录
+     */
+    private fun isLogin(): Boolean {
+        val loginToken = SpUtil.Obtain(this@SceneDetails, "loginToken", "").toString()
+        if (loginToken.isBlank()) {
+            startActivity(
+                Intent(
+                    this@SceneDetails,
+                    LoginVerificationCode::class.java
+                ).putExtra("isBackArrow", true)
+            )
+            return true
+        }
+        return false
     }
 }

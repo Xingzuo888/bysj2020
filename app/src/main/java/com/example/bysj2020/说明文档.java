@@ -29,6 +29,12 @@ package com.example.bysj2020;
 {@link com.example.bysj2020.activity.HotelList} 酒店列表
 {@link com.example.bysj2020.activity.SceneDetails} 景点详情
 {@link com.example.bysj2020.activity.HotelDetails} 酒店详情
+{@link com.example.bysj2020.activity.Favorite} 收藏列表
+{@link com.example.bysj2020.activity.SceneBooking} 景点预订
+{@link com.example.bysj2020.activity.HotelBooking} 酒店预订
+{@link com.example.bysj2020.activity.SceneOrderDetails} 景点订单详情
+{@link com.example.bysj2020.activity.HotelOrderDetails} 酒店订单详情
+{@link com.example.bysj2020.activity.OrderList} 订单列表
 
 
  */

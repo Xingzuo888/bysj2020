@@ -1,16 +1,15 @@
 package com.example.bysj2020.fragment
 
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.HotelDetails
-import com.example.bysj2020.adapter.SearchListHotelAdapter
+import com.example.bysj2020.adapter.FavoriteAdapter
 import com.example.bysj2020.base.BaseFragment
-import com.example.bysj2020.bean.HotelRecord
-import com.example.bysj2020.bean.SearchListHotelBean
-import com.example.bysj2020.event.AreaSelectorEvent
+import com.example.bysj2020.bean.FavoriteBean
+import com.example.bysj2020.bean.FavoriteRecord
+import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.https.HttpPageResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
@@ -21,25 +20,18 @@ import org.greenrobot.eventbus.ThreadMode
 
 /**
  *    Author : wxz
- *    Time   : 2020/03/24
- *    Desc   : 搜索结果--酒店
+ *    Time   : 2020/04/12
+ *    Desc   : 收藏--酒店
  */
-class SearchHotel : BaseFragment() {
+class HotelFavorite : BaseFragment() {
 
-    private var searchContent: String = ""
+    private var adapter: FavoriteAdapter? = null
     private var page: Int = 0
-    private var city: String = ""
-    private var searchListHotelBean: SearchListHotelBean? = null
-    private lateinit var hotelRecords: MutableList<HotelRecord>
-    private var adapter: SearchListHotelAdapter? = null
+    private lateinit var list: MutableList<FavoriteRecord>
 
     companion object {
-        fun newInstance(data: String): SearchHotel {
-            val fragment = SearchHotel()
-            val args = Bundle()
-            args.putString("data", data)
-            fragment.arguments = args
-            return fragment
+        fun newInstance(): HotelFavorite {
+            return HotelFavorite()
         }
     }
 
@@ -52,22 +44,17 @@ class SearchHotel : BaseFragment() {
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.fragment_search_hotel
-    }
-
-    override fun getContentView(): View? {
-        return smartRefreshLayout
+        return R.layout.fragment_hotel_list
     }
 
     override fun initViews() {
         EventBus.getDefault().register(this)
-        searchContent = arguments!!.getString("data").toString()
         initStateLayout(object : LoadHelper.EmptyClickListener {
             override fun reload() {
                 getDataList()
             }
         })
-        hotelRecords = ArrayList()
+        list = ArrayList()
         smartRefreshLayout.setOnRefreshListener {
             page = 0
             getDataList()
@@ -83,43 +70,48 @@ class SearchHotel : BaseFragment() {
         smartRefreshLayout.setEnableLoadMore(true)
     }
 
+    override fun onClick(v: View?) {
+    }
+
+    override fun getContentView(): View? {
+        return smartRefreshLayout
+    }
+
+    /**
+     * 设置数据
+     */
     private fun setData() {
         if (adapter == null) {
-            adapter = SearchListHotelAdapter(hotelRecords, context!!)
+            adapter = FavoriteAdapter(list, context!!)
             recyclerView.layoutManager = LinearLayoutManager(context)
             recyclerView.adapter = adapter
-            adapter!!.addItemClickListener { view, t, position ->
+            adapter!!.addItemClickListener { view, data, position ->
                 startActivity(
                     Intent(
                         activity,
                         HotelDetails::class.java
-                    ).putExtra("hotelId", t!!.hotelId.toString())
+                    ).putExtra("hotelId", data?.businessId.toString())
                 )
             }
         }
         if (page == 0) {
             adapter!!.notifyDataSetChanged()
         } else {
-            adapter!!.notifyItemChanged(hotelRecords.size)
+            adapter!!.notifyItemChanged(list.size)
         }
     }
 
     /**
-     * 获取景点列表数据
+     * 获取收藏列表
      */
     private fun getDataList() {
-        val rxHttp = RxHttp(context)
+        val rxHttp = RxHttp(activity)
         addLifecycle(rxHttp)
         val map = mutableMapOf<String, Any>()
         map["index"] = page
-        if (searchContent.isNotBlank()) {
-            map["searchContent"] = searchContent
-        }
-        if (city.isNotBlank()) {
-            map["city"] = city
-        }
-        rxHttp.getPageWithJson("searchHotel", map, object : HttpPageResult<SearchListHotelBean> {
-            override fun OnSuccess(t: SearchListHotelBean?, lastPage: Int, msg: String?) {
+        map["type"] = 2 //1-景点 2-酒店 3-帖子
+        rxHttp.getPageWithJson("saveList", map, object : HttpPageResult<FavoriteBean> {
+            override fun OnSuccess(t: FavoriteBean?, lastPage: Int, msg: String?) {
                 if (smartRefreshLayout.isRefreshing) {
                     smartRefreshLayout.finishRefresh()
                 } else if (smartRefreshLayout.isLoading) {
@@ -128,16 +120,15 @@ class SearchHotel : BaseFragment() {
                 if (t == null) {
                     showEmpty()
                 } else {
-                    searchListHotelBean = t
-                    if (t.records.isNotEmpty()) {
+                    if (t.records.isNullOrEmpty()) {
+                        showEmpty()
+                    } else {
                         if (page == 0) {
-                            hotelRecords.removeAll(hotelRecords)
+                            list.removeAll(list)
                         }
-                        hotelRecords.addAll(t.records)
+                        list.addAll(t.records)
                         setData()
                         showContent()
-                    } else {
-                        showEmpty()
                     }
                 }
             }
@@ -154,23 +145,18 @@ class SearchHotel : BaseFragment() {
         })
     }
 
-    override fun onClick(v: View?) {
-    }
-
     override fun onDestroy() {
-        super.onDestroy()
         EventBus.getDefault().unregister(this)
+        super.onDestroy()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public fun AreaSelectorEvent(event: AreaSelectorEvent) {
-        when (event.code) {
-            1 -> {
-                city = if (event.cityName == "不限") event.provinceName else event.cityName
-                page = 0
+    public fun userInfoEvent(event: UserInfoEvent) {
+        when (event.type) {
+            2 -> {
+                //刷新收藏列表
                 getDataList()
             }
         }
     }
-
 }

@@ -390,4 +390,22 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/green"
+        android:gravity="center">
+
+        <CheckBox
+            android:id="@+id/hotel_details_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:button="@drawable/select_favorite_img"
+            android:padding="10dp"
+            android:text="收藏"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+    </LinearLayout>
 </LinearLayout>

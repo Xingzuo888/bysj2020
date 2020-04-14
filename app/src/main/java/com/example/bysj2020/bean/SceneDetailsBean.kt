@@ -11,6 +11,7 @@ data class SceneDetailsBean(
     val bookNotice: List<BookNotice>, //预订须知
     val city: String, //城市
     val imgRespList: List<ImgResp>, //图片
+    val isSave: Boolean, //是否收藏
     val name: String, //景点名
     val openTime: String, //营业时间
     val overview: String, //景点简略介绍
@@ -39,6 +40,15 @@ data class ImgResp(
 data class SceneTickInfo(
     val id: Int,
     val name: String,
+    val notice: String, //注意事项
+    val price: Int,
+    val tag: String
+)
+
+data class SceneTickInfos(
+    val id: Int,
+    val name: String,
+    var num: Int = 0,
     val notice: String, //注意事项
     val price: Int,
     val tag: String

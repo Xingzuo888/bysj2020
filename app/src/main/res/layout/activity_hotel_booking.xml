@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activity.HotelBooking">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:id="@+id/hotel_booking_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="预订信息"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_e6" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="房间类型"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hotel_booking_roomType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_e6" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingRight="20dp"
+                    android:text="姓名"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/hotel_booking_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
+                    android:hint="请输入你的真实姓名"
+                    android:inputType="text"
+                    android:textColor="@color/gray_8"
+                    android:textSize="17dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_e6" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingRight="10dp"
+                    android:text="预订日期"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/hotel_booking_date"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableRight="@mipmap/right_arrow"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical|right"
+                    android:text="选择日期"
+                    android:textColor="@color/gray_8"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_e6" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingRight="20dp"
+                    android:text="手机号"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/hotel_booking_phone"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
+                    android:hint="请输入你的手机号"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:textColor="@color/gray_8"
+                    android:textSize="17dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_e6" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingRight="10dp"
+                    android:text="身份证号码"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/hotel_booking_identity"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right|center_vertical"
+                    android:hint="请输入你的身份证号"
+                    android:inputType="textVisiblePassword"
+                    android:maxLength="18"
+                    android:textColor="@color/gray_8"
+                    android:textSize="17dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_e6" />
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:layout_gravity="bottom"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/hotel_booking_bottom_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:text="应付金额："
+            android:textColor="@color/black"
+            android:textSize="18dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/hotel_booking_money"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/hotel_booking_bottom_tv"
+            android:gravity="center"
+            android:text="￥200"
+            android:textColor="#F70404"
+            android:textSize="18dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/hotel_booking_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="#FA7840"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="提交订单"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+    </RelativeLayout>
+</LinearLayout>

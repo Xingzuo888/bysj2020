@@ -143,6 +143,11 @@ class SearchAttractions : BaseFragment() {
             }
 
             override fun OnFail(code: Int, msg: String?) {
+                if (smartRefreshLayout.isRefreshing) {
+                    smartRefreshLayout.finishRefresh()
+                } else if (smartRefreshLayout.isLoading) {
+                    smartRefreshLayout.finishLoadMore()
+                }
                 showToast(msg!!)
                 showError()
             }
