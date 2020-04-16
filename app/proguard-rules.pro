@@ -25,14 +25,16 @@
 -optimizationpasses 5  #指定代码的压缩级别
 -dontpreverify  #预校验
 -verbose  #指定日志级别
--dontskipnonpubliclibraryclassmembers
+-dontskipnonpubliclibraryclasses # 指定不去忽略非公共的库类(不跳过library中的非public的类)
+-dontoptimize #不进行优化，建议使用此选项
+-dontskipnonpubliclibraryclassmembers # 指定不去忽略包可见的库类的成员
 -dontusemixedcaseclassnames  #包名不混合大小写
 -ignorewarnings  #忽略警告
 -printmapping proguardMapping.txt  #生成原类名和混淆后的类名的映射文件
 -optimizations !code/simplification/cast,!field/*,!class/merging/*  #混淆时所采用的算法
--keepattributes *Annotation*,InnerClasses
--keepattributes Signature
--keepattributes SourceFile,LineNumberTable
+-keepattributes *Annotation*,InnerClasses # 保护代码中的Annotation不被混淆
+-keepattributes Signature # 避免混淆泛型, 这在JSON实体映射时非常重要
+-keepattributes SourceFile,LineNumberTable # 抛出异常时保留代码行号
 
 
 #---------------------------------默认保留区------------------------
@@ -49,6 +51,8 @@
 -keep public class * extends android.view.View
 -keep class android.support.** {*;}
 -keep public class * extends android.support.v4.**
+-keep public class * extends android.support.v7.**
+-keep public class * extends android.support.annotation.**
 
 -keep public class * extends android.view.View{
     *** get*();
