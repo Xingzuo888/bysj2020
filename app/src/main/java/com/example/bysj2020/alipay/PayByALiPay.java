@@ -18,9 +18,15 @@ import com.example.bysj2020.utils.ToastUtil;
  */
 public class PayByALiPay {
     private Activity activity;
+    private String orderId;
 
     public PayByALiPay(Activity activity) {
         this.activity = activity;
+    }
+
+    public PayByALiPay(Activity activity, String orderId) {
+        this.activity = activity;
+        this.orderId = orderId;
     }
 
     private Handler payHandler = new Handler() {
@@ -32,11 +38,11 @@ public class PayByALiPay {
             //支付成功
             if (TextUtils.equals(status, "9000")) {
                 ToastUtil.setToast(activity, "支付成功");
-                activity.startActivity(new Intent(activity, PaySuccess.class).putExtra("name", activity.getLocalClassName()));
+                activity.startActivity(new Intent(activity, PaySuccess.class).putExtra("name", activity.getLocalClassName().split("\\.")[1]).putExtra("orderId",orderId));
             } else if (TextUtils.equals(status, "8000")) {
                 ToastUtil.setToast(activity, "支付结果确认中");
             } else if (TextUtils.equals(status, "6001")) {
-                ToastUtil.setToast(activity, "用户中途取消");
+                ToastUtil.setToast(activity, "订单已创建，预订信息查看");
                 activity.finish();
             } else {
                 ToastUtil.setToast(activity, "支付失败");

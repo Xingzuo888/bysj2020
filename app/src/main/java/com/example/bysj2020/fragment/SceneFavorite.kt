@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.ThreadMode
 class SceneFavorite : BaseFragment() {
 
     private var adapter: FavoriteAdapter? = null
-    private var page: Int = 0
+    private var page: Int = 1
     private lateinit var list: MutableList<FavoriteRecord>
 
     companion object {
@@ -56,7 +56,7 @@ class SceneFavorite : BaseFragment() {
         })
         list = ArrayList()
         smartRefreshLayout.setOnRefreshListener {
-            page = 0
+            page = 1
             getDataList()
         }
         smartRefreshLayout.setOnLoadMoreListener {
@@ -66,8 +66,8 @@ class SceneFavorite : BaseFragment() {
         //禁止下拉刷新或上滑加载时操作列表
         smartRefreshLayout.setDisableContentWhenRefresh(true)
         smartRefreshLayout.setDisableContentWhenLoading(true)
-        //启动上滑加载功能
-        smartRefreshLayout.setEnableLoadMore(true)
+        //是否启用越界拖动（仿苹果效果）
+        smartRefreshLayout.setEnableOverScrollDrag(true)
     }
 
     override fun onClick(v: View?) {
@@ -94,7 +94,7 @@ class SceneFavorite : BaseFragment() {
                 )
             }
         }
-        if (page == 0) {
+        if (page == 1) {
             adapter!!.notifyDataSetChanged()
         } else {
             adapter!!.notifyItemChanged(list.size)
@@ -123,12 +123,14 @@ class SceneFavorite : BaseFragment() {
                     if (t.records.isNullOrEmpty()) {
                         showEmpty()
                     } else {
-                        if (page == 0) {
+                        if (page == 1) {
                             list.removeAll(list)
                         }
                         list.addAll(t.records)
                         setData()
                         showContent()
+                        //是否需要启动上滑加载功能
+                        smartRefreshLayout.setEnableLoadMore(!t.lastPage)
                     }
                 }
             }

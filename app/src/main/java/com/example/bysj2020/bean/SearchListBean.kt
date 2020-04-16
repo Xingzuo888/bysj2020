@@ -11,6 +11,7 @@ package com.example.bysj2020.bean
  */
 data class SearchListSceneBean(
     val current: Int, //当前页
+    val lastPage: Boolean, //是否最后一页
     val records: List<SceneRecord>, //返回数据
     val size: Int, //每页数量
     val total: Int //总条数
@@ -35,6 +36,7 @@ data class SceneRecord(
  */
 data class SearchListHotelBean(
     val current: Int, //当前页
+    val lastPage: Boolean, //是否最后一页
     val records: List<HotelRecord>, //返回数据
     val size: Int, //每页数量
     val total: Int //总条数

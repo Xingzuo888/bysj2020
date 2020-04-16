@@ -29,8 +29,9 @@ import java.util.*
  */
 class SceneBooking : BaseActivity() {
     private var json = ""
+    private var selectId: Int = 0
     private var money: Int = 0
-    private var number: Int = 0 //用于判断选择的票数
+    private var number: Int = 1 //用于判断选择的票数
     private var timePickerDialog: TimePickerDialog? = null
     private lateinit var sceneTickInfoList: List<SceneTickInfos>
     private lateinit var adapter: SceneBookingTypeAdapter
@@ -39,6 +40,8 @@ class SceneBooking : BaseActivity() {
     }
 
     override fun initViews() {
+        selectId = intent.getIntExtra("selectId", 0)
+        money = intent.getIntExtra("money", 0)
         json = intent.getStringExtra("json").toString()
         sceneTickInfoList = Gson().fromJson<List<SceneTickInfos>>(
             json,
@@ -46,16 +49,21 @@ class SceneBooking : BaseActivity() {
         )
         setBack()
         setTitle("景点门票")
+        //初始化数据
+        for (i in sceneTickInfoList.indices) {
+            if (sceneTickInfoList[i].id == selectId) {
+                sceneTickInfoList[i].num = 1
+            }
+        }
         scene_booking_date.text =
             DateUtil.longToString(System.currentTimeMillis(), Format.YEAR_MONTH_DAY_CROSS)
         scene_booking_money.text = "￥${money}"
         //初始化适配器
-        adapter = SceneBookingTypeAdapter(sceneTickInfoList, this)
+        adapter = SceneBookingTypeAdapter(sceneTickInfoList, this, selectId)
         val linearItemDecoration = LinearItemDecoration.Builder(this).setSpan(1f)
             .setColorResource(R.color.gray_e6)
             .setmShowLastLine(true)
             .build()
-
         scene_booking_ticketType.layoutManager = LinearLayoutManager(this)
         scene_booking_ticketType.addItemDecoration(linearItemDecoration)
         scene_booking_ticketType.adapter = adapter
@@ -173,8 +181,8 @@ class SceneBooking : BaseActivity() {
         rxHttp.postWithJson("createSceneOrder", body, object : HttpResult<PayInfoBean> {
             override fun OnSuccess(t: PayInfoBean?, msg: String?) {
                 if (t != null) {
-                    if (t.orderInfo.isNotBlank()) {
-                        val payByALiPay = PayByALiPay(this@SceneBooking)
+                    if (t.orderId.isNotBlank() && t.orderInfo.isNotBlank()) {
+                        val payByALiPay = PayByALiPay(this@SceneBooking, t.orderId)
                         payByALiPay.pay(t.orderInfo)
                     }
                 }

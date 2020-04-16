@@ -26,7 +26,7 @@ import org.greenrobot.eventbus.EventBus
 class HotelOrderDetails : BaseActivity() {
     private lateinit var loading: QMUITipDialog
     private var orderId = ""
-    private lateinit var timer: CountDownTimer
+    private var timer: CountDownTimer? = null
     private lateinit var orderDetailsBean: OrderDetailsBean
     override fun getLayoutId(): Int {
         return R.layout.activity_hotel_order_details
@@ -102,11 +102,11 @@ class HotelOrderDetails : BaseActivity() {
                 hotelOrderDetail_bottom_lay.visibility = View.VISIBLE
                 hotelOrderDetail_cancel.visibility = View.VISIBLE
                 hotelOrderDetail_pay.visibility = View.VISIBLE
-                lastTime(orderDetailsBean.validTime)
+                lastTime(orderDetailsBean.validTime - System.currentTimeMillis())
             }
             "SUCCESS" -> {
                 //支付成功
-                hotelOrderDetail_state.text = "支付成功"
+                hotelOrderDetail_state.text = "已预订"
                 hotelOrderDetail_bottom_lay.visibility = View.VISIBLE
                 hotelOrderDetail_cancel.visibility = View.VISIBLE
                 hotelOrderDetail_pay.visibility = View.GONE
@@ -152,12 +152,16 @@ class HotelOrderDetails : BaseActivity() {
             }
 
         })
+        timer!!.start()
     }
 
     /**
      * 获取数据
      */
     private fun getData() {
+        if (timer != null) {
+            timer!!.cancel()
+        }
         val rxHttp = RxHttp(this)
         addLifecycle(rxHttp)
         val map = mutableMapOf<String, Any>()
@@ -194,6 +198,7 @@ class HotelOrderDetails : BaseActivity() {
             override fun OnSuccess(t: String?, msg: String?) {
                 loading.dismiss()
                 showToast("订单取消成功")
+                hotelOrderDetail_lastTime.visibility = View.GONE
                 getData()
                 EventBus.getDefault().post(UserInfoEvent(4))
             }
@@ -227,5 +232,12 @@ class HotelOrderDetails : BaseActivity() {
                 showToast(msg!!)
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (timer != null) {
+            timer!!.cancel()
+        }
     }
 }

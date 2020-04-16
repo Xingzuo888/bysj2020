@@ -12,6 +12,7 @@ import com.example.bysj2020.adapter.HotelDetailsRoomAdapter
 import com.example.bysj2020.base.BaseActivity
 import com.example.bysj2020.bean.HotelDetailsBean
 import com.example.bysj2020.bean.HotelPolicyBean
+import com.example.bysj2020.bean.HotelRoomInfo
 import com.example.bysj2020.bean.XBannerBean
 import com.example.bysj2020.event.UserInfoEvent
 import com.example.bysj2020.https.HttpResult
@@ -102,7 +103,8 @@ class HotelDetails : BaseActivity() {
         }
 
         hotel_details_name.text = hotelDetailsBean?.name
-        hotel_details_score_tv.text = hotelDetailsBean?.star.toString()
+        hotel_details_score_tv.text = "评分：${hotelDetailsBean?.star.toString()}"
+        hotel_details_score_rb.rating = (hotelDetailsBean?.star!! / 2f)
         hotel_details_score_searchNum_tv.text = "搜索次数：${hotelDetailsBean?.searchNum}"
         hotel_details_address.text = hotelDetailsBean?.address
         hotel_details_traffic_bus.visibility = View.GONE
@@ -160,12 +162,13 @@ class HotelDetails : BaseActivity() {
                     if (isLogin()) {
                         return
                     }
+                    data as HotelRoomInfo
                     val json = Gson().toJson(hotelDetailsBean?.hotelRoomInfoList)
                     startActivity(
                         Intent(this@HotelDetails, HotelBooking::class.java).putExtra(
                             "json",
                             json
-                        )
+                        ).putExtra("selectId", data.id).putExtra("money", data.price)
                     )
                 }
             })

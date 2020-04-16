@@ -25,7 +25,7 @@ public class FHomeRecyclerViewAdapter extends BaseAdapter<MustPlayScene> {
         holder.setImageResource(R.id.hri_iv, mList.get(position).getSmallImg());
         holder.setText(R.id.hri_tv, mList.get(position).getName());
         RatingBar ratingBar = holder.getView(R.id.hri_rb);
-        ratingBar.setRating(mList.get(position).getStar());
+        ratingBar.setRating(mList.get(position).getStar() / 2f);
     }
 
     @Override

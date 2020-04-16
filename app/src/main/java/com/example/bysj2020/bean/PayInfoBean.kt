@@ -6,6 +6,6 @@ package com.example.bysj2020.bean
  *    Desc   : 
  */
 data class PayInfoBean(
-    val bizNo: String, //订单号
+    val orderId: String, //订单号
     val orderInfo: String //下单信息
 )

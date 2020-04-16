@@ -57,7 +57,7 @@
                 android:id="@+id/hotel_details_score_lay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="10dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 app:layout_constraintRight_toRightOf="parent"
@@ -71,6 +71,18 @@
                     android:text="5.0"
                     android:textColor="@color/green"
                     android:textSize="15dp" />
+
+                <RatingBar
+                    android:id="@+id/hotel_details_score_rb"
+                    style="@style/fiveRatingBarSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="2dp"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:rating="5"
+                    android:stepSize="0.5" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/hotel_details_score_searchNum_tv"

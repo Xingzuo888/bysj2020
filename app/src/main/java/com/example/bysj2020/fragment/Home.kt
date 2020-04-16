@@ -167,9 +167,9 @@ class Home : BaseFragment() {
         f_home_xBanner.loadImage { banner, model, view, position ->
             Glide.with(this@Home).load(list[position].url).into(view as ImageView)
         }
-        f_home_xBanner.setOnItemClickListener { xBanner: XBanner, any: Any, view: View, i: Int ->
-            ToastUtil.setToast(activity, "")
-        }
+//        f_home_xBanner.setOnItemClickListener { xBanner: XBanner, any: Any, view: View, i: Int ->
+//            ToastUtil.setToast(activity, "")
+//        }
     }
 
     /**

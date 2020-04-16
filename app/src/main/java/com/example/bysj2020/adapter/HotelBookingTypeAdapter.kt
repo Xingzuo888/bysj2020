@@ -14,7 +14,11 @@ import com.example.bysj2020.utils.ToastUtil
  *    Time   : 2020/04/12
  *    Desc   : 酒店房间类型适配器
  */
-class HotelBookingTypeAdapter(mList: List<HotelRoomInfos>, val context: Context) :
+class HotelBookingTypeAdapter(
+    mList: List<HotelRoomInfos>,
+    val context: Context,
+    val selectId: Int
+) :
     BaseAdapter<HotelRoomInfos>(mList, context) {
     private lateinit var click: HotelBookingTypeNumClick
     override fun covert(
@@ -25,6 +29,7 @@ class HotelBookingTypeAdapter(mList: List<HotelRoomInfos>, val context: Context)
         holder.setText(R.id.item_booking_type_name, mList[position].roomType)
         holder.setText(R.id.item_booking_type_money, "￥${mList[position].price}")
         val numTextView = holder.getView<AppCompatTextView>(R.id.item_booking_type_num)
+        numTextView.text = if (mList[position].id == selectId) "1" else "0"
         holder.getView<AppCompatTextView>(R.id.item_booking_type_reduce)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {

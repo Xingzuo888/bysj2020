@@ -11,6 +11,7 @@ import com.example.bysj2020.R
 import com.example.bysj2020.adapter.SceneDetailsTicketAdapter
 import com.example.bysj2020.base.BaseActivity
 import com.example.bysj2020.bean.SceneDetailsBean
+import com.example.bysj2020.bean.SceneTickInfo
 import com.example.bysj2020.bean.XBannerBean
 import com.example.bysj2020.dialog.PopupBookingNotice
 import com.example.bysj2020.event.UserInfoEvent
@@ -116,8 +117,8 @@ class SceneDetails : BaseActivity() {
             )
         }
         scene_details_name.text = sceneDetailsBean?.name
-        scene_details_score_tv.text = sceneDetailsBean?.star.toString()
-        scene_details_score_rb.rating = sceneDetailsBean?.star!!.toFloat()
+        scene_details_score_tv.text = "评分：${sceneDetailsBean?.star.toString()}"
+        scene_details_score_rb.rating = (sceneDetailsBean?.star!! / 2f)
         scene_details_score_ranking_tv.text = "第${sceneDetailsBean?.ranking}名"
 
         //标签
@@ -156,12 +157,13 @@ class SceneDetails : BaseActivity() {
                     if (isLogin()) {
                         return
                     }
+                    data as SceneTickInfo
                     val json = Gson().toJson(sceneDetailsBean?.sceneTickInfoList)
                     startActivity(
                         Intent(this@SceneDetails, SceneBooking::class.java).putExtra(
                             "json",
                             json
-                        )
+                        ).putExtra("selectId", data.id).putExtra("money", data.price)
                     )
                 }
             })

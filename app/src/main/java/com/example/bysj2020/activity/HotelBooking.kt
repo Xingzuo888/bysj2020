@@ -29,8 +29,9 @@ import java.util.*
  */
 class HotelBooking : BaseActivity() {
     private var json = ""
+    private var selectId: Int = 0
     private var money: Int = 0
-    private var number: Int = 0 //用于判断选择的房间数
+    private var number: Int = 1 //用于判断选择的房间数
     private var timePickerDialog: TimePickerDialog? = null
     private lateinit var hotelRoomInfo: List<HotelRoomInfos>
     private lateinit var adapter: HotelBookingTypeAdapter
@@ -39,21 +40,28 @@ class HotelBooking : BaseActivity() {
     }
 
     override fun initViews() {
+        selectId = intent.getIntExtra("selectId", 0)
+        money = intent.getIntExtra("money", 0)
         json = intent.getStringExtra("json").toString()
         hotelRoomInfo = Gson().fromJson<List<HotelRoomInfos>>(json, object :
             TypeToken<List<HotelRoomInfos>>() {}.type)
         setBack()
         setTitle("酒店预订")
+        //初始化数据
+        for (i in hotelRoomInfo.indices) {
+            if (hotelRoomInfo[i].id == selectId) {
+                hotelRoomInfo[i].num = 1
+            }
+        }
         hotel_booking_date.text =
             DateUtil.longToString(System.currentTimeMillis(), Format.YEAR_MONTH_DAY_CROSS)
         hotel_booking_money.text = "￥${money}"
         //初始化适配器
-        adapter = HotelBookingTypeAdapter(hotelRoomInfo, this)
+        adapter = HotelBookingTypeAdapter(hotelRoomInfo, this, selectId)
         val linearItemDecoration = LinearItemDecoration.Builder(this).setSpan(1f)
             .setColorResource(R.color.gray_e6)
             .setmShowLastLine(true)
             .build()
-
         hotel_booking_roomType.layoutManager = LinearLayoutManager(this)
         hotel_booking_roomType.addItemDecoration(linearItemDecoration)
         hotel_booking_roomType.adapter = adapter
@@ -171,8 +179,8 @@ class HotelBooking : BaseActivity() {
         rxHttp.postWithJson("createHotelOrder", body, object : HttpResult<PayInfoBean> {
             override fun OnSuccess(t: PayInfoBean?, msg: String?) {
                 if (t != null) {
-                    if (t.orderInfo.isNotBlank()) {
-                        val payByALiPay = PayByALiPay(this@HotelBooking)
+                    if (t.orderId.isNotBlank() && t.orderInfo.isNotBlank()) {
+                        val payByALiPay = PayByALiPay(this@HotelBooking, t.orderId)
                         payByALiPay.pay(t.orderInfo)
                     }
                 }

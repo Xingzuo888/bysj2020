@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode
 class SearchAttractions : BaseFragment() {
 
     private var searchContent: String = ""
-    private var page: Int = 0
+    private var page: Int = 1
     private var city: String = ""
     private var searchListSceneBean: SearchListSceneBean? = null
     private lateinit var sceneRecords: MutableList<SceneRecord>
@@ -69,7 +69,7 @@ class SearchAttractions : BaseFragment() {
         })
         sceneRecords = ArrayList()
         smartRefreshLayout.setOnRefreshListener {
-            page = 0
+            page = 1
             getDataList()
         }
         smartRefreshLayout.setOnLoadMoreListener {
@@ -79,8 +79,8 @@ class SearchAttractions : BaseFragment() {
         //禁止下拉刷新或上滑加载时操作列表
         smartRefreshLayout.setDisableContentWhenRefresh(true)
         smartRefreshLayout.setDisableContentWhenLoading(true)
-        //启动上滑加载功能
-        smartRefreshLayout.setEnableLoadMore(true)
+        //是否启用越界拖动（仿苹果效果）
+        smartRefreshLayout.setEnableOverScrollDrag(true)
     }
 
     private fun setData() {
@@ -97,7 +97,7 @@ class SearchAttractions : BaseFragment() {
                 )
             }
         }
-        if (page == 0) {
+        if (page == 1) {
             adapter!!.notifyDataSetChanged()
         } else {
             adapter!!.notifyItemChanged(sceneRecords.size)
@@ -130,12 +130,14 @@ class SearchAttractions : BaseFragment() {
                 } else {
                     searchListSceneBean = t
                     if (t.records.isNotEmpty()) {
-                        if (page == 0) {
+                        if (page == 1) {
                             sceneRecords.removeAll(sceneRecords)
                         }
                         sceneRecords.addAll(t.records)
                         setData()
                         showContent()
+                        //是否需要启动上滑加载功能
+                        smartRefreshLayout.setEnableLoadMore(!t.lastPage)
                     } else {
                         showEmpty()
                     }
@@ -167,7 +169,7 @@ class SearchAttractions : BaseFragment() {
         when (event.code) {
             1 -> {
                 city = if (event.cityName == "不限") event.provinceName else event.cityName
-                page = 0
+                page = 1
                 getDataList()
             }
         }
