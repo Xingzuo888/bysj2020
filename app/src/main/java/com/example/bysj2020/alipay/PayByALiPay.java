@@ -38,14 +38,21 @@ public class PayByALiPay {
             //支付成功
             if (TextUtils.equals(status, "9000")) {
                 ToastUtil.setToast(activity, "支付成功");
-                activity.startActivity(new Intent(activity, PaySuccess.class).putExtra("name", activity.getLocalClassName().split("\\.")[1]).putExtra("orderId",orderId));
+                if (orderId == null) {
+                    orderId = "";
+                }
+                activity.startActivity(new Intent(activity, PaySuccess.class).putExtra("name", activity.getLocalClassName().split("\\.")[1]).putExtra("orderId", orderId));
             } else if (TextUtils.equals(status, "8000")) {
                 ToastUtil.setToast(activity, "支付结果确认中");
             } else if (TextUtils.equals(status, "6001")) {
-                ToastUtil.setToast(activity, "订单已创建，预订信息查看");
+                ToastUtil.setToast(activity, "用户中途取消");
+                activity.finish();
+            } else if (TextUtils.equals(status, "6002")) {
+                ToastUtil.setToast(activity, "网络连接出错");
                 activity.finish();
             } else {
                 ToastUtil.setToast(activity, "支付失败");
+                activity.finish();
             }
         }
     };

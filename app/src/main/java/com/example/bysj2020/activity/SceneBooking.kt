@@ -182,6 +182,7 @@ class SceneBooking : BaseActivity() {
             override fun OnSuccess(t: PayInfoBean?, msg: String?) {
                 if (t != null) {
                     if (t.orderId.isNotBlank() && t.orderInfo.isNotBlank()) {
+                        showToast("订单已创建，请到预订信息查看")
                         val payByALiPay = PayByALiPay(this@SceneBooking, t.orderId)
                         payByALiPay.pay(t.orderInfo)
                     }
