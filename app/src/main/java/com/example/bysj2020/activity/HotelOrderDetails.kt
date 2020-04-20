@@ -116,9 +116,14 @@ class HotelOrderDetails : BaseActivity() {
                 hotelOrderDetail_state.text = "支付失败"
                 hotelOrderDetail_bottom_lay.visibility = View.GONE
             }
-            "REFUND" -> {
+            "CANCEL" -> {
                 //已取消
                 hotelOrderDetail_state.text = "已取消"
+                hotelOrderDetail_bottom_lay.visibility = View.GONE
+            }
+            "REFUND" -> {
+                //已取消
+                hotelOrderDetail_state.text = "已退款"
                 hotelOrderDetail_bottom_lay.visibility = View.GONE
             }
             "TIME_OUT" -> {
