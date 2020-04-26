@@ -106,7 +106,7 @@ class HotelDetails : BaseActivity() {
         hotel_details_score_tv.text = "评分：${hotelDetailsBean?.star.toString()}"
         hotel_details_score_rb.rating = (hotelDetailsBean?.star!! / 2f)
         hotel_details_score_searchNum_tv.text = "搜索次数：${hotelDetailsBean?.searchNum}"
-        hotel_details_address.text = hotelDetailsBean?.address
+        hotel_details_address.text = "地址：${hotelDetailsBean?.address}"
         hotel_details_traffic_bus.visibility = View.GONE
         hotel_details_open_time.text = "${hotelDetailsBean?.debutYear}年开业"
         hotel_details_update_time.text = "${hotelDetailsBean?.decorateDate}年装修"
@@ -138,7 +138,10 @@ class HotelDetails : BaseActivity() {
             hotel_details_label_lay.visibility = View.GONE
         }
 
-        hotel_details_overView_content.text = hotelDetailsBean?.overview
+        hotel_details_overView_content.setText(hotelDetailsBean?.overview)
+        hotel_details_overView_content.setTextSize(15)
+        hotel_details_overView_content.setClose("...全文")
+
         //设施项目
         if (hotelDetailsBean?.facilityInfoList != null && hotelDetailsBean?.facilityInfoList!!.isNotEmpty()) {
             for (i in hotelDetailsBean?.facilityInfoList!!.indices) {

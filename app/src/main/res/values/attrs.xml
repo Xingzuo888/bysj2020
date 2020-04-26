@@ -54,4 +54,9 @@
         </attr>
 
     </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="mMaxLine" format="integer" />
+        <attr name="text" format="string" />
+    </declare-styleable>
 </resources>

@@ -138,19 +138,40 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/scene_details_open_time" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/scene_details_traffic_bus"
+                <LinearLayout
+                    android:id="@+id/scene_details_traffic_bus_lay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="乘坐661a路到熊猫基地站下，步行241米可到达"
-                    android:textColor="@color/black_3"
-                    android:textSize="11dp"
+                    android:orientation="vertical"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/scene_details_address" />
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_address">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:background="@color/gray_e6" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="交通信息："
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/scene_details_traffic_bus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="乘坐661a路到熊猫基地站下，步行241米可到达"
+                        android:textColor="@color/black_3"
+                        android:textSize="15dp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/scene_details_overView_lay"
@@ -160,7 +181,7 @@
                     android:orientation="vertical"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/scene_details_traffic_bus">
+                    app:layout_constraintTop_toBottomOf="@id/scene_details_traffic_bus_lay">
 
                     <View
                         android:layout_width="match_parent"
@@ -175,16 +196,14 @@
                         android:textColor="@color/black"
                         android:textSize="18dp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.example.bysj2020.view.ExpandableTextView
                         android:id="@+id/scene_details_overView_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="杀的故事梵蒂冈我金额东方日报你觉得白帝水宫"
-                        android:textColor="@color/black_3"
-                        android:textSize="10dp" />
+                        app:mMaxLine="5" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -219,7 +238,7 @@
                         android:layout_marginRight="10dp"
                         android:text="杀的故事梵蒂冈我金额东方日报你觉得白帝水宫"
                         android:textColor="@color/black_3"
-                        android:textSize="10dp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -254,7 +273,7 @@
                         android:layout_marginRight="10dp"
                         android:text="杀的故事梵蒂冈我金额东方日报你觉得白帝水宫"
                         android:textColor="@color/black_3"
-                        android:textSize="10dp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <RelativeLayout

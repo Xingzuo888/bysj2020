@@ -130,7 +130,7 @@
                 android:layout_marginRight="10dp"
                 android:text="乘坐661a路到熊猫基地站下，步行241米可到达"
                 android:textColor="@color/black_3"
-                android:textSize="11dp"
+                android:textSize="15dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/hotel_details_address" />
@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:text="2020年开业"
                     android:textColor="@color/black_3"
-                    android:textSize="12dp" />
+                    android:textSize="13dp" />
 
                 <View
                     android:layout_width="1dp"
@@ -165,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:text="2020年装修"
                     android:textColor="@color/black_3"
-                    android:textSize="12dp" />
+                    android:textSize="13dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -183,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:text="经济型"
                     android:textColor="@color/black_3"
-                    android:textSize="12dp" />
+                    android:textSize="13dp" />
 
                 <View
                     android:layout_width="1dp"
@@ -198,15 +198,15 @@
                     android:layout_height="wrap_content"
                     android:text="66房间"
                     android:textColor="@color/black_3"
-                    android:textSize="12dp" />
+                    android:textSize="13dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/hotel_details_service_lay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="10dp"
+                android:orientation="vertical"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/hotel_details_type_lay">
@@ -262,9 +262,9 @@
                     android:layout_marginRight="10dp"
                     android:text="酒店电话：0830-6020277"
                     android:textColor="#4893E7"
-                    android:textSize="11dp" />
+                    android:textSize="13dp" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <com.example.bysj2020.view.ExpandableTextView
                     android:id="@+id/hotel_details_overView_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -272,9 +272,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="杀的故事梵蒂冈我金额东方日报你觉得白帝水宫"
-                    android:textColor="@color/black_3"
-                    android:textSize="10dp" />
+                    app:mMaxLine="5" />
             </RelativeLayout>
 
             <LinearLayout
@@ -372,7 +370,7 @@
                     android:layout_marginRight="10dp"
                     android:text="杀的故事梵蒂冈我金额东方日报你觉得白帝水宫"
                     android:textColor="@color/black_3"
-                    android:textSize="10dp" />
+                    android:textSize="15dp" />
             </LinearLayout>
 
             <LinearLayout

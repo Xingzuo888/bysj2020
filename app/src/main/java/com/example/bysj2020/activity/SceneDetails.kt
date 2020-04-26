@@ -133,10 +133,12 @@ class SceneDetails : BaseActivity() {
             scene_details_label_lay.visibility = View.GONE
         }
 
-        scene_details_open_time.text = sceneDetailsBean?.openTime
-        scene_details_address.text = sceneDetailsBean?.address
+        scene_details_open_time.text = "开放时间：\n${sceneDetailsBean?.openTime}"
+        scene_details_address.text = "地址：${sceneDetailsBean?.address}"
         scene_details_traffic_bus.text = sceneDetailsBean?.trafficBus
-        scene_details_overView_content.text = sceneDetailsBean?.overview
+        scene_details_overView_content.setText(sceneDetailsBean?.overview)
+        scene_details_overView_content.setClose("...全文")
+        scene_details_overView_content.setTextSize(15)
         scene_details_rule_content.text = sceneDetailsBean?.rule
         scene_details_recommend_content.text = sceneDetailsBean?.recommend
 
