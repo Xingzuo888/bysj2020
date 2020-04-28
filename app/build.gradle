@@ -118,8 +118,8 @@ dependencies {
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     //数据库
     implementation 'org.greenrobot:greendao:3.2.2'
-    //百度定位
-    implementation(name: 'BaiduLBS_aar_android_V1.1.9_2048', ext: 'aar')
+    //高德定位
+    implementation(name: 'AMapLocation_4.9.0_20200302', ext: 'aar')
     //权限管理
     implementation "org.permissionsdispatcher:permissionsdispatcher:4.7.0"
 //    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.7.0"

@@ -4,9 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import com.baidu.location.LocationClient
-import com.baidu.location.LocationClientOption
-import com.example.bysj2020.BaiduLBS.MyLocationListener
 import com.example.bysj2020.Interface.ItemClick
 import com.example.bysj2020.R
 import com.example.bysj2020.activity.*
@@ -20,6 +17,7 @@ import com.example.bysj2020.event.LocationEvent
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
+import com.example.bysj2020.utils.SpUtil
 import kotlinx.android.synthetic.main.fragment_address.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -36,9 +34,6 @@ class Address : BaseFragment() {
     private var hotels: MutableList<HotelImgTopInfo> = ArrayList()
     private var sceneAdapter: FAddressSceneAdapter? = null
     private var hotelAdapter: FAddressHotelAdapter? = null
-    private var locationClient: LocationClient? = null
-    private var myListener = MyLocationListener()
-    private var option = LocationClientOption()
 
     private var cityId: String = "0"
     private var cityName: String = ""
@@ -75,6 +70,10 @@ class Address : BaseFragment() {
             }
 
         })
+        val city = SpUtil.Obtain(context, "city", "").toString()
+        if (city.isNotBlank()) {
+            f_address_positionName_tv.text = city
+        }
         //初始化刷新
         f_address_smartRefreshLayout.setOnRefreshListener {
             getDataList()
@@ -82,21 +81,6 @@ class Address : BaseFragment() {
         f_address_smartRefreshLayout.setDisableContentWhenRefresh(true)
         f_address_smartRefreshLayout.setDisableContentWhenLoading(true)
         f_address_smartRefreshLayout.setEnableLoadMore(false)
-        //声明LocationClient类
-        locationClient = LocationClient(activity!!.applicationContext)
-        //注册监听函数
-        locationClient?.registerLocationListener(myListener)
-        option.locationMode = LocationClientOption.LocationMode.Battery_Saving
-        //可选，是否需要地址信息，默认为不需要，即参数为false
-        //如果开发者需要获得当前点的地址信息，此处必须为true
-        option.setIsNeedAddress(true)
-        //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
-        option.setOpenAutoNotifyMode()
-        //可选，默认false，设置是否开启Gps定位
-        option.isOpenGps = true
-
-        locationClient!!.locOption = option
-        locationClient!!.start()
     }
 
     override fun onClick(v: View?) {
@@ -155,8 +139,10 @@ class Address : BaseFragment() {
                     )
                 }
             })
+
             f_address_scene_recycler.adapter = sceneAdapter
             f_address_scene_recycler.layoutManager = GridLayoutManager(context, 3)
+            f_address_scene_recycler.isNestedScrollingEnabled=false
         }
         sceneAdapter?.notifyDataSetChanged()
     }
@@ -177,6 +163,7 @@ class Address : BaseFragment() {
             }
             f_address_hotel_recycler.layoutManager = GridLayoutManager(context, 3)
             f_address_hotel_recycler.adapter = hotelAdapter
+            f_address_hotel_recycler.isNestedScrollingEnabled=false
         }
         hotelAdapter?.notifyDataSetChanged()
     }
@@ -253,7 +240,6 @@ class Address : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-        locationClient!!.stop()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -265,6 +251,7 @@ class Address : BaseFragment() {
                 } else {
                     event.str
                 }
+                getDataList()
             }
         }
     }

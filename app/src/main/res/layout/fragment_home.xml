@@ -11,9 +11,23 @@
         android:layout_height="50dp"
         android:background="@color/green">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/f_home_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:drawableLeft="@mipmap/icon_position"
+            android:drawablePadding="5dp"
+            android:text="全国"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:id="@+id/search_lay"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -22,7 +36,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/f_home_position"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -66,196 +80,34 @@
                     android:layout_height="match_parent"
                     android:background="@color/white">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/f_home_hot_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="10dp"
-                        android:text="热门城市"
-                        android:textColor="@color/black"
-                        android:textSize="30dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/f_home_city_lay"
+                    <LinearLayout
+                        android:id="@+id/f_home_hot_lay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="16dp"
+                        android:visibility="gone"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/f_home_hot_tv">
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/gray_b"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/f_home_hot_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="热搜:"
+                            android:textColor="@color/black"
+                            android:textSize="13dp" />
+
+                        <com.example.bysj2020.view.flow.FlowTagLayout
+                            android:id="@+id/f_home_hot_search"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent" />
-
-                        <LinearLayout
-                            android:id="@+id/f_home_hotCity1_lay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/f_home_hotCity1_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="1dp"
-                                android:paddingRight="1dp"
-                                android:text="成都"
-                                android:textColor="@color/black"
-                                android:textSize="15dp" />
-
-                            <View
-                                android:id="@+id/f_home_hotCity1_v"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="2dp"
-                                android:background="@color/gray_47" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/f_home_hotCity2_lay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="17dp"
-                            android:orientation="vertical"
-                            app:layout_constraintLeft_toRightOf="@id/f_home_hotCity1_lay"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/f_home_hotCity2_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="1dp"
-                                android:paddingRight="1dp"
-                                android:text="丽江"
-                                android:textColor="@color/gray_6"
-                                android:textSize="15dp" />
-
-                            <View
-                                android:id="@+id/f_home_hotCity2_v"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="2dp"
-                                android:background="@color/gray_47"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/f_home_hotCity3_lay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="17dp"
-                            android:orientation="vertical"
-                            app:layout_constraintLeft_toRightOf="@id/f_home_hotCity2_lay"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/f_home_hotCity3_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="1dp"
-                                android:paddingRight="1dp"
-                                android:text="泸州"
-                                android:textColor="@color/gray_47"
-                                android:textSize="15dp" />
-
-                            <View
-                                android:id="@+id/f_home_hotCity3_v"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="2dp"
-                                android:background="@color/gray_47"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/f_home_hotCity4_lay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="17dp"
-                            android:orientation="vertical"
-                            app:layout_constraintLeft_toRightOf="@id/f_home_hotCity3_lay"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/f_home_hotCity4_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="1dp"
-                                android:paddingRight="1dp"
-                                android:text="德阳"
-                                android:textColor="@color/gray_6"
-                                android:textSize="15dp" />
-
-                            <View
-                                android:id="@+id/f_home_hotCity4_v"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="2dp"
-                                android:background="@color/gray_47"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/f_home_hotCity5_lay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="17dp"
-                            android:orientation="vertical"
-                            app:layout_constraintLeft_toRightOf="@id/f_home_hotCity4_lay"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/f_home_hotCity5_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="1dp"
-                                android:paddingRight="1dp"
-                                android:text="绵阳"
-                                android:textColor="@color/gray_6"
-                                android:textSize="15dp" />
-
-                            <View
-                                android:id="@+id/f_home_hotCity5_v"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="2dp"
-                                android:background="@color/gray_47"
-                                android:visibility="gone" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/f_home_moreCity_lay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/f_home_moreCity_tv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="5dp"
-                                android:drawableRight="@mipmap/right_arrow"
-                                android:drawablePadding="10dp"
-                                android:text="更多"
-                                android:textColor="@color/gray_6"
-                                android:textSize="15dp" />
-
-                        </LinearLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            app:layout_constraintTop_toBottomOf="@id/f_home_hot_tv" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/f_home_xBanner_lay"
@@ -267,7 +119,7 @@
                         android:elevation="5dp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/f_home_city_lay">
+                        app:layout_constraintTop_toBottomOf="@id/f_home_hot_lay">
 
                         <com.stx.xhb.androidx.XBanner
                             android:id="@+id/f_home_xBanner"

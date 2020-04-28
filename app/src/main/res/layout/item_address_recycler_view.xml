@@ -22,24 +22,24 @@
         android:id="@+id/ari_nameC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="10dp"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
         android:layout_below="@id/ari_iv"
-
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="15dp"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
         android:text="九寨沟"
         android:textColor="@color/black"
-        android:textSize="15dp"
-         />
+        android:textSize="15dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/ari_nameE"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"
         android:layout_marginBottom="15dp"
@@ -49,7 +49,5 @@
         android:text="Jiuzhaigou"
         android:textColor="@color/white"
         android:textSize="10dp"
-        android:visibility="visible"
-        android:layout_alignParentBottom="true"
-        />
+        android:visibility="gone" />
 </RelativeLayout>

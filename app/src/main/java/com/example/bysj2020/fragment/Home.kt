@@ -1,29 +1,31 @@
 package com.example.bysj2020.fragment
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.CountDownTimer
 import android.view.View
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.bysj2020.R
-import com.example.bysj2020.activity.SceneDetails
-import com.example.bysj2020.activity.SceneList
-import com.example.bysj2020.activity.Search
+import com.example.bysj2020.activity.*
 import com.example.bysj2020.adapter.FHomeRecyclerViewAdapter
 import com.example.bysj2020.base.BaseFragment
 import com.example.bysj2020.bean.FHomeBean
 import com.example.bysj2020.bean.FHomeSceneBean
+import com.example.bysj2020.bean.SearchRecommendBean
 import com.example.bysj2020.bean.XBannerBean
-import com.example.bysj2020.event.SwitchFragmentEvent
+import com.example.bysj2020.event.LocationEvent
 import com.example.bysj2020.https.HttpResult
 import com.example.bysj2020.https.RxHttp
 import com.example.bysj2020.statelayout.LoadHelper
-import com.example.bysj2020.utils.ToastUtil
-import com.stx.xhb.androidx.XBanner
+import com.example.bysj2020.utils.SpUtil
+import com.example.bysj2020.view.flow.FlowTagLayout
+import com.example.bysj2020.view.flow.TextAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  *    Author : wxz
@@ -39,7 +41,13 @@ class Home : BaseFragment() {
     private lateinit var fHomeBean: FHomeBean
     private lateinit var fHomeSceneBean: FHomeSceneBean
     private var list = mutableListOf<XBannerBean>()
-    private var city: String = ""
+    private lateinit var textAdapter: TextAdapter<String>
+    private var searchRecommendBean: SearchRecommendBean? = null
+
+    private var cityId: String = "0"
+    private var cityName: String = ""
+    private var provincesId: String = ""
+    private var provincesName: String = ""
 
     companion object {
         fun newInstance(): Home {
@@ -50,17 +58,13 @@ class Home : BaseFragment() {
     override fun loadData() {
         canRefresh = true
         showLoading()
+        getHotSearch()
         getDataList()
     }
 
     override fun setViewClick() {
-        f_home_hotCity1_lay.setOnClickListener(this)
-        f_home_hotCity2_lay.setOnClickListener(this)
-        f_home_hotCity3_lay.setOnClickListener(this)
-        f_home_hotCity4_lay.setOnClickListener(this)
-        f_home_hotCity5_lay.setOnClickListener(this)
+        f_home_position.setOnClickListener(this)
         search_lay.setOnClickListener(this)
-        f_home_moreCity_tv.setOnClickListener(this)
         f_home_moreViewPoint_tv.setOnClickListener(this)
     }
 
@@ -69,20 +73,70 @@ class Home : BaseFragment() {
     }
 
     override fun initViews() {
+        EventBus.getDefault().register(this)
         initStateLayout(object : LoadHelper.EmptyClickListener {
             override fun reload() {
+                getHotSearch()
                 getDataList()
             }
-
         })
+        val city = SpUtil.Obtain(context, "city", "").toString()
+        if (city.isNotBlank()) {
+            f_home_position.text = city
+        }
         //初始化刷新
         f_home_smartRefreshLayout.setOnRefreshListener {
             canRefresh = true
+            getHotSearch()
             getDataList()
         }
         f_home_smartRefreshLayout.setDisableContentWhenRefresh(true)
         f_home_smartRefreshLayout.setDisableContentWhenLoading(true)
         f_home_smartRefreshLayout.setEnableLoadMore(false)
+
+        textAdapter = TextAdapter(activity)
+        f_home_hot_search.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_NONE)
+        f_home_hot_search.adapter = textAdapter
+        f_home_hot_search.setOnTagClickListener { parent, view, position ->
+            startActivity(
+                Intent(
+                    activity,
+                    SearchList::class.java
+                ).putExtra("searchContent", parent!!.adapter.getItem(position) as String)
+            )
+        }
+    }
+
+    /**
+     * 初始化热搜
+     */
+    private fun initHotSearch() {
+        if (searchRecommendBean != null) {
+            f_home_hot_lay.visibility = View.VISIBLE
+            textAdapter.clearAndAddAll(searchRecommendBean!!.recommendTagList)
+        }
+    }
+
+    /**
+     * 获取热搜
+     */
+    private fun getHotSearch() {
+        val rxHttp = RxHttp(context)
+        addLifecycle(rxHttp)
+        val map = mutableMapOf<String, Any>()
+        map["num"] = 5
+        rxHttp.getWithJson("searchRecommend", map, object : HttpResult<SearchRecommendBean> {
+            override fun OnSuccess(t: SearchRecommendBean?, msg: String?) {
+                if (t != null) {
+                    searchRecommendBean = t
+                    initHotSearch()
+                }
+            }
+
+            override fun OnFail(code: Int, msg: String?) {
+                showToast(msg!!)
+            }
+        })
     }
 
     /**
@@ -107,8 +161,7 @@ class Home : BaseFragment() {
                     fHomeBean = t
                     setData()
                     showContent()
-                    city = t.hotCityList[0]
-                    getSceneData(t.hotCityList[0])
+                    getSceneData()
                 }
                 if (f_home_smartRefreshLayout.isRefreshing) {
                     f_home_smartRefreshLayout.finishRefresh()
@@ -127,12 +180,12 @@ class Home : BaseFragment() {
     /**
      * 获取景点数据
      */
-    private fun getSceneData(cityName: String) {
+    private fun getSceneData() {
         f_home_mustPlay_lay.visibility = View.GONE
         val rxHttp = RxHttp(context)
         addLifecycle(rxHttp)
         var map = mutableMapOf<String, String>()
-        map["city"] = cityName
+        map["city"] = f_home_position.text.toString()
         rxHttp.getWithJson("homeIndexScene", map, object : HttpResult<FHomeSceneBean> {
             override fun OnSuccess(t: FHomeSceneBean?, msg: String?) {
                 if (t != null) {
@@ -152,12 +205,6 @@ class Home : BaseFragment() {
      * 设置城市和轮播图
      */
     private fun setData() {
-        f_home_hotCity1_tv.text = fHomeBean.hotCityList[0]
-        f_home_hotCity2_tv.text = fHomeBean.hotCityList[1]
-        f_home_hotCity3_tv.text = fHomeBean.hotCityList[2]
-        f_home_hotCity4_tv.text = fHomeBean.hotCityList[3]
-        f_home_hotCity5_tv.text = fHomeBean.hotCityList[4]
-        showLine(1)
         list.removeAll(list)
         for (indexLoopInfo in fHomeBean.indexLoopInfoList) {
             list.add(XBannerBean(indexLoopInfo.name, indexLoopInfo.img))
@@ -179,6 +226,7 @@ class Home : BaseFragment() {
         adapter = FHomeRecyclerViewAdapter(fHomeSceneBean.mustPlaySceneList, context)
         f_home_recyclerView.layoutManager = GridLayoutManager(context, 3)
         f_home_recyclerView.adapter = adapter
+        f_home_recyclerView.isNestedScrollingEnabled=false
         adapter!!.addItemClickListener { view, t, position ->
             startActivity(
                 Intent(
@@ -191,42 +239,48 @@ class Home : BaseFragment() {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.f_home_hotCity1_lay -> {
-                showLine(1)
-                city = fHomeBean.hotCityList[0]
-                getSceneData(fHomeBean.hotCityList[0])
-            }
-            R.id.f_home_hotCity2_lay -> {
-                showLine(2)
-                city = fHomeBean.hotCityList[1]
-                getSceneData(fHomeBean.hotCityList[1])
-            }
-            R.id.f_home_hotCity3_lay -> {
-                showLine(3)
-                city = fHomeBean.hotCityList[2]
-                getSceneData(fHomeBean.hotCityList[2])
-            }
-            R.id.f_home_hotCity4_lay -> {
-                showLine(4)
-                city = fHomeBean.hotCityList[3]
-                getSceneData(fHomeBean.hotCityList[3])
-            }
-            R.id.f_home_hotCity5_lay -> {
-                showLine(5)
-                city = fHomeBean.hotCityList[4]
-                getSceneData(fHomeBean.hotCityList[4])
+            R.id.f_home_position -> {
+                //选择城市
+                startActivityForResult(
+                    Intent(activity, Area::class.java).putExtra(
+                        "PreciseChoice",
+                        true
+                    ), 1
+                )
             }
             R.id.search_lay -> {
                 //跳转到搜索界面
                 startActivity(Intent(activity, Search::class.java))
             }
-            R.id.f_home_moreCity_tv -> {
-                //更多城市
-                EventBus.getDefault().post(SwitchFragmentEvent(0, 1))
-            }
             R.id.f_home_moreViewPoint_tv -> {
                 //更多景点
-                startActivity(Intent(activity, SceneList::class.java).putExtra("city", city))
+                startActivity(
+                    Intent(activity, SceneList::class.java).putExtra(
+                        "city",
+                        f_home_position.text.toString()
+                    )
+                )
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                1 -> {
+                    if (data == null) {
+                        return
+                    }
+                    cityId = data.getStringExtra("cityId")
+                    cityName = data.getStringExtra("cityName")
+                    provincesId = data.getStringExtra("provincesId")
+                    provincesName = data.getStringExtra("provincesName")
+                    f_home_position.text =
+                        if (cityName == "不限") provincesName else cityName
+                    timer?.cancel()
+                    canRefresh = true
+                    getDataList()
+                }
             }
         }
     }
@@ -235,73 +289,6 @@ class Home : BaseFragment() {
         return f_home_ll
     }
 
-    /**
-     * 显示 热门城市选择的下划线
-     */
-    private fun showLine(showLine: Int) {
-        when (showLine) {
-            1 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
-                f_home_hotCity1_v.visibility = View.VISIBLE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity2_v.visibility = View.GONE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity3_v.visibility = View.GONE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity4_v.visibility = View.GONE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity5_v.visibility = View.GONE
-            }
-            2 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity1_v.visibility = View.GONE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
-                f_home_hotCity2_v.visibility = View.VISIBLE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity3_v.visibility = View.GONE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity4_v.visibility = View.GONE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity5_v.visibility = View.GONE
-            }
-            3 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity1_v.visibility = View.GONE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity2_v.visibility = View.GONE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
-                f_home_hotCity3_v.visibility = View.VISIBLE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity4_v.visibility = View.GONE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity5_v.visibility = View.GONE
-            }
-            4 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity1_v.visibility = View.GONE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity2_v.visibility = View.GONE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity3_v.visibility = View.GONE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
-                f_home_hotCity4_v.visibility = View.VISIBLE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity5_v.visibility = View.GONE
-            }
-            5 -> {
-                f_home_hotCity1_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity1_v.visibility = View.GONE
-                f_home_hotCity2_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity2_v.visibility = View.GONE
-                f_home_hotCity3_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity3_v.visibility = View.GONE
-                f_home_hotCity4_tv.setTextColor(ContextCompat.getColor(context!!, R.color.gray_6))
-                f_home_hotCity4_v.visibility = View.GONE
-                f_home_hotCity5_tv.setTextColor(ContextCompat.getColor(context!!, R.color.black))
-                f_home_hotCity5_v.visibility = View.VISIBLE
-            }
-        }
-    }
 
     /**
      * 开启定时器
@@ -327,11 +314,33 @@ class Home : BaseFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        f_home_xBanner.stopAutoPlay()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        f_home_xBanner.stopAutoPlay()
+        EventBus.getDefault().unregister(this)
         if (null == timer) {
             timer!!.cancel()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun locationEvent(event: LocationEvent) {
+        when (event.code) {
+            3 -> {
+                f_home_position.text = if (event.str.endsWith("市")) {
+                    event.str.substring(0, (event.str.length - 1))
+                } else {
+                    event.str
+                }
+                SpUtil.Save(context, "city", f_home_position.text.toString())
+                timer?.cancel()
+                canRefresh = true
+                getDataList()
+            }
         }
     }
 }
