@@ -184,8 +184,9 @@ class Home : BaseFragment() {
         f_home_mustPlay_lay.visibility = View.GONE
         val rxHttp = RxHttp(context)
         addLifecycle(rxHttp)
-        var map = mutableMapOf<String, String>()
+        var map = mutableMapOf<String, Any>()
         map["city"] = f_home_position.text.toString()
+        map["sceneNum"] = 12 //景点的数量
         rxHttp.getWithJson("homeIndexScene", map, object : HttpResult<FHomeSceneBean> {
             override fun OnSuccess(t: FHomeSceneBean?, msg: String?) {
                 if (t != null) {
@@ -226,7 +227,7 @@ class Home : BaseFragment() {
         adapter = FHomeRecyclerViewAdapter(fHomeSceneBean.mustPlaySceneList, context)
         f_home_recyclerView.layoutManager = GridLayoutManager(context, 3)
         f_home_recyclerView.adapter = adapter
-        f_home_recyclerView.isNestedScrollingEnabled=false
+        f_home_recyclerView.isNestedScrollingEnabled = false
         adapter!!.addItemClickListener { view, t, position ->
             startActivity(
                 Intent(

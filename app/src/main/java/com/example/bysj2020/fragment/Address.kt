@@ -174,8 +174,10 @@ class Address : BaseFragment() {
     fun getDataList() {
         val rxHttp = RxHttp(activity)
         addLifecycle(rxHttp)
-        val map = mutableMapOf<String, String>()
+        val map = mutableMapOf<String, Any>()
         map["city"] = f_address_positionName_tv.text.toString()
+        map["sceneNum"]=12 // 景点的数量
+        map["hotelNum"]=12 //酒店的数量
         rxHttp.getWithJson("mdd", map, object : HttpResult<FAddressBean> {
             override fun OnSuccess(t: FAddressBean?, msg: String?) {
                 if (f_address_smartRefreshLayout.isRefreshing) {
