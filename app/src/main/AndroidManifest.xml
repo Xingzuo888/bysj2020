@@ -104,7 +104,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.Launch"
-            android:screenOrientation="portrait"
             android:theme="@style/LaunchTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
