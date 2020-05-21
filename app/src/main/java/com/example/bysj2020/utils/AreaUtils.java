@@ -40,7 +40,7 @@ public class AreaUtils {
             //读取城市的json文件
             StringBuffer json = new StringBuffer();
             try {
-                InputStream inputStream = context.getResources().getAssets().open("Area.json");
+                InputStream inputStream = context.getResources().getAssets().open("Area2.json");
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader reader = new BufferedReader(inputStreamReader);
                 String jsonLine;
