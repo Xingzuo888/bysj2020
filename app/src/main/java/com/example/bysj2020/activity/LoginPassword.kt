@@ -280,7 +280,7 @@ class LoginPassword : BaseActivity() {
                 )
                 SpUtil.Save(this@LoginPassword, "showImgCode", 0)
                 login_password_imgCode_layout.visibility = View.GONE
-                showToast(msg!!)
+                showToast("登录成功！")
                 EventBus.getDefault().post(LoginEvent(0))
                 if (!isBackArrow) {
                     startActivity(Intent(this@LoginPassword, Home::class.java))

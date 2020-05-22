@@ -218,7 +218,7 @@ class LoginVerificationCode : BaseActivity() {
                     "loginPhone",
                     login_vc_ed_phone.text.toString()
                 )
-                showToast(msg!!)
+                showToast("登录成功！")
                 //通知登录成功
                 EventBus.getDefault().post(LoginEvent(0))
                 if (!isBackArrow) {
