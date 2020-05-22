@@ -45,7 +45,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="30dp"
                 android:ellipsize="end"
-                android:lines="1"
+                android:maxLines="2"
                 android:text="大熊猫培育基地"
                 android:textColor="@color/black"
                 android:textSize="25dp"

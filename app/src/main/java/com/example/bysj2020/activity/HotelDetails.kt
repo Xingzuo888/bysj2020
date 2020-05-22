@@ -25,6 +25,7 @@ import com.google.gson.JsonObject
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog
 import kotlinx.android.synthetic.main.activity_hotel_details.*
 import org.greenrobot.eventbus.EventBus
+import java.lang.StringBuilder
 
 /**
  * Author : wxz
@@ -182,8 +183,32 @@ class HotelDetails : BaseActivity() {
         //相关政策
         val hotelPolicyBean =
             Gson().fromJson<HotelPolicyBean>(hotelDetailsBean?.policy, HotelPolicyBean::class.java)
-        hotel_details_policy_content.text =
-            "${hotelPolicyBean.cancel}\n${hotelPolicyBean.requirements}\n${hotelPolicyBean.checkInTime}\n${hotelPolicyBean.checkOutTime}\n${hotelPolicyBean.arrivalDeparture}\n${hotelPolicyBean.depositPrepaid}\n${hotelPolicyBean.pet}\n${hotelPolicyBean.children}\n"
+        val policy = StringBuilder()
+        if (!hotelPolicyBean.cancel.isNullOrEmpty()) {
+            policy.append("${hotelPolicyBean.cancel}\n")
+        }
+        if (!hotelPolicyBean.requirements.isNullOrEmpty()) {
+            policy.append("${hotelPolicyBean.requirements}\n")
+        }
+        if (!hotelPolicyBean.checkInTime.isNullOrEmpty()) {
+            policy.append("${hotelPolicyBean.checkInTime}\n")
+        }
+        if (!hotelPolicyBean.checkOutTime.isNullOrEmpty()) {
+            policy.append("${hotelPolicyBean.checkOutTime}\n")
+        }
+        if (!hotelPolicyBean.arrivalDeparture.isNullOrEmpty()) {
+            policy.append("${hotelPolicyBean.arrivalDeparture}\n")
+        }
+        if (!hotelPolicyBean.depositPrepaid.isNullOrEmpty()) {
+            policy.append("${hotelPolicyBean.depositPrepaid}\n")
+        }
+        if (!hotelPolicyBean.pet.isNullOrEmpty()) {
+            policy.append("${hotelPolicyBean.pet}\n")
+        }
+        if (!hotelPolicyBean.children.isNullOrEmpty()) {
+            policy.append("${hotelPolicyBean.children}\n")
+        }
+        hotel_details_policy_content.text = policy.toString()
 
         hotel_details_related_lay.visibility = View.GONE
         hotel_details_favorite.isChecked = hotelDetailsBean?.isSave!!
